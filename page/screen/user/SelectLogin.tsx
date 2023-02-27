@@ -96,11 +96,9 @@ const SelectLogin = () => {
     /** 라인 로그인 */
     const lineLogin = async()=>{
         console.log('login')
-        liff.init({liffId:'1657936870-mGjryQyK'},()=>{
-           
-                console.log('login')
-     
-        }, err => console.log('err:',err))
+        // liff.init({liffId:'1657936870-mGjryQyK'},()=>{
+        //         console.log('login')
+        // }, err => console.log('err:',err))
     }
 
     const backAction = () => {

@@ -24,7 +24,7 @@ export default function NotificationIndex() {
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
     const [index, setIndex] = React.useState(0);
 
-    const [routes] = React.useState([
+    const [routes,setRoutes] = React.useState([
         {key:"noti" , title :t('상품/후기 알림')},
         {key:'keyword', title:t('키워드알림')},
     ]);
@@ -115,6 +115,13 @@ export default function NotificationIndex() {
         KeywordList()
       })
     },[])
+    
+    React.useEffect(()=>{
+      setRoutes([        
+        {key:"noti", title :t('상품/후기 알림')},
+        {key:'keyword', title:t('키워드알림')}
+      ])
+    },[t])
 
   
 

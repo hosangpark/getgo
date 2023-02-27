@@ -71,7 +71,7 @@ export const LangugaeChange = ({isVisible,selectLag,action,action2}:ModalType) =
             onPress={action}
             >
               <Text style={[style.text_b,{fontSize:18,color:colors.WHITE_COLOR}]}>
-              {t('변경하기')}
+              {t('언어변경')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={{

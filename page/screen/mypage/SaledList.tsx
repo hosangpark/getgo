@@ -26,23 +26,26 @@ export default function SaledList() {
   const [index, setIndex] = React.useState(0);
   const [Saleitems, setsaleitem] = React.useState([])
   const [Completeitems, setCompleteitem] = React.useState([])
+  const [isloading, setIsLoading] = React.useState(true);
   const [routes] = React.useState([
       {key:"OnSale" , title :t('판매중')},
       {key:'Complete', title:t('거래완료')},
   ]);
-  const OnSale = () => {
+  
+const OnSale = () => {
     return(
         <SaledList_OnSale items={Saleitems} ReviewCount={Saleitems.length} Remove={RemoveOnsale}/>
     )
 }
 const Complete = () => {
     return(
-        <SaledList_Complete items={Completeitems} ReviewCount={Completeitems.length} Remove={RemoveComplete}/>
+        // <SaledList_Complete items={Completeitems} ReviewCount={Completeitems.length} Remove={RemoveComplete}/>
+        <View></View>
     )
 }
-const renderScene = SceneMap({
-  Complete: Complete,
-  OnSale: OnSale,
+  const renderScene = SceneMap({
+    Complete: Complete,
+    OnSale: OnSale,
   });
 
   const RemoveComplete = async(target:number) => {
@@ -72,13 +75,13 @@ const renderScene = SceneMap({
       }).then(
         res=>{
           cusToast(res.data.message)
-          getData()
+          getOnsaleData()
       }).catch(
         err=>{console.log(err)
-      })
+    })
   };
 
-  const getData = async () => {
+  const getOnsaleData = async () => {
     await client({
       method: 'get',
       url: '/product/sales',
@@ -90,9 +93,8 @@ const renderScene = SceneMap({
           setsaleitem(res.data)
       }).catch(
         err=>{
-          console.log('getData')
+          console.log('getOnsaleData')
       })
-
     };
 
   const getCompleteData = async () => {
@@ -104,16 +106,20 @@ const renderScene = SceneMap({
       }
       }).then(
         res=>{
-          setCompleteitem(res.data)
+          if(res.data !== Array){
+            console.log('noData')
+          } else {
+            setCompleteitem(res.data)
+          }
         }
       ).catch(
-        err=>{console.log('getData')
+        err=>{console.log('getOnsaleData')
       })
     };
 
   React.useEffect(() => {
     getCompleteData();
-    getData()
+    getOnsaleData()
   }, []);
 
 

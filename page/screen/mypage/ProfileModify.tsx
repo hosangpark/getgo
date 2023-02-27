@@ -105,12 +105,14 @@ const MypageSetting = () => {
     const form = new FormData();
     form.append('mt_idx', userInfo.idx);
     if(rrrtype==='onlyphoto'){
+      console.log('onlyphoto')
       form.append("mt_image1",{
         name: profileimg[0].fileName,
         type: profileimg[0].type,
         uri: Platform.OS === 'ios' ? profileimg[0].uri.replace('file://', '') : profileimg[0].uri,
       });
-    } else if(rrrtype='onlynickname'){
+    } else if(rrrtype==='onlynickname'){
+      console.log('onlynickname')
       form.append(`mt_nickname`, modifyName);
     } else {
       form.append(`mt_nickname`, modifyName);
@@ -129,6 +131,7 @@ const MypageSetting = () => {
           cusToast(t(res.data.message))
           setModifyName('')
           Keyboard.dismiss()
+          getProfileDetailData()
         }).catch(error => {
           console.log("getUserNickName")
         })

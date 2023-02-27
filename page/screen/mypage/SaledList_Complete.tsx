@@ -9,9 +9,8 @@
 import React,{useState} from 'react';
 import {
     Alert,
-  SafeAreaView, ScrollView, Text, View,StyleSheet, FlatList, Image
+  SafeAreaView, ScrollView, Text, View,StyleSheet, FlatList, Image,TouchableOpacity
 } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import style from '../../../assets/style/style';
 import { colors } from '../../../assets/color';
 import { useNavigation } from '@react-navigation/native';
@@ -38,7 +37,6 @@ import cusToast from '../../../components/navigation/CusToast';
 const SaledList_Complete = ({items,ReviewCount,Remove}:any) => {
   const {t} = useTranslation()
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
-  const [isloading, setIsLoading] = useState(false);
 
   const enterReview = () => {
     console.log('d')
@@ -51,9 +49,6 @@ const SaledList_Complete = ({items,ReviewCount,Remove}:any) => {
 
     return (
         <SafeAreaView style={{flex:1,backgroundColor:'#fff'}}>
-          {isloading?
-          <LoadingIndicator/>
-            :
             <FlatList data={items}
               style={{paddingHorizontal:20}}
               ListHeaderComponent={
@@ -75,7 +70,7 @@ const SaledList_Complete = ({items,ReviewCount,Remove}:any) => {
                 <ProductSaledList item={item} Remove={Remove} Modify={Modify}/>
               )}
             />
-          }
+          
             <BackHandlerCom />
         </SafeAreaView>
     );
