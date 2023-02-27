@@ -113,14 +113,15 @@ const ItemList = ({setTabIndex}: itemListType) => {
 
   /** 지역 상품목록 */
   const getProductListData = async (event: any) => {
+    console.log('getProductListData');
     await client({
       method: 'get',
       url: `/product/procudt-list?mt_idx=${userInfo.idx}&pt_area=${event}`,
     })
       .then(res => {
-        if (items !== res.data) {
-          setitem(res.data);
-        }
+        //if (items !== res.data) {
+        setitem(res.data);
+        //}
         setIsLoading(false);
       })
       .catch(err => {
@@ -160,9 +161,15 @@ const ItemList = ({setTabIndex}: itemListType) => {
     if (!isFocused) {
       backHandler.remove();
     }
-
-    getRefreshData();
   }, [isFocused, exitApp]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getRefreshData();
+
+      return () => {};
+    }, []),
+  );
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
