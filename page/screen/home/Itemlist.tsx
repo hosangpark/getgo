@@ -90,9 +90,7 @@ const ItemList = ({setTabIndex}: itemListType) => {
   const [refreshing, setRefreshing] = useState(false);
   const getRefreshData = () => {
     console.log('refresh', '');
-    setRefreshing(true);
     rerendering();
-    setRefreshing(false);
   };
   const onRefresh = () => {
     if (!refreshing) {
@@ -113,7 +111,6 @@ const ItemList = ({setTabIndex}: itemListType) => {
 
   /** 지역 상품목록 */
   const getProductListData = async (event: any) => {
-    console.log('getProductListData');
     await client({
       method: 'get',
       url: `/product/procudt-list?mt_idx=${userInfo.idx}&pt_area=${event}`,

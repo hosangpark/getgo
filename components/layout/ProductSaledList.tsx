@@ -37,7 +37,13 @@ const ProductSaledList = ({item , Remove , Modify}:
   const {t} = useTranslation()
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const Itempost = () => {
-    navigation.navigate('Itempost',item.pt_idx);
+    if(item.pt_idx){
+      navigation.navigate('Itempost',{pt_idx:item.pt_idx});
+    } else {
+      // navigation.navigate('Itempost',{pt_idx:item.ot_idx});
+      console.log(item)
+    }
+    // 
   }
   
   const SendReview = () => {

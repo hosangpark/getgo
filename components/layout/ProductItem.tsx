@@ -44,7 +44,7 @@ const ProductItem = ({
   const userInfo = useSelector((state:any) => state.userInfo);
   const [hearton,setHearton] = React.useState(false)
   const Itempost = (pt_idx:any) => {
-    navigation.navigate('Itempost',pt_idx);
+    navigation.navigate('Itempost',{pt_idx:pt_idx});
   };
 
   const {t} = useTranslation()

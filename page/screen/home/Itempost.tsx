@@ -99,12 +99,11 @@ const Itempost = ({route}: Props) => {
       method: 'get',
       url: `/product/procudt-detail`,
       params: {
-        pt_idx: route.params,
+        pt_idx: route.params.pt_idx,
         mt_idx: userInfo.idx,
       },
     })
       .then(res => {
-        console.log('procudt-detail', res.data);
         setitem(res.data);
         setfilterslideImage(res.data.image_arr);
         setIsLoading(false);
@@ -136,7 +135,7 @@ const Itempost = ({route}: Props) => {
     }
   };
 
-  /** 상품 정보 가져오기 ${route.params}*/
+  /** 상품 정보 가져오기 ${route.params.pt_idx}*/
   React.useEffect(() => {
     navigation.addListener('focus', () => {
       getPostData();

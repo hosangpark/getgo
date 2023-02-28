@@ -31,10 +31,7 @@ import cusToast from '../../../components/navigation/CusToast';
  * LTI update could not be added via codemod */
 
 const Login = () => {
-
-    const userInfo = useSelector((state:any) => state.userInfo);
-    const myLocation = useSelector((state:any) => state.myLocation);
-    const dispatch = useDispatch()
+    const {t} = useTranslation()
     const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
 
     const [phoneOptions] = React.useState([
@@ -138,11 +135,7 @@ const Login = () => {
                 t('기존 정보가 없습니다.')
             )
         })
-
     }
-    
-
-    const {t} = useTranslation()
 
 
     React.useEffect(()=>{
@@ -215,7 +208,7 @@ const Login = () => {
                         >
                             <Text style={btnStyle.green_font}>{t('인증번호 다시받기')}
                             </Text>
-                            <View style={{width:45,marginLeft:5}}>
+                            <View style={{width:50,marginLeft:5}}>
                                 <Timer 
                                     mm={5}
                                     ss={0}

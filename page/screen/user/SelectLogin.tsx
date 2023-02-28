@@ -92,13 +92,20 @@ const SelectLogin = () => {
           }
     }
 
-
+    const userInfo = useSelector((state:any) => state.userInfo);
     /** 라인 로그인 */
     const lineLogin = async()=>{
-        console.log('login')
-        // liff.init({liffId:'1657936870-mGjryQyK'},()=>{
-        //         console.log('login')
-        // }, err => console.log('err:',err))
+        let params={
+            ...userInfo,
+            idx:59,
+            mt_na:82,
+            mt_hp:'01029270185',
+            mt_area:1,
+            mt_lat:1,
+            mt_log:1,
+        }
+        await AsyncStorage.setItem('userIdx',JSON.stringify(params))
+        dispatch(UserInfoAction.userlogin(params));
     }
 
     const backAction = () => {
@@ -158,6 +165,23 @@ const SelectLogin = () => {
             })
           })
     }, [])
+
+    const Visitapi = async () => {
+        await client({
+          method: 'get',
+          url: '/user/visit',
+        })
+          .then(res => {
+            console.log('visit')
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      };
+
+    React.useEffect(()=>{
+        Visitapi()
+    },[])
     
     return (
         <ScrollView contentContainerStyle={[style.default_background,{ flexGrow: 1, paddingHorizontal:20}]}>

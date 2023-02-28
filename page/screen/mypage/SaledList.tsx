@@ -39,8 +39,7 @@ const OnSale = () => {
 }
 const Complete = () => {
     return(
-        // <SaledList_Complete items={Completeitems} ReviewCount={Completeitems.length} Remove={RemoveComplete}/>
-        <View></View>
+        <SaledList_Complete items={Completeitems} ReviewCount={Completeitems.length} Remove={RemoveComplete}/>
     )
 }
   const renderScene = SceneMap({
@@ -106,11 +105,8 @@ const Complete = () => {
       }
       }).then(
         res=>{
-          if(res.data !== Array){
-            console.log('noData')
-          } else {
-            setCompleteitem(res.data)
-          }
+          console.log(res.data)
+          setCompleteitem(res.data)
         }
       ).catch(
         err=>{console.log('getOnsaleData')

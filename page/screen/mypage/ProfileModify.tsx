@@ -105,7 +105,7 @@ const MypageSetting = () => {
     const form = new FormData();
     form.append('mt_idx', userInfo.idx);
     if(rrrtype==='onlyphoto'){
-      console.log('onlyphoto')
+      form.append(`mt_nickname`, modifyName);
       form.append("mt_image1",{
         name: profileimg[0].fileName,
         type: profileimg[0].type,
@@ -225,7 +225,7 @@ const MypageSetting = () => {
                 profileimg? 
                 {uri:profileimg[0]?.uri}
                 :
-                userInfo.mt_profile_img? {uri:userInfo.mt_profile_img} : require('../../../assets/img/img_profile.png')}
+                ProfileData.mt_image1? {uri:'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000/uploads/'+ProfileData.mt_image1} : require('../../../assets/img/img_profile.png')}
               />
               </TouchableOpacity>
               <TouchableOpacity style={{borderWidth:1,borderColor:colors.GRAY_COLOR_3,borderRadius:15,marginVertical:7}}
