@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -50,6 +50,7 @@ import client from '../../../api/client';
 import cusToast from '../../../components/navigation/CusToast';
 import axios from 'axios';
 import {launchImageLibrary} from 'react-native-image-picker';
+import SetMyLocation from '../location/SetMyLocation';
 
 type Props = StackScreenProps<MainNavigatorParams, 'Itemupload'>;
 const Itemupload = ({route}: Props) => {
@@ -65,6 +66,7 @@ const Itemupload = ({route}: Props) => {
   const {t} = useTranslation();
   const bodyRef = useRef<TextInput | null>(null);
   const [uploadpictures, setUploadpictures] = useState<any>([]);
+  const pt_idx = route?.params?.pt_idx;
 
   const dispatch = useDispatch();
 
@@ -87,7 +89,16 @@ const Itemupload = ({route}: Props) => {
 
         if (res.didCancel) {
         } else if (res.assets) {
-          let newres = [...uploadpictures, ...res.assets];
+          let newres = [...uploadpictures];
+          res.assets.forEach((item, index) => {
+            newres.push({
+              uri: item.uri,
+              fileName: item.fileName,
+              type: item.type,
+              img_idx: '',
+            });
+          });
+
           if (newres.length >= 10) {
             newres = newres.slice(0, 10);
           }
@@ -152,15 +163,55 @@ const Itemupload = ({route}: Props) => {
     setOverScroll(!overScroll);
     setSelCategory({...item});
   };
-  const Delete = (e: any) => {
-    const remove = uploadpictures.filter(
-      (item: any) => item.fileName !== e.fileName,
-    );
-    setUploadpictures(remove);
+
+  // const Delete = (e: any) => {
+  //   const remove = uploadpictures.filter(
+  //     (item: any) => item.fileName !== e.fileName,
+  //   );
+  //   setUploadpictures(remove);
+  // };
+
+  //이미지 삭제(idx:배열번호)
+  const Delete = async (idx: any) => {
+    let arr_idx = idx;
+    let temp_img = [...uploadpictures];
+    console.log('del', idx, temp_img.length);
+
+    // if (item.uri.indexOf('http') != -1) return;
+    //서버 업로드된 파일이면 파일 삭제와 DB순서 업데이트
+    if (
+      temp_img[arr_idx].img_idx &&
+      temp_img[arr_idx].uri.indexOf('http') != -1
+    ) {
+      setLoading(true);
+
+      await client({
+        method: 'post',
+        url: '/product/product_image_del',
+        data: {
+          key_idx: pt_idx,
+          // mt_idx: userInfo.idx,
+          img_idx: idx + 1,
+        },
+      })
+        .then(res => {
+          setLoading(false);
+          setUploadpictures(temp_img.filter((el, index) => index !== arr_idx));
+        })
+        .catch(error => {
+          console.log(error);
+          setLoading(false);
+        });
+    } else {
+      setUploadpictures(temp_img.filter((el, index) => index !== arr_idx));
+    }
   };
 
   const Complete = () => {
     // setLoading(true)
+
+    console.log('Complete', '');
+
     if (
       title == '' ||
       bodyText == '' ||
@@ -171,6 +222,7 @@ const Itemupload = ({route}: Props) => {
       setLoading(false);
       return;
     } else {
+      console.log('Complete', '2', uploadpictures.length);
       const form = new FormData();
       form.append('mt_idx', userInfo.idx);
       form.append(`ct_id`, selectCategory.sel_id);
@@ -180,22 +232,33 @@ const Itemupload = ({route}: Props) => {
       form.append(`pt_area`, myLocation.location1.mt_area);
       form.append(`pt_lat`, myLocation.location1.mt_lat);
       form.append(`pt_lon`, myLocation.location1.mt_log);
-      const image_list = [];
-      const idxs = Object.keys(uploadpictures);
-      for (const idx of idxs) {
-        const item = uploadpictures[idx];
-        let data = {
-          name: item.fileName,
-          type: item.type,
-          uri:
-            Platform.OS === 'ios' ? item.uri.replace('file://', '') : item.uri,
-        };
-        let s_idx = parseInt(idx) + 1;
-        // form.append(`pt_image${s_idx}`, data);
-        form.append(`pt_image[]`, data);
+      let image_list = [];
+      // const idxs = Object.keys(uploadpictures);
+      for (let i = 0, cnt = uploadpictures.length; i < cnt; i++) {
+        const item = uploadpictures[i];
+
+        if (item.uri.indexOf('http') == -1) {
+          let data = {
+            img_idx: i + 1,
+            name: item.fileName,
+            type: item.type,
+            uri:
+              Platform.OS === 'ios'
+                ? item.uri.replace('file://', '')
+                : item.uri,
+          };
+          // let s_idx = parseInt(idx) + 1;
+          // form.append(`pt_image${s_idx}`, data);
+          form.append(`pt_image[]`, data);
+          // image_list.push(item.fileName);
+        }
       }
 
-      //   console.log('form', form);
+      // if (!image_list.length) form.append(`pt_image[]`, null);
+
+      console.log('Complete', '3');
+
+      console.log('form', route.params.type, form);
 
       if (route.params.type == 'ProductUpload') {
         const setUpload = async () => {
@@ -218,7 +281,9 @@ const Itemupload = ({route}: Props) => {
         setUpload();
       } else {
         const setModify = async () => {
-          await client<{data: string; message: string}>({
+          form.append(`pt_idx`, pt_idx);
+
+          await client({
             method: 'post',
             url: '/product/product_edit',
             headers: {'Content-Type': 'multipart/form-data'},
@@ -238,6 +303,70 @@ const Itemupload = ({route}: Props) => {
       }
     }
   };
+
+  const getPostData = async () => {
+    setLoading(true);
+    await client<any>({
+      method: 'get',
+      url: `/product/procudt-detail`,
+      params: {
+        pt_idx: pt_idx,
+        mt_idx: userInfo.idx,
+      },
+    })
+      .then(res => {
+        const item = res.data.data[0];
+        let image_arr = res.data.image_arr;
+
+        console.log('item', item);
+
+        if (item.ct_id) {
+          CategoryOptions.forEach(v => {
+            console.log(v, item.ct_id);
+            let {label, value, sel_id} = v;
+            if (sel_id == item.ct_id) {
+              setSelCategory(v);
+              return false;
+            }
+          });
+        }
+
+        // selectCategory.sel_id
+
+        setTitle(item.pt_title);
+        setBodyText(item.pt_content);
+        console.log('item.pt_selling_price', item.pt_selling_price);
+        setPrice(item.pt_selling_price?.toString());
+
+        // let tempImage = [];
+
+        // for (let i = 0, cnt = image_arr.length; i < cnt; i++) {
+        //   tempImage.push({
+        //     uri:
+        //       'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000/uploads/' +
+        //       image_arr[i],
+        //     fileName: image_arr[i],
+        //     type: 'image/png',
+        // id,
+        // img_idx,
+        //   });
+        // }
+        if (image_arr.length) setUploadpictures(image_arr);
+
+        setLoading(false);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  //type:'ProductModify',pt_idx:pt_idx
+  useEffect(() => {
+    if (pt_idx) {
+      console.log('rotue', pt_idx, route);
+      getPostData();
+    }
+  }, [route]);
 
   return (
     <SafeAreaView style={[style.default_background, {flex: 1}]}>
@@ -297,7 +426,7 @@ const Itemupload = ({route}: Props) => {
                   imageStyle={{borderRadius: 10}}>
                   <TouchableOpacity
                     style={{alignItems: 'flex-end', right: 10, top: 10}}
-                    onPress={() => Delete(item)}>
+                    onPress={() => Delete(index)}>
                     <Image
                       style={{width: 25, height: 25}}
                       source={require('../../../assets/img/ico_close1.png')}
