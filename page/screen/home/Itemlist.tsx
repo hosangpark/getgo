@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Alert,
   SafeAreaView,
@@ -19,7 +19,7 @@ import {
   BackHandler,
   ActivityIndicator,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import ProductItem from '../../../components/layout/ProductItem';
 import style from '../../../assets/style/style';
 
@@ -28,18 +28,18 @@ import {
   useIsFocused,
   useNavigation,
 } from '@react-navigation/native';
-import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
-import {MainNavigatorParams} from '../../../components/types/routerTypes';
-import {MainHeader} from '../../../components/header/MainHeader';
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
+import { MainNavigatorParams } from '../../../components/types/routerTypes';
+import { MainHeader } from '../../../components/header/MainHeader';
 import cusToast from '../../../components/navigation/CusToast';
 import client from '../../../api/client';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as UserInfoAction from '../../../redux/actions/UserInfoAction';
 import * as MyLocationAction from '../../../redux/actions/MyLocationAction';
 import LoadingIndicator from '../../../components/layout/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useTranslation} from 'react-i18next';
-import {BackHandlerCom} from '../../../components/BackHandlerCom';
+import { useTranslation } from 'react-i18next';
+import { BackHandlerCom } from '../../../components/BackHandlerCom';
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
 
@@ -47,10 +47,10 @@ interface itemListType {
   setTabIndex: (index: number) => void;
 }
 
-const ItemList = ({setTabIndex}: itemListType) => {
+const ItemList = ({ setTabIndex }: itemListType) => {
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const isFocused = useIsFocused();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const [exitApp, setExitApp] = React.useState(false);
   const [isloading, setIsLoading] = React.useState<boolean>(false);
@@ -64,12 +64,13 @@ const ItemList = ({setTabIndex}: itemListType) => {
   const myLocation = useSelector((state: any) => state.myLocation);
 
   const Itemupload = () => {
-    navigation.navigate('Itemupload', {type: 'ProductUpload', pt_idx: 0});
+    navigation.navigate('Itemupload', { type: 'ProductUpload', pt_idx: 0 });
   };
 
   const backAction = () => {
     var timeout;
     let tmp = 0;
+    console.log('qqq', exitApp, timeout);
     if (tmp == 0) {
       if ((exitApp == undefined || !exitApp) && isFocused) {
         cusToast(t('한번 더 누르시면 종료됩니다'));
@@ -102,6 +103,7 @@ const ItemList = ({setTabIndex}: itemListType) => {
 
   /** 데이터 리렌더링 */
   const rerendering = () => {
+    console.log('myLocation', myLocation);
     if (myLocation.select_location == 1) {
       setListChanege(1);
     } else if (myLocation.select_location == 2) {
@@ -113,21 +115,42 @@ const ItemList = ({setTabIndex}: itemListType) => {
 
   /** 지역 상품목록 */
   const getProductListData = async (event: any) => {
-    console.log('getProductListData');
+    console.log('getProductListData', event, userInfo.idx);
+
     await client({
       method: 'get',
       url: `/product/procudt-list?mt_idx=${userInfo.idx}&pt_area=${event}`,
-    })
-      .then(res => {
+    }).then(
+      res => {
+        // console.log(res);
+
+        console.log('getProductListData2', res.data);
+
         //if (items !== res.data) {
         setitem(res.data);
         //}
         setIsLoading(false);
-      })
-      .catch(err => {
-        console.log('getProductListData');
-      });
+      },
+    );
+
     setIsLoading(false);
+
+    // await client({
+    //   method: 'get',
+    //   url: `/product/procudt-list?mt_idx=${userInfo.idx}&pt_area=${event}`,
+    // })
+    //   .then(res => {
+    //     console.log('getProductListData2', res.data);
+
+    //     //if (items !== res.data) {
+    //     setitem(res.data);
+    //     //}
+    //     setIsLoading(false);
+    //   })
+    //   .catch(err => {
+    //     console.log('getProductListData fail');
+    //   });
+    // setIsLoading(false);
   };
 
   const setListChanege = (target: number) => {
@@ -146,12 +169,9 @@ const ItemList = ({setTabIndex}: itemListType) => {
   React.useEffect(() => {
     setIsLoading(true);
     rerendering();
-  }, [myLocation.location1.mt_area]);
+  }, [myLocation.location1.mt_area, myLocation.location2.mt_area]);
 
-  React.useEffect(() => {
-    setIsLoading(true);
-    rerendering();
-  }, [myLocation.location2.mt_area]);
+
 
   React.useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -161,43 +181,46 @@ const ItemList = ({setTabIndex}: itemListType) => {
     if (!isFocused) {
       backHandler.remove();
     }
+    // return () => {
+    //   backHandler.remove();
+    // }
   }, [isFocused, exitApp]);
 
   useFocusEffect(
     React.useCallback(() => {
       getRefreshData();
 
-      return () => {};
+      return () => { };
     }, []),
   );
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       <MainHeader setTabIndex={setTabIndex} setListChanege={setListChanege} />
       {isloading ? (
         <LoadingIndicator />
       ) : (
-        <FlatList
-          style={{paddingHorizontal: 20}}
-          data={items}
-          initialNumToRender={8}
-          onRefresh={onRefresh}
-          refreshing={refreshing}
-          renderItem={({item}) => (
-            <ProductItem item={item} action={rerendering} />
-          )}
-          showsVerticalScrollIndicator={false}
-          // onEndReached={()=>{
-          //   setIsListLoading(true)
-          // }}
-          ListFooterComponent={isListLoading ? <LoadingIndicator /> : null}
-        />
-      )}
+          <FlatList
+            style={{ paddingHorizontal: 20 }}
+            data={items}
+            initialNumToRender={8}
+            onRefresh={onRefresh}
+            refreshing={refreshing}
+            renderItem={({ item }) => (
+              <ProductItem item={item} action={rerendering} />
+            )}
+            showsVerticalScrollIndicator={false}
+            // onEndReached={()=>{
+            //   setIsListLoading(true)
+            // }}
+            ListFooterComponent={isListLoading ? <LoadingIndicator /> : null}
+          />
+        )}
       <View
-        style={{position: 'absolute', right: 20, bottom: 25, borderRadius: 50}}>
+        style={{ position: 'absolute', right: 20, bottom: 25, borderRadius: 50 }}>
         <TouchableOpacity onPress={Itemupload}>
           <Image
-            style={{width: 75, height: 75}}
+            style={{ width: 75, height: 75 }}
             source={require('../../../assets/img/ico_write.png')}
           />
         </TouchableOpacity>
