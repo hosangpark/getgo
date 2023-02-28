@@ -166,7 +166,6 @@ const ItemList = ({setTabIndex}: itemListType) => {
   useFocusEffect(
     React.useCallback(() => {
       getRefreshData();
-
       return () => {};
     }, []),
   );
