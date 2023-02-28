@@ -6,10 +6,10 @@
  * @flow strict-local
  */
 
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import {
-    Alert, Keyboard,
-  SafeAreaView, Image, Text, View, FlatList, ScrollView,ActivityIndicator,Platform
+  Alert, Keyboard,
+  SafeAreaView, Image, Text, View, FlatList, ScrollView, ActivityIndicator, Platform
 } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import style from '../../../assets/style/style';
@@ -36,268 +36,272 @@ import cusToast from '../../../components/navigation/CusToast';
 
 const MypageSetting = () => {
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
-  const {t} = useTranslation()
-  
+  const { t } = useTranslation()
+
   const [modifyName, setModifyName] = React.useState('')
-  const [isLoading ,  setIsLoading] = React.useState<boolean>(true);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [profileimg, setProfileimg] = useState<any>(undefined)
-  const [ProfileData,setProfileData] = useState<any>([])
-  const [reviewData,setReviewData] = useState<ReviewItemType[]>([])
+  const [ProfileData, setProfileData] = useState<any>([])
+  const [reviewData, setReviewData] = useState<ReviewItemType[]>([])
 
   const Allreview = () => {
     navigation.navigate('Allreview');
   }
-    /** redux */
-    const userInfo = useSelector((state:any) => state.userInfo);
-    const myLocation = useSelector((state:any) => state.myLocation);
-    const dispatch = useDispatch()
+  /** redux */
+  const userInfo = useSelector((state: any) => state.userInfo);
+  const myLocation = useSelector((state: any) => state.myLocation);
+  const dispatch = useDispatch()
 
-  const getProfileDetailData = async() =>{
+  const getProfileDetailData = async () => {
     await client({
       method: 'get',
-      url: `/user/myprofile?mt_idx=${userInfo.idx}`,
-      }).then(
-        res=>{
-          setProfileData(res.data.data[0])
-          setReviewData(res.data.list.reverse())
-          setIsLoading(false)
-        }
-      ).catch(
-        err=>console.log('getProfileDetailData')
-      )
-    };
+      url: `/user/myprofile?mt_idx=${userInfo.idx}`
+    }).then(
+      (res) => {
+        setProfileData(res.data.data[0])
+        setReviewData(res.data.list.reverse())
+        setIsLoading(false)
+      }
+    ).catch(
+      err => console.log(err)
+    );
+  };
 
-  const deleteReview = async(target:ReviewItemType) =>{
+  const deleteReview = async (target: ReviewItemType) => {
     await client({
       method: 'get',
-      url: `/user/reviews-received?rt_idx=${target}`,
-      }).then(
-        res=>{
-          // const remove = reviewData.filter((item:ReviewItemType) => item.rt_idx !== target.rt_idx)
-          // setReviewData(remove)
-          cusToast(t(res.data.message))
-        }
-      ).catch(
-        err=>console.log('deleteReview')
-      )
-    };
+      url: `/user/reviews-received?rt_idx=${target}`
+    }).then(
+      res => {
+        // const remove = reviewData.filter((item:ReviewItemType) => item.rt_idx !== target.rt_idx)
+        // setReviewData(remove)
+        cusToast(t(res.data.message))
+      }
+    );
+  };
 
   const ModifyImage = () => {
     launchImageLibrary(
-        {
-            mediaType: 'photo',
-            maxWidth:512,
-            maxHeight:512,
-            selectionLimit:1,
-        },
-        (res:any) => {
-          if(res.didCancel != true){
-            setProfileimg(res.assets)
-            console.log('ModifyImage')
-          }
+      {
+        mediaType: 'photo',
+        maxWidth: 512,
+        maxHeight: 512,
+        selectionLimit: 1,
+      },
+      (res: any) => {
+        if (res.didCancel != true) {
+          setProfileimg(res.assets)
+          console.log('ModifyImage')
         }
+      }
     )
   }
 
 
   /** 닉네임 변경 */
-  const getUserNickName = async(rrrtype:string) => {
+  const getUserNickName = async (rrrtype: string) => {
+
+
     const form = new FormData();
     form.append('mt_idx', userInfo.idx);
-    if(rrrtype==='onlyphoto'){
-      form.append(`mt_nickname`, modifyName);
-      form.append("mt_image1",{
+    if (rrrtype === 'onlyphoto') {
+      form.append("mt_image1", {
         name: profileimg[0].fileName,
         type: profileimg[0].type,
         uri: Platform.OS === 'ios' ? profileimg[0].uri.replace('file://', '') : profileimg[0].uri,
       });
-    } else if(rrrtype==='onlynickname'){
-      console.log('onlynickname')
+    } else if (rrrtype == 'onlynickname') {
       form.append(`mt_nickname`, modifyName);
     } else {
       form.append(`mt_nickname`, modifyName);
-      form.append("mt_image1",{
-          name: profileimg[0].fileName,
-          type: profileimg[0].type,
-          uri: Platform.OS === 'ios' ? profileimg[0].uri.replace('file://', '') : profileimg[0].uri,
+      form.append("mt_image1", {
+        name: profileimg[0].fileName,
+        type: profileimg[0].type,
+        uri: Platform.OS === 'ios' ? profileimg[0].uri.replace('file://', '') : profileimg[0].uri,
       });
     }
+    // console.log('rrrtype', rrrtype, form);
+
     await client({
-        method: 'post',
-        url: '/user/profile-edit',
-        headers:{'Content-Type': 'multipart/form-data'},
-        data:form
-        }).then(res => {
-          cusToast(t(res.data.message))
-          setModifyName('')
-          Keyboard.dismiss()
-          getProfileDetailData()
-        }).catch(error => {
-          console.log("getUserNickName")
-        })
-    }
+      method: 'post',
+      url: '/user/profile-edit',
+      headers: { 'Content-Type': 'multipart/form-data' },
+      data: form,
+    }).then(res => {
+      cusToast(t(res.data.message))
+      setModifyName('')
+      Keyboard.dismiss()
+
+      if (rrrtype != 'onlynickname') {
+        setProfileimg(undefined);
+      }
+
+
+      getProfileDetailData()
+    }).catch(error => {
+      console.log("getUserNickName")
+    })
+  }
 
   /** profile 수정 */
-  const ModifyProfile = async() => {
-    if(modifyName !== '' || profileimg !== undefined){
-      if(modifyName == ''){
+  const ModifyProfile = async () => {
+
+    if (modifyName !== '' || profileimg !== undefined) {
+      if (modifyName == '') {
         /** 사진만 변경 */
-          getUserNickName("onlyphoto")
-          setProfileimg(undefined)
-          return
-      }  else if (profileimg == undefined){
+
+        getUserNickName("onlyphoto")
+        // getProfileDetailData()
+      } else if (profileimg == undefined) {
         /** 닉네임만 변경 */
         /** 닉네임 중복체크 */
+
+        console.log('www');
+
         await client({
           method: 'post',
           url: '/user/nickname-check',
-          data:{
-              mt_idx:userInfo.idx,
-              mt_nickname:modifyName,
+          data: {
+            mt_idx: userInfo.idx,
+            mt_nickname: modifyName,
           }
-          }).then(res=>
-            {
-              getUserNickName("onlynickname")
-            }
-            ).catch(error=>{
-            console.log('onlynickname')
-          })
-        return
+        }).then(res => {
+          getUserNickName("onlynickname")
+        }).catch(error => {
+
+          console.log('err', error);
+        });
       } else {
         /** 닉네임 & 사진 둘다 변경 */
 
         await client({
           method: 'post',
           url: '/user/nickname-check',
-          data:{
-              mt_idx:userInfo.idx,
-              mt_nickname:modifyName,
+          data: {
+            mt_idx: userInfo.idx,
+            mt_nickname: modifyName,
           }
-          }).then(res=>
-            {
-              getUserNickName("both")
-            }
-            ).catch(error=>{
-            console.log('both')
-          })
-        setProfileimg(undefined)
-        getProfileDetailData()
+        }).then(res => {
+          getUserNickName("both");
+        }).catch(
+          err => console.log(err)
+        );
       }
     }
   }
-  
-  const enterReview = (item:ReviewItemType) => {
+
+  const enterReview = (item: ReviewItemType) => {
     console.log(item)
   }
 
   const ReviewCount = reviewData.length
 
   const [listmodal, setListmodal] = useState({})
-  const Toggle = (e:number)=>{
+  const Toggle = (e: number) => {
     setListmodal(e)
-    if(e == listmodal){
+    if (e == listmodal) {
       setListmodal(false)
     }
   }
-  React.useEffect(()=>{
+  React.useEffect(() => {
     setIsLoading(true)
     getProfileDetailData()
-  },[])
+  }, [])
 
-  React.useEffect(()=>{
-    console.log(profileimg)
-    if(ProfileData == undefined){
+  React.useEffect(() => {
+    console.log('profileimg', profileimg)
+    if (ProfileData == undefined) {
       setIsLoading(true)
     } else {
       setIsLoading(false)
     }
-  },[])
+  }, [])
 
-  
-    return (
-        <SafeAreaView style={{flex:1,backgroundColor:'#fff'}}>
-          <BackHeader title={t('프로필')}/>
-          {/* <ScrollView> */}
-          <View style={[{padding:20,borderBottomWidth:1,borderColor:colors.GRAY_COLOR_1,}]}>
-            <View style={{justifyContent:'center',alignItems:'center'}}>
-              <TouchableOpacity onPress={ModifyImage}>
-              <Image style={{width:85,height:85,borderRadius:50}} source={
-                profileimg? 
-                {uri:profileimg[0]?.uri}
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <BackHeader title={t('프로필')} />
+      {/* <ScrollView> */}
+      <View style={[{ padding: 20, borderBottomWidth: 1, borderColor: colors.GRAY_COLOR_1, }]}>
+        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <TouchableOpacity onPress={ModifyImage}>
+            <Image style={{ width: 85, height: 85, borderRadius: 50 }} source={
+              profileimg ?
+                { uri: profileimg[0]?.uri }
                 :
-                ProfileData.mt_image1? {uri:'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000/uploads/'+ProfileData.mt_image1} : require('../../../assets/img/img_profile.png')}
-              />
-              </TouchableOpacity>
-              <TouchableOpacity style={{borderWidth:1,borderColor:colors.GRAY_COLOR_3,borderRadius:15,marginVertical:7}}
-              onPress={ModifyImage}>
-                <Text style={[style.text_me,{fontSize:13,color:colors.GRAY_COLOR_2,marginHorizontal:15,marginVertical:4}]}>
-                {t('프로필사진 변경')}
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View>
-              {ProfileData !== undefined ?
-              <Text style={[style.text_b,{fontSize:15,color:colors.BLACK_COLOR_2,}]}>
-              {ProfileData.mt_nickname? ProfileData.mt_nickname : t('이름을지정해주세요')}
-              </Text>
-              :
-              <Text style={[style.text_b,{fontSize:15,color:colors.BLACK_COLOR_2,}]}>
+                ProfileData.mt_image1 ? { uri: 'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000/uploads/' + ProfileData.mt_image1 } : require('../../../assets/img/img_profile.png')}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={{ borderWidth: 1, borderColor: colors.GRAY_COLOR_3, borderRadius: 15, marginVertical: 7 }}
+            onPress={ModifyImage}>
+            <Text style={[style.text_me, { fontSize: 13, color: colors.GRAY_COLOR_2, marginHorizontal: 15, marginVertical: 4 }]}>
+              {t('프로필사진 변경')}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          {ProfileData !== undefined ?
+            <Text style={[style.text_b, { fontSize: 15, color: colors.BLACK_COLOR_2, }]}>
+              {ProfileData.mt_nickname ? ProfileData.mt_nickname : t('이름을지정해주세요')}
+            </Text>
+            :
+            <Text style={[style.text_b, { fontSize: 15, color: colors.BLACK_COLOR_2, }]}>
               {t('이름을지정해주세요')}
-              </Text>
-              }
-              <TextInput 
-              value={modifyName}
-              onChangeText={(e:string)=>setModifyName(e)}
-              style={{marginVertical:10,paddingHorizontal:15,borderWidth:1,borderColor:colors.GRAY_COLOR_2,borderRadius:6}}
-              onSubmitEditing={ModifyProfile}
-              placeholder={t('변경할 닉네임 입력')}/>
-              <CustomButton title={t('프로필 수정')} buttonType={'green'}
-              action={ModifyProfile} 
-              disable={modifyName == '' && profileimg == undefined}/>
-            </View>
-          </View>
-          <View style={[{paddingTop:7,paddingHorizontal:20,borderTopWidth:7,borderColor:colors.GRAY_COLOR_1,}]}>
-            <TouchableOpacity style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',paddingVertical:20}}
-            onPress={Allreview}>
-              <View style={{flexDirection:'row'}}>
-                <Image style={{width:22,height:22,marginRight:7}} source={require('../../../assets/img/ico_review.png')}/>
-                <Text style={[style.text_b,{fontSize:17,color:colors.BLACK_COLOR_2,marginRight:5}]}>
-                {t('받은 거래후기')} 
-                </Text>
-                <Text style={[style.text_b,{fontSize:17,color:colors.GREEN_COLOR_3}]}>
-                {ReviewCount}
-                </Text>
-              </View>
-              <Image style={{width:7,height:12}} source={require('../../../assets/img/arrow3.png')}/>
-            </TouchableOpacity>
-          </View>
-          {reviewData == undefined?
-          <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-            <ActivityIndicator color={'#00C379'} size={'large'}/> 
-          </View>
-          :
-
-            <View>
-              <FlatList
-                data = {reviewData.slice(0,5)}
-                renderItem = {({item})=>{
-                  return(
-                  <ReviewList key={item.rt_idx} item={item} enterReview={enterReview} deleteReview={deleteReview} Toggle={Toggle} 
-                  listmodal={listmodal} setListmodal={setListmodal}/>
-                  )
-                }}
-                inverted = {true}
-                contentContainerStyle = {{paddingHorizontal:20}}
-                showsVerticalScrollIndicator = {false}
-                onEndReachedThreshold={0.1}
-                />
-            </View>
-
-
+            </Text>
           }
-          <BackHandlerCom />
-        </SafeAreaView>
-    );
+          <TextInput
+            value={modifyName}
+            onChangeText={(e: string) => setModifyName(e)}
+            style={{ marginVertical: 10, paddingHorizontal: 15, borderWidth: 1, borderColor: colors.GRAY_COLOR_2, borderRadius: 6 }}
+            onSubmitEditing={ModifyProfile}
+            placeholder={t('변경할 닉네임 입력')} />
+          <CustomButton title={t('프로필 수정')} buttonType={'green'}
+            action={ModifyProfile}
+            disable={modifyName == '' && profileimg == undefined} />
+        </View>
+      </View>
+      <View style={[{ paddingTop: 7, paddingHorizontal: 20, borderTopWidth: 7, borderColor: colors.GRAY_COLOR_1, }]}>
+        <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 20 }}
+          onPress={Allreview}>
+          <View style={{ flexDirection: 'row' }}>
+            <Image style={{ width: 22, height: 22, marginRight: 7 }} source={require('../../../assets/img/ico_review.png')} />
+            <Text style={[style.text_b, { fontSize: 17, color: colors.BLACK_COLOR_2, marginRight: 5 }]}>
+              {t('받은 거래후기')}
+            </Text>
+            <Text style={[style.text_b, { fontSize: 17, color: colors.GREEN_COLOR_3 }]}>
+              {ReviewCount}
+            </Text>
+          </View>
+          <Image style={{ width: 7, height: 12 }} source={require('../../../assets/img/arrow3.png')} />
+        </TouchableOpacity>
+      </View>
+      {reviewData == undefined ?
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator color={'#00C379'} size={'large'} />
+        </View>
+        :
+
+        <View>
+          <FlatList
+            data={reviewData.slice(0, 5)}
+            renderItem={({ item }) => {
+              return (
+                <ReviewList key={item.rt_idx} item={item} enterReview={enterReview} deleteReview={deleteReview} Toggle={Toggle}
+                  listmodal={listmodal} setListmodal={setListmodal} />
+              )
+            }}
+            inverted={true}
+            contentContainerStyle={{ paddingHorizontal: 20 }}
+            showsVerticalScrollIndicator={false}
+            onEndReachedThreshold={0.1}
+          />
+        </View>
+
+
+      }
+      <BackHandlerCom />
+    </SafeAreaView>
+  );
 };
 
 export default MypageSetting;
