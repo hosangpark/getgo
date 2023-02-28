@@ -1,0 +1,51 @@
+{
+  "project_info": {
+    "project_number": "800821934601",
+    "project_id": "getgo-374306",
+    "storage_bucket": "getgo-374306.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:800821934601:android:eb743369d5bbf4b59196d8",
+        "android_client_info": {
+          "package_name": "com.getgo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "800821934601-6683vb7d12cc1mbdqevunqu2h02i1m9r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.getgo",
+            "certificate_hash": "8c31f3139208649dcc8dcf980833139dda0947dc"
+          }
+        },
+        {
+          "client_id": "800821934601-hboru68pgnro72njigl35fqvpdum0kao.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.getgo",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtvLINUu4lHzmv5-A4vCpA9v9dM4ywUIk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "800821934601-e2u4hgnqhjbevkvorsqt81ov3igatvnr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

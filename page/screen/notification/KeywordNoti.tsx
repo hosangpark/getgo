@@ -94,7 +94,6 @@ const KeywordNoti = ({KeywordNotiitem,MaxTextCount}) => {
                 </View>
               )}
             /> */}
-            <BackHandlerCom />
         </SafeAreaView>
     );
 };

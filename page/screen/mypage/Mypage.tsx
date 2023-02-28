@@ -9,18 +9,19 @@
 import React,{useEffect, useState} from 'react';
 import {
     Alert,
-  SafeAreaView, ScrollView, Text, View,StyleSheet, FlatList, Image
+  SafeAreaView, ScrollView, Text, View,StyleSheet, FlatList, Image,BackHandler
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import style from '../../../assets/style/style';
 import { colors } from '../../../assets/color';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation,useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../../components/types/routerTypes';
 import { MypageHeader } from '../../../components/header/MypageHeader'
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import client from '../../../api/client';
+import cusToast from '../../../components/navigation/CusToast';
 
 
 
@@ -30,7 +31,8 @@ const Mypage = () => {
 
  
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
-  
+  const isFocused = useIsFocused();
+  const [exitApp, setExitApp] = React.useState(false);
   /** redux 상태관리 */
   const userInfo = useSelector((state:any) => state.userInfo);
   const myLocation = useSelector((state:any) => state.myLocation);
@@ -75,6 +77,34 @@ const Mypage = () => {
         err=>console.log(err)
       )
     };
+
+  const backAction = () => {
+    var timeout;
+    let tmp = 0;
+    if (tmp == 0) {
+      if ((exitApp == undefined || !exitApp) && isFocused) {
+        cusToast(t('한번 더 누르시면 종료됩니다'));
+        setExitApp(true);
+        timeout = setTimeout(() => {
+          setExitApp(false);
+        }, 2000);
+      } else {
+        // appTimeSave();
+        clearTimeout(timeout);
+        BackHandler.exitApp(); // 앱 종료
+      }
+      return true;
+    }
+  };
+  React.useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    if (!isFocused) {
+      backHandler.remove();
+    }
+  }, [isFocused, exitApp]);
   
     React.useEffect(()=>{
       setIsLoading(true)

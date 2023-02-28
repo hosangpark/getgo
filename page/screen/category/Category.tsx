@@ -9,11 +9,11 @@
 import React,{ useState } from 'react';
 import {
     Alert,
-  SafeAreaView, Text, View, FlatList, Image, ScrollView
+  SafeAreaView, Text, View, FlatList, Image, ScrollView,BackHandler
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation,useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../../components/types/routerTypes';
 import { CategoryType } from '../../../components/types/componentType';
@@ -23,6 +23,7 @@ import { CategoryHeader } from '../../../components/header/CategoryHeader'
 import { useTranslation } from 'react-i18next';
 import client from '../../../api/client';
 import LoadingIndicator from '../../../components/layout/Loading';
+import cusToast from '../../../components/navigation/CusToast';
 
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
@@ -37,7 +38,8 @@ interface MainHeaderType{
 const Category = ({setTabIndex}:MainHeaderType) => {
 
   const {t} = useTranslation()
-
+  const isFocused = useIsFocused();
+  const [exitApp, setExitApp] = React.useState(false);
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
 
   const [isLoading, setIsLoading] = React.useState(false);
@@ -57,6 +59,33 @@ const Category = ({setTabIndex}:MainHeaderType) => {
       )
     };
 
+  const backAction = () => {
+    var timeout;
+    let tmp = 0;
+    if (tmp == 0) {
+      if ((exitApp == undefined || !exitApp) && isFocused) {
+        cusToast(t('한번 더 누르시면 종료됩니다'));
+        setExitApp(true);
+        timeout = setTimeout(() => {
+          setExitApp(false);
+        }, 2000);
+      } else {
+        // appTimeSave();
+        clearTimeout(timeout);
+        BackHandler.exitApp(); // 앱 종료
+      }
+      return true;
+    }
+  };
+  React.useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    if (!isFocused) {
+      backHandler.remove();
+    }
+  }, [isFocused, exitApp]);
 
   React.useEffect(() => {
     setIsLoading(true)

@@ -137,6 +137,7 @@ const Search = () => {
           }
           }).then(res=>{
           setIsLoading(false)
+          console.log(res.data)
           setItemList(res.data)
           }).catch(error=>{
           setIsLoading(false)

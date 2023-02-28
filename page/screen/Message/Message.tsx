@@ -14,7 +14,7 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import style from '../../../assets/style/style';
 import { colors } from '../../../assets/color';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation,useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../../components/types/routerTypes';
 import { MessageHeader } from '../../../components/header/MessageHeader'
@@ -35,7 +35,8 @@ const Message = () => {
   const {t} = useTranslation()
   const ws  = io(`http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:3333`, { query  : { device : Platform.OS }});
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
-
+  const isFocused = useIsFocused();
+  const [exitApp, setExitApp] = React.useState(false);
   const [items, setitem] = useState<ChatItemType[]>([])
   const [chatQuitVisible, setchatQuitVisible] = React.useState(false); // 채팅방 나가기 모달
   const [target,setTarget] = useState({})
@@ -112,6 +113,25 @@ const Message = () => {
       setIsLoading(false)
   };
 
+  const backAction = () => {
+    var timeout;
+    let tmp = 0;
+    if (tmp == 0) {
+      if ((exitApp == undefined || !exitApp) && isFocused) {
+        cusToast(t('한번 더 누르시면 종료됩니다'));
+        setExitApp(true);
+        timeout = setTimeout(() => {
+          setExitApp(false);
+        }, 2000);
+      } else {
+        // appTimeSave();
+        clearTimeout(timeout);
+        BackHandler.exitApp(); // 앱 종료
+      }
+      return true;
+    }
+  };
+
   React.useEffect(()=>{
     getChatListData()
   },[])
@@ -132,6 +152,16 @@ const Message = () => {
       console.log('disconnect Server List');
     }
   }, []);
+
+  React.useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    if (!isFocused) {
+      backHandler.remove();
+    }
+  }, [isFocused, exitApp]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', async() => {

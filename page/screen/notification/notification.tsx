@@ -98,7 +98,6 @@ const Notification = ({Alert_datas}:any) => {
           />
 
       }
-          <BackHandlerCom />
         </SafeAreaView>
     );
 };

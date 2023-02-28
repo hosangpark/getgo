@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, ViewStyle,Text, ScrollView, SafeAreaView, useWindowDimensions } from 'react-native';
+import {View, ViewStyle,Text, ScrollView, SafeAreaView, useWindowDimensions,BackHandler } from 'react-native';
 import { NotificationHeader } from '../../../components/header/NotificationHeader';
 import { TabView, SceneMap,TabBar } from "react-native-tab-view";
 import Notification from './Notification';
@@ -9,10 +9,11 @@ import style from '../../../assets/style/style';
 import { useTranslation } from 'react-i18next';
 import client from '../../../api/client';
 import { useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation,useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../../components/types/routerTypes';
 import LoadingIndicator from '../../../components/layout/Loading';
+import cusToast from '../../../components/navigation/CusToast';
 
 
 
@@ -20,6 +21,8 @@ export default function NotificationIndex() {
 
   const {t} = useTranslation()
   const layout = useWindowDimensions();
+  const isFocused = useIsFocused();
+  const [exitApp, setExitApp] = React.useState(false);
   const userInfo = useSelector((state:any) => state.userInfo);
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
     const [index, setIndex] = React.useState(0);
@@ -107,6 +110,35 @@ export default function NotificationIndex() {
           )
         };
 
+
+    const backAction = () => {
+      var timeout;
+      let tmp = 0;
+      if (tmp == 0) {
+        if ((exitApp == undefined || !exitApp) && isFocused) {
+          cusToast(t('한번 더 누르시면 종료됩니다'));
+          setExitApp(true);
+          timeout = setTimeout(() => {
+            setExitApp(false);
+          }, 2000);
+        } else {
+          // appTimeSave();
+          clearTimeout(timeout);
+          BackHandler.exitApp(); // 앱 종료
+        }
+        return true;
+      }
+    };
+    
+    React.useEffect(() => {
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        backAction,
+      );
+      if (!isFocused) {
+        backHandler.remove();
+      }
+    }, [isFocused, exitApp]);
     React.useEffect(()=>{
       NoticeList()
       KeywordList()
