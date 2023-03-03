@@ -29,7 +29,7 @@ import * as UserInfoAction from '../../../redux/actions/UserInfoAction';
 import client from '../../../api/client';
 import logsStorage from '../../../components/utils/logStorage';
 import cusToast from '../../../components/navigation/CusToast';
-
+import Api from '../../../api/Api';
 
 
 
@@ -52,6 +52,8 @@ const MypageSetting = () => {
   const myLocation = useSelector((state: any) => state.myLocation);
   const dispatch = useDispatch()
 
+  console.log('userInfo', userInfo)
+
   const getProfileDetailData = async () => {
     await client({
       method: 'get',
@@ -59,6 +61,7 @@ const MypageSetting = () => {
     }).then(
       (res) => {
         setProfileData(res.data.data[0])
+
         setReviewData(res.data.list.reverse())
         setIsLoading(false)
       }
@@ -134,7 +137,14 @@ const MypageSetting = () => {
 
       if (rrrtype != 'onlynickname') {
         setProfileimg(undefined);
+
       }
+
+      let params = { ...userInfo }
+      if (res.data.nickname) params.mt_nickname = res.data.nickname
+      if (res.data.mt_image1) params.mt_profile_img = res.data.mt_image1
+
+      dispatch(UserInfoAction.updateUserInfo(JSON.stringify(params)));
 
 
       getProfileDetailData()
@@ -155,8 +165,6 @@ const MypageSetting = () => {
       } else if (profileimg == undefined) {
         /** 닉네임만 변경 */
         /** 닉네임 중복체크 */
-
-        console.log('www');
 
         await client({
           method: 'post',
@@ -229,7 +237,7 @@ const MypageSetting = () => {
               profileimg ?
                 { uri: profileimg[0]?.uri }
                 :
-                ProfileData.mt_image1 ? { uri: 'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000/uploads/' + ProfileData.mt_image1 } : require('../../../assets/img/img_profile.png')}
+                ProfileData.mt_image1 ? { uri: Api.state.imageUrl + ProfileData.mt_image1 } : require('../../../assets/img/img_profile.png')}
             />
           </TouchableOpacity>
           <TouchableOpacity style={{ borderWidth: 1, borderColor: colors.GRAY_COLOR_3, borderRadius: 15, marginVertical: 7 }}

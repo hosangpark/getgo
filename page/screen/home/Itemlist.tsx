@@ -40,6 +40,7 @@ import LoadingIndicator from '../../../components/layout/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import { BackHandlerCom } from '../../../components/BackHandlerCom';
+import Api, { NodataView } from '../../../api/Api';
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
 
@@ -62,6 +63,7 @@ const ItemList = ({ setTabIndex }: itemListType) => {
 
   const userInfo = useSelector((state: any) => state.userInfo);
   const myLocation = useSelector((state: any) => state.myLocation);
+
 
   const Itemupload = () => {
     navigation.navigate('Itemupload', { type: 'ProductUpload', pt_idx: 0 });
@@ -101,7 +103,7 @@ const ItemList = ({ setTabIndex }: itemListType) => {
 
   /** 데이터 리렌더링 */
   const rerendering = () => {
-    console.log('myLocation', myLocation);
+    console.log('myLocation', myLocation.select_location, myLocation.location1.mt_area, myLocation.location2.mt_area);
     if (myLocation.select_location == 1) {
       setListChanege(1);
     } else if (myLocation.select_location == 2) {
@@ -113,6 +115,10 @@ const ItemList = ({ setTabIndex }: itemListType) => {
 
   /** 지역 상품목록 */
   const getProductListData = async (event: any) => {
+
+
+    if (!event) return;
+
     console.log('getProductListData', event, userInfo.idx);
 
     await client({
@@ -121,9 +127,7 @@ const ItemList = ({ setTabIndex }: itemListType) => {
     }).then(
       res => {
         // console.log(res);
-
         console.log('getProductListData2', res.data);
-
         //if (items !== res.data) {
         setitem(res.data);
         //}
@@ -164,10 +168,10 @@ const ItemList = ({ setTabIndex }: itemListType) => {
     }
   };
 
-  React.useEffect(() => {
-    setIsLoading(true);
-    rerendering();
-  }, [myLocation.location1.mt_area, myLocation.location2.mt_area]);
+  // React.useEffect(() => {
+  //   setIsLoading(true);
+  //   rerendering();
+  // }, [myLocation.location1.mt_area, myLocation.location2.mt_area, myLocation.select_location]);
 
 
 
@@ -179,17 +183,18 @@ const ItemList = ({ setTabIndex }: itemListType) => {
     if (!isFocused) {
       backHandler.remove();
     }
-    // return () => {
-    //   backHandler.remove();
-    // }
   }, [isFocused, exitApp]);
 
   useFocusEffect(
     React.useCallback(() => {
-      getRefreshData();
+
+      rerendering();
+
       return () => { };
-    }, []),
+    }, [myLocation.location1.mt_area, myLocation.location2.mt_area, myLocation.select_location]),
   );
+
+
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -207,6 +212,7 @@ const ItemList = ({ setTabIndex }: itemListType) => {
               <ProductItem item={item} action={rerendering} />
             )}
             showsVerticalScrollIndicator={false}
+            ListEmptyComponent={<NodataView />}
             // onEndReached={()=>{
             //   setIsListLoading(true)
             // }}

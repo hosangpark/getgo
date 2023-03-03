@@ -122,8 +122,8 @@ const Login = () => {
             data: {
                 mt_na: inputLoginInfo.areaCode,
                 mt_hp: inputLoginInfo.mt_hp,
-                auth_number: '1234'
-                //   auth_number:authCode
+                // auth_number: '1234'
+                auth_number: authCode
             }
         }).then(res => {
             setAutoUserData(res.data.user_idx)
@@ -131,9 +131,9 @@ const Login = () => {
             cusToast(t(res.data.message))
         }).catch(error => {
             console.log(error)
-            cusToast(
-                t('기존 정보가 없습니다.')
-            )
+            // cusToast(
+            //     t('기존 정보가 없습니다.')
+            // )
         })
     }
 

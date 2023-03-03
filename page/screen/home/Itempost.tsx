@@ -20,6 +20,8 @@ import {
   Button,
   Dimensions,
   ActivityIndicator,
+  Linking,
+  Share
 } from 'react-native';
 import style from '../../../assets/style/style';
 import { colors } from '../../../assets/color';
@@ -43,6 +45,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import LoadingIndicator from '../../../components/layout/Loading';
 import cusToast from '../../../components/navigation/CusToast';
 import { useTranslation } from 'react-i18next';
+import Api from '../../../api/Api';
 
 type Props = StackScreenProps<MainNavigatorParams, 'Itempost'>;
 const Itempost = ({ route }: Props) => {
@@ -68,12 +71,44 @@ const Itempost = ({ route }: Props) => {
   /** 내가올린 게시글이면 수정버튼 보이기 */
   const [myProduct, setmyProduct] = useState(false);
 
-  const SHOWLOG = () => {
-    console.log('share');
-    console.log(profileToggle);
+
+  // const SHOWLOG = () => {
+  //   console.log('share');
+  //   console.log(profileToggle);
+  // };
+
+  const SHOWLOG = async () => {
+    try {
+      // let shopUrl = '';
+      // if (Platform.OS == 'android') {
+      //   shopUrl = 'https://play.google.com/store/apps/details?id=com.getgo';
+      // } else {
+      //   shopUrl = 'https://apps.apple.com/kr/app/id1572757670';
+      // }
+      let fullcodeUrl = Api.state.siteUrl + '/bridge.php?code=' + items.data[0].pt_idx;
+      const result = await Share.share({
+        message: `[Getgo] ${items.data[0].pt_title} / ￦ ${NumberComma(items.data[0].pt_selling_price)} `,
+        url: fullcodeUrl,
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+          //Toast.show('공유되었습니다.');
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      Alert.alert(error.message);
+    }
   };
-  const ReportPost = (target: number) => {
-    navigation.navigate('ReportPost', { mt_declaration_idx: target });
+
+
+  const ReportPost = (target: number, pt_idx: any) => {
+    navigation.navigate('ReportPost', { mt_declaration_idx: target, pt_idx: pt_idx });
   };
   const gofullscreen = () => {
     navigation.navigate('ItempostFullSlide', filterslideImage);
@@ -88,9 +123,12 @@ const Itempost = ({ route }: Props) => {
         pt_wdate: new Date(),
         pt_selling_price: 0,
         mt_seller_idx: 0,
+        wp_idx: null,
       },
     ],
   });
+
+  const [wp_idx, setWp_idx] = React.useState(items.data[0].wp_idx ?? null);
 
   const [filterslideImage, setfilterslideImage] = React.useState<any>([]);
 
@@ -105,6 +143,7 @@ const Itempost = ({ route }: Props) => {
     })
       .then(res => {
         setitem(res.data);
+        setWp_idx(res.data.wp_idx ?? null);
         setfilterslideImage(res.data.image_arr);
         setIsLoading(false);
       })
@@ -115,6 +154,13 @@ const Itempost = ({ route }: Props) => {
 
   /** 상품 예약자 선택 & 자기상품 아닐시 예약전송 */
   const Reserve_choice = async (target: ChoiceType) => {
+
+    //거래완료
+    // if (items.data[0].pt_sale_now == '3') {
+    //   cusToast(t('이미 거래가 완료된 상품입니다.'));
+    //   return false;
+    // }
+
     if (userInfo.idx == items.data[0].mt_seller_idx) {
       navigation.navigate('Reserve_choice', { target });
     } else {
@@ -127,7 +173,11 @@ const Itempost = ({ route }: Props) => {
         },
       })
         .then(res => {
-          console.log(res.data);
+          //{"crt_idx": 52, "ctt_room_id": "CzAuaGg4fxlXg"}
+          if (res.data.crt_idx) {
+            cusToast(t('판매자에게 채팅요청을 보냈습니다.'))
+          }
+          //console.log(res.data);
         })
         .catch(error => {
           console.log(error);
@@ -137,24 +187,59 @@ const Itempost = ({ route }: Props) => {
 
   /** 상품 정보 가져오기 ${route.params.pt_idx}*/
   React.useEffect(() => {
-    navigation.addListener('focus', () => {
+    const subscribe = navigation.addListener('focus', () => {
       getPostData();
     });
+
+
   }, []);
 
+  /** 관심상품 등록&제거 */
+  const heartOnOff = async (pt_idx: any) => {
+
+    console.log('heartOnOff', pt_idx, wp_idx)
+
+    if (!wp_idx) {
+      AddHeart(pt_idx)
+    } else {
+      DeleteHeart(wp_idx)
+    }
+  }
+
+
+
+  const DeleteHeart = async (target: number) => {
+    await client({
+      method: 'get',
+      url: `/product/add_like_delete`,
+      params: {
+        wp_idx: target,
+      }
+    }).then(res => {
+      cusToast(t(res.data.message))
+      setWp_idx(null)
+      // action()
+    }
+    ).catch(error => {
+      console.log(error);
+    })
+  }
+
   /** 관심상품 등록 */
-  const heartOn = async (e: number) => {
+  const AddHeart = async (e: number) => {
     await client<{ data: string; message: string }>({
       method: 'post',
       url: '/product/add_like',
       data: {
-        pt_idx: items.data[0].pt_idx,
+        pt_idx: e,
         mt_idx: userInfo.idx,
         area_show: 'Y',
       },
     })
       .then(res => {
-        cusToast(t(res.data.message));
+        cusToast(t(res.data.message))
+        setWp_idx(res.data.wt_idx)
+
       })
       .catch(error => {
         console.log(error);
@@ -199,7 +284,7 @@ const Itempost = ({ route }: Props) => {
             imageheight={410}
             SlideImage={filterslideImage}
           />
-        ) : null}
+        ) : <View style={{ height: 50, backgroundColor: colors.GRAY_COLOR_4 }}></View>}
         <View style={{ marginVertical: 24, marginHorizontal: 20 }}>
           {myProduct && (
             <View style={{ width: 100, height: 20, marginBottom: 12 }}>
@@ -424,13 +509,13 @@ const Itempost = ({ route }: Props) => {
             </View>
 
             <TouchableOpacity
-              onPress={() => ReportPost(items.data[0].mt_seller_idx)}>
+              onPress={() => ReportPost(items.data[0].mt_seller_idx, items.data[0].pt_idx)}>
               <Text
                 style={[
                   style.text_me,
                   { fontSize: 13, color: colors.GRAY_COLOR_2 },
                 ]}>
-                {t('게시글 신고')}
+                {t('글 신고')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -455,18 +540,18 @@ const Itempost = ({ route }: Props) => {
           borderColor: colors.GRAY_COLOR_3,
           flexDirection: 'row',
           justifyContent: 'space-between',
-          height: 60,
+          // height: 60,
           paddingHorizontal: 20,
-          paddingVertical: 12,
+          paddingVertical: 10,
         }}>
-        <View style={{ justifyContent: 'center' }}>
-          <Text style={[style.default_font_black, { fontSize: 18 }]}>
+        <View style={{ justifyContent: 'center', flex: 1 }}>
+          <Text style={[style.default_font_black, { fontSize: 18, flexWrap: 'wrap', flexShrink: 1 }]}>
             ￦ {NumberComma(items.data[0].pt_selling_price)}
           </Text>
         </View>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity
-            onPress={() => heartOn(items.data[0].pt_idx)}
+            onPress={() => heartOnOff(items.data[0].pt_idx)}
             style={{
               marginRight: 6,
               padding: 10,
@@ -474,7 +559,7 @@ const Itempost = ({ route }: Props) => {
               justifyContent: 'center',
               borderRadius: 5,
             }}>
-            {items.wp_idx ? (
+            {!wp_idx ? (
               <Image
                 style={{ width: 25, height: 25 }}
                 source={require('../../../assets/img/ico_book.png')}
@@ -500,6 +585,7 @@ const Itempost = ({ route }: Props) => {
               justifyContent: 'center',
               width: 100,
               borderRadius: 5,
+              height: 45,
             }}>
             <Text style={{ color: 'white' }}>{t('채팅하기')}</Text>
           </TouchableOpacity>

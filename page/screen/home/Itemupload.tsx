@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, {useRef, useState, useEffect} from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -25,35 +25,35 @@ import {
   Alert,
 } from 'react-native';
 import style from '../../../assets/style/style';
-import {colors} from '../../../assets/color';
+import { colors } from '../../../assets/color';
 
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
-import {MainNavigatorParams} from '../../../components/types/routerTypes';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
+import { MainNavigatorParams } from '../../../components/types/routerTypes';
 // import { color } from 'native-base/lib/typescript/theme/styled-system';
-import {BackHeader} from '../../../components/header/BackHeader';
+import { BackHeader } from '../../../components/header/BackHeader';
 import {
   CategoryOptionType,
   Reserve_SelectBoxType,
 } from '../../../components/types/componentType';
-import {SelectBox} from '../../../components/layout/SelectBox';
+import { SelectBox } from '../../../components/layout/SelectBox';
 
 import ProductUpload from '../../../components/layout/ProductUpload';
-import {BackHandlerCom} from '../../../components/BackHandlerCom';
+import { BackHandlerCom } from '../../../components/BackHandlerCom';
 import MultipleImagePicker from '@baronha/react-native-multiple-image-picker';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-import {formatDistanceToNow} from 'date-fns/esm';
-import {ko} from 'date-fns/locale';
-import {connect, useDispatch, useSelector} from 'react-redux';
+import { formatDistanceToNow } from 'date-fns/esm';
+import { ko } from 'date-fns/locale';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import client from '../../../api/client';
 import cusToast from '../../../components/navigation/CusToast';
 import axios from 'axios';
-import {launchImageLibrary} from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import SetMyLocation from '../location/SetMyLocation';
 
 type Props = StackScreenProps<MainNavigatorParams, 'Itemupload'>;
-const Itemupload = ({route}: Props) => {
+const Itemupload = ({ route }: Props) => {
   const userInfo = useSelector((state: any) => state.userInfo);
   const myLocation = useSelector((state: any) => state.myLocation);
 
@@ -63,7 +63,7 @@ const Itemupload = ({route}: Props) => {
   const [bodyText, setBodyText] = useState('');
   const [price, setPrice] = React.useState('');
   const [loading, setLoading] = React.useState(false);
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const bodyRef = useRef<TextInput | null>(null);
   const [uploadpictures, setUploadpictures] = useState<any>([]);
   const pt_idx = route?.params?.pt_idx;
@@ -132,27 +132,27 @@ const Itemupload = ({route}: Props) => {
   });
 
   const [CategoryOptions] = React.useState([
-    {label: t('디지털기기'), value: '디지털기기', sel_id: 1},
-    {label: t('생활가전'), value: '생활가전', sel_id: 2},
-    {label: t('가구/인테리어'), value: '가구/인테리어', sel_id: 3},
-    {label: t('생활/주방'), value: '생활/주방', sel_id: 4},
-    {label: t('유아동'), value: '유아동', sel_id: 5},
-    {label: t('유아도서'), value: '유아도서', sel_id: 6},
-    {label: t('여성의류'), value: '여성의류', sel_id: 7},
-    {label: t('여성잡화'), value: '여성잡화', sel_id: 8},
-    {label: t('남성패션/잡화'), value: '남성패션/잡화', sel_id: 9},
-    {label: t('뷰티/미용'), value: '뷰티/미용', sel_id: 10},
-    {label: t('스포츠/레저'), value: '스포츠/레저', sel_id: 11},
-    {label: t('골프'), value: '골프', sel_id: 21},
-    {label: t('취미/게임/음반'), value: '취미/게임/음반', sel_id: 12},
-    {label: t('도서'), value: '도서', sel_id: 13},
-    {label: t('자동차'), value: '자동차', sel_id: 20},
-    {label: t('중고차'), value: '중고차', sel_id: 14},
-    {label: t('티켓/교환권'), value: '티켓/교환권', sel_id: 15},
-    {label: t('가공식품'), value: '가공식품', sel_id: 16},
-    {label: t('반려동물용품'), value: '반려동물용품', sel_id: 17},
-    {label: t('식품'), value: '식품', sel_id: 18},
-    {label: t('기타'), value: '기타', sel_id: 19},
+    { label: t('디지털기기'), value: '디지털기기', sel_id: 1 },
+    { label: t('생활가전'), value: '생활가전', sel_id: 2 },
+    { label: t('가구/인테리어'), value: '가구/인테리어', sel_id: 3 },
+    { label: t('생활/주방'), value: '생활/주방', sel_id: 4 },
+    { label: t('유아동'), value: '유아동', sel_id: 5 },
+    { label: t('유아도서'), value: '유아도서', sel_id: 6 },
+    { label: t('여성의류'), value: '여성의류', sel_id: 7 },
+    { label: t('여성잡화'), value: '여성잡화', sel_id: 8 },
+    { label: t('남성패션/잡화'), value: '남성패션/잡화', sel_id: 9 },
+    { label: t('뷰티/미용'), value: '뷰티/미용', sel_id: 10 },
+    { label: t('스포츠/레저'), value: '스포츠/레저', sel_id: 11 },
+    { label: t('골프'), value: '골프', sel_id: 21 },
+    { label: t('취미/게임/음반'), value: '취미/게임/음반', sel_id: 12 },
+    { label: t('도서'), value: '도서', sel_id: 13 },
+    { label: t('자동차'), value: '자동차', sel_id: 20 },
+    { label: t('중고차'), value: '중고차', sel_id: 14 },
+    { label: t('티켓/교환권'), value: '티켓/교환권', sel_id: 15 },
+    { label: t('가공식품'), value: '가공식품', sel_id: 16 },
+    { label: t('반려동물용품'), value: '반려동물용품', sel_id: 17 },
+    { label: t('식품'), value: '식품', sel_id: 18 },
+    { label: t('기타'), value: '기타', sel_id: 19 },
   ]);
 
   const [overScroll, setOverScroll] = useState(true);
@@ -161,7 +161,7 @@ const Itemupload = ({route}: Props) => {
   };
   const CategorySelect = (item: CategoryOptionType) => {
     setOverScroll(!overScroll);
-    setSelCategory({...item});
+    setSelCategory({ ...item });
   };
 
   // const Delete = (e: any) => {
@@ -265,7 +265,7 @@ const Itemupload = ({route}: Props) => {
           await client({
             method: 'post',
             url: '/product/product_add',
-            headers: {'Content-Type': 'multipart/form-data'},
+            headers: { 'Content-Type': 'multipart/form-data' },
             data: form,
           })
             .then(res => {
@@ -286,7 +286,7 @@ const Itemupload = ({route}: Props) => {
           await client({
             method: 'post',
             url: '/product/product_edit',
-            headers: {'Content-Type': 'multipart/form-data'},
+            headers: { 'Content-Type': 'multipart/form-data' },
             data: form,
           })
             .then(res => {
@@ -323,7 +323,7 @@ const Itemupload = ({route}: Props) => {
         if (item.ct_id) {
           CategoryOptions.forEach(v => {
             console.log(v, item.ct_id);
-            let {label, value, sel_id} = v;
+            let { label, value, sel_id } = v;
             if (sel_id == item.ct_id) {
               setSelCategory(v);
               return false;
@@ -369,7 +369,7 @@ const Itemupload = ({route}: Props) => {
   }, [route]);
 
   return (
-    <SafeAreaView style={[style.default_background, {flex: 1}]}>
+    <SafeAreaView style={[style.default_background, { flex: 1 }]}>
       <BackHeader
         title={
           route.params.type == 'ProductUpload'
@@ -380,7 +380,7 @@ const Itemupload = ({route}: Props) => {
       <ScrollView
         scrollEnabled={overScroll}
         showsVerticalScrollIndicator={false}>
-        <KeyboardAvoidingView style={{marginHorizontal: 20}}>
+        <KeyboardAvoidingView style={{ marginHorizontal: 20 }}>
           <Text
             style={[
               style.text_b,
@@ -392,7 +392,7 @@ const Itemupload = ({route}: Props) => {
               },
             ]}>
             {t('상품 이미지 (1장 이상)')}
-            <Text style={{color: colors.GREEN_COLOR_2}}> *</Text>
+            <Text style={{ color: colors.GREEN_COLOR_2 }}> *</Text>
           </Text>
           <TouchableOpacity
             style={{
@@ -407,7 +407,7 @@ const Itemupload = ({route}: Props) => {
             <Text
               style={[
                 style.text_sb,
-                {color: colors.WHITE_COLOR, fontSize: 15},
+                { color: colors.WHITE_COLOR, fontSize: 15 },
               ]}>
               {t('사진 추가')} ({uploadpictures ? uploadpictures.length : 0}
               /10)
@@ -415,20 +415,20 @@ const Itemupload = ({route}: Props) => {
           </TouchableOpacity>
           <FlatList
             showsHorizontalScrollIndicator={false}
-            style={{marginBottom: 30}}
+            style={{ marginBottom: 30 }}
             data={uploadpictures}
-            renderItem={({item, index}) => (
-              <View style={{marginRight: 8, width: 100, height: 100}}>
+            renderItem={({ item, index }) => (
+              <View style={{ marginRight: 8, width: 100, height: 100 }}>
                 <ImageBackground
-                  style={{flex: 1}}
-                  source={{uri: item.uri}}
+                  style={{ flex: 1 }}
+                  source={{ uri: item.uri }}
                   resizeMode="cover"
-                  imageStyle={{borderRadius: 10}}>
+                  imageStyle={{ borderRadius: 10 }}>
                   <TouchableOpacity
-                    style={{alignItems: 'flex-end', right: 10, top: 10}}
+                    style={{ alignItems: 'flex-end', right: 10, top: 10 }}
                     onPress={() => Delete(index)}>
                     <Image
-                      style={{width: 25, height: 25}}
+                      style={{ width: 25, height: 25 }}
                       source={require('../../../assets/img/ico_close1.png')}
                     />
                   </TouchableOpacity>
@@ -449,7 +449,7 @@ const Itemupload = ({route}: Props) => {
                     <Text
                       style={[
                         style.text_sb,
-                        {fontSize: 13, color: colors.WHITE_COLOR},
+                        { fontSize: 13, color: colors.WHITE_COLOR },
                       ]}>
                       {t('대표사진')}
                     </Text>
@@ -460,16 +460,16 @@ const Itemupload = ({route}: Props) => {
             horizontal={true}
           />
 
-          <View style={{marginBottom: 20}}>
+          <View style={{ marginBottom: 20 }}>
             <Text
               style={[
                 style.text_sb,
-                {color: colors.BLACK_COLOR_1, fontSize: 15, marginBottom: 6},
+                { color: colors.BLACK_COLOR_1, fontSize: 15, marginBottom: 6 },
               ]}>
               {t('카테고리')}
-              <Text style={{color: colors.GREEN_COLOR_2}}> *</Text>
+              <Text style={{ color: colors.GREEN_COLOR_2 }}> *</Text>
             </Text>
-            <View style={{height: 45}}>
+            <View style={{ height: 45 }}>
               <SelectBox
                 selOption={selectCategory} // 선택한 옵션 정보
                 options={CategoryOptions} //옵션 리스트
@@ -481,14 +481,14 @@ const Itemupload = ({route}: Props) => {
             </View>
           </View>
 
-          <View style={{marginBottom: 20}}>
+          <View style={{ marginBottom: 20 }}>
             <Text
               style={[
                 style.text_sb,
-                {color: colors.BLACK_COLOR_1, fontSize: 15, marginBottom: 6},
+                { color: colors.BLACK_COLOR_1, fontSize: 15, marginBottom: 6 },
               ]}>
               {t('제목')}
-              <Text style={{color: colors.GREEN_COLOR_2}}> *</Text>
+              <Text style={{ color: colors.GREEN_COLOR_2 }}> *</Text>
             </Text>
             <TextInput
               style={{
@@ -508,14 +508,14 @@ const Itemupload = ({route}: Props) => {
               onChangeText={setTitle}
             />
           </View>
-          <View style={{marginBottom: 20}}>
+          <View style={{ marginBottom: 20 }}>
             <Text
               style={[
                 style.text_sb,
-                {color: colors.BLACK_COLOR_1, fontSize: 15, marginBottom: 6},
+                { color: colors.BLACK_COLOR_1, fontSize: 15, marginBottom: 6 },
               ]}>
               {t('내용')}
-              <Text style={{color: colors.GREEN_COLOR_2}}> *</Text>
+              <Text style={{ color: colors.GREEN_COLOR_2 }}> *</Text>
             </Text>
             <TextInput
               style={{
@@ -534,14 +534,14 @@ const Itemupload = ({route}: Props) => {
               ref={bodyRef}
             />
           </View>
-          <View style={{marginBottom: 30}}>
+          <View style={{ marginBottom: 30 }}>
             <Text
               style={[
                 style.text_sb,
-                {color: colors.BLACK_COLOR_1, fontSize: 15, marginBottom: 6},
+                { color: colors.BLACK_COLOR_1, fontSize: 15, marginBottom: 6 },
               ]}>
               {t('가격')}
-              <Text style={{color: colors.GREEN_COLOR_2}}> *</Text>
+              <Text style={{ color: colors.GREEN_COLOR_2 }}> *</Text>
             </Text>
             <TextInput
               style={{
@@ -552,6 +552,7 @@ const Itemupload = ({route}: Props) => {
                 paddingHorizontal: 15,
               }}
               placeholder={t('가격 입력')}
+              maxLength={20}
               numberOfLines={1}
               blurOnSubmit={false}
               keyboardType="number-pad"
@@ -561,16 +562,16 @@ const Itemupload = ({route}: Props) => {
             />
           </View>
         </KeyboardAvoidingView>
-        <View style={{backgroundColor: colors.GREEN_COLOR_2}}>
+        <View style={{ backgroundColor: colors.GREEN_COLOR_2 }}>
           <TouchableOpacity
             onPress={Complete}
             style={[
-              {alignItems: 'center', justifyContent: 'center', height: 60},
+              { alignItems: 'center', justifyContent: 'center', height: 60 },
             ]}>
             <Text
               style={[
                 style.text_sb,
-                {color: colors.WHITE_COLOR, fontSize: 18},
+                { color: colors.WHITE_COLOR, fontSize: 18 },
               ]}>
               {t('완료')}
             </Text>

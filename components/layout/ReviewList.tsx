@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {
   Alert,
-SafeAreaView, Image, Text, View, FlatList, ScrollView
+  SafeAreaView, Image, Text, View, FlatList, ScrollView
 } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import style from '../../assets/style/style';
@@ -12,80 +12,86 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../components/types/routerTypes';
 import { foramtDate } from "../utils/funcKt";
+import Api from "../../api/Api";
 
 
 
-export const ReviewList = ({item,  deleteReview ,enterReview,Toggle,listmodal,setListmodal}:
-  ({item:ReviewItemType , deleteReview:(item:ReviewItemType)=>void, enterReview:(item:ReviewItemType)=>void, Toggle:(itemid:number)=>void ,listmodal:any,setListmodal:(e:boolean)=>void})
-  ) => {
-    const {t} = useTranslation()
-    const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
-    const [noticeState,noticeToggle] = useState(false)
-  return(
+export const ReviewList = ({ item, deleteReview, enterReview, Toggle, listmodal, setListmodal }:
+  ({ item: ReviewItemType, deleteReview: (item: ReviewItemType) => void, enterReview: (item: ReviewItemType) => void, Toggle: (itemid: number) => void, listmodal: any, setListmodal: (e: boolean) => void })
+) => {
+  const { t } = useTranslation()
+  const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
+  const [noticeState, noticeToggle] = useState(false)
+  return (
     <View
-    style={{paddingVertical:17,flexDirection:'row',justifyContent:'space-between',alignItems:'center',overflow:'visible',
-    flex:1,position:'relative',}}
+      style={{
+        paddingVertical: 17, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', overflow: 'visible',
+        flex: 1, position: 'relative',
+      }}
     >
-      <View  style={{flexDirection:'row',flex:10}}>
-        <TouchableOpacity style={{flexDirection:'row'}}
-        onPress={()=>enterReview(item)}>
-        {/* onPress={()=>navigation.navigate('ReviewDetail',item)}> */}
-          <Image style={{width:40,height:40,borderRadius:50,marginRight:20}} source={item.review_image1?{
-            uri:'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000/uploads/'+item.review_image1}
-            :require('../../assets/img/img_profile.png')
-          }/>
-          <View style={{width:'80%'}}>
-            <View style={{flexDirection:'row'}}>
-              <Text style={[style.text_sb,{fontSize:12,color:colors.BLACK_COLOR_1}]}>
-              {item.mt_nickname} 
+      <View style={{ flexDirection: 'row', flex: 10 }}>
+        <TouchableOpacity style={{ flexDirection: 'row' }}
+          onPress={() => enterReview(item)}>
+          {/* onPress={()=>navigation.navigate('ReviewDetail',item)}> */}
+          <Image style={{ width: 40, height: 40, borderRadius: 50, marginRight: 20 }} source={item.review_image1 ? {
+            uri: Api.state.imageUrl + item.review_image1
+          }
+            : require('../../assets/img/img_profile.png')
+          } />
+          <View style={{ width: '80%' }}>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={[style.text_sb, { fontSize: 12, color: colors.BLACK_COLOR_1 }]}>
+                {item.mt_nickname}
               </Text>
-              <Text style={[style.text_li,{fontSize:12,color:colors.GRAY_COLOR_2,marginLeft:5}]}>
-              {item.pt_area} / {foramtDate(item.rt_wdate)}
+              <Text style={[style.text_li, { fontSize: 12, color: colors.GRAY_COLOR_2, marginLeft: 5 }]}>
+                {item.pt_area} / {foramtDate(item.rt_wdate)}
               </Text>
             </View>
-            <View style={{flexDirection:'row',alignItems:'center',marginTop:6,}}>
-            {!noticeState ?
-              null
-              :
-              <Text style={{color:'red',marginRight:5,justifyContent:'center'}}>
-                차단중
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6, }}>
+              {!noticeState ?
+                null
+                :
+                <Text style={{ color: 'red', marginRight: 5, justifyContent: 'center' }}>
+                  차단중
               {/* <Image style={{width:20,height:20}} source={require('../../assets/img/top_alim.png')}/> */}
+                </Text>
+              }
+              <Text style={[style.text_re, { fontSize: 15, color: colors.BLACK_COLOR_2 }]} numberOfLines={1}>
+                {item.rt_content}
               </Text>
-            }
-            <Text style={[style.text_re,{fontSize:15,color:colors.BLACK_COLOR_2}]} numberOfLines={1}>  
-              {item.rt_content}
-            </Text>
             </View>
           </View>
         </TouchableOpacity>
       </View>
-      <View  style={{flexDirection:'row',flex:1}}>
-        <TouchableOpacity onPress={()=>Toggle(item.rt_idx)} style={{flex:3}}>
-          <Image style={{width:28,height:28}} source={require('../../assets/img/top_menu.png')}/>
+      <View style={{ flexDirection: 'row', flex: 1 }}>
+        <TouchableOpacity onPress={() => Toggle(item.rt_idx)} style={{ flex: 3 }}>
+          <Image style={{ width: 28, height: 28 }} source={require('../../assets/img/top_menu.png')} />
         </TouchableOpacity>
       </View>
-      {listmodal==item.rt_idx?
-      <View style={{position:'absolute',backgroundColor:colors.WHITE_COLOR,right:35,top:20,borderRadius:5,elevation:10,
-      paddingVertical:15,zIndex:999}}>
-          <TouchableOpacity style={{flex:1,paddingVertical:10,paddingHorizontal:25}}
-          onPress={()=>noticeToggle(!noticeState)}
+      {listmodal == item.rt_idx ?
+        <View style={{
+          position: 'absolute', backgroundColor: colors.WHITE_COLOR, right: 35, top: 20, borderRadius: 5, elevation: 10,
+          paddingVertical: 15, zIndex: 999
+        }}>
+          <TouchableOpacity style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 25 }}
+            onPress={() => noticeToggle(!noticeState)}
           >
-            <Text style={[style.text_me,{fontSize:14,color:colors.BLACK_COLOR_1}]}>
-            {!noticeState ?
-              t('알림 끄기')
-              :
-              t('알림 켜기')
-            }
+            <Text style={[style.text_me, { fontSize: 14, color: colors.BLACK_COLOR_1 }]}>
+              {!noticeState ?
+                t('알림 끄기')
+                :
+                t('알림 켜기')
+              }
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{flex:1,paddingVertical:10,paddingHorizontal:25}}
-          onPress={()=>deleteReview(item)}
+          <TouchableOpacity style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 25 }}
+            onPress={() => deleteReview(item)}
           >
-            <Text style={[style.text_me,{fontSize:14,color:colors.BLACK_COLOR_1}]}>
-            {t('채팅방삭제')}
+            <Text style={[style.text_me, { fontSize: 14, color: colors.BLACK_COLOR_1 }]}>
+              {t('채팅방삭제')}
             </Text>
           </TouchableOpacity>
-      </View> : null
+        </View> : null
       }
     </View>
   )
