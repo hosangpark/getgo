@@ -102,7 +102,7 @@ const SelectLogin = () => {
             ...userInfo,
             idx: 59,
         }
-        await AsyncStorage.setItem('userIdx', JSON.stringify(params))
+        await AsyncStorage.setItem('userIdx', JSON.stringify(59))
         dispatch(UserInfoAction.userlogin(params));
     }
 
@@ -153,12 +153,34 @@ const SelectLogin = () => {
 
     /** 자동로그인 설정 */
     React.useEffect(() => {
-        navigation.addListener('focus', () => {
-            AsyncStorage.getItem('userIdx', (err, result) => {
-                if (result == null) {
-                    return
-                } else if (result) {
-                    dispatch(UserInfoAction.userlogin(result));
+        navigation.addListener('focus', async () => {
+            await AsyncStorage.getItem('userIdx', async (err, result) => {
+                if (result) {
+                    /*
+                    idx:args.idx,
+        mt_profile_img:args.mt_profile_img,
+        mt_na:args.mt_na,
+        mt_hp:args.mt_hp,
+        mt_nickname:args.mt_nickname,
+        mt_email:args.mt_email,
+        sell_count:args.sell_count,
+        trade_com_count:args.trade_com_count,
+        token:args.token,
+                    */
+
+                    await client({
+                        method: 'get',
+                        url: `/user/mypage?mt_idx=${result}`,
+                    }).then(
+                        res => {
+                            console.log('resdata', res.data.data[0]);
+                            dispatch(UserInfoAction.userlogin(JSON.stringify(res.data.data[0])));
+                        }
+                    ).catch(
+                        cusToast(t('자동로그인에 실패했습니다.'))
+                    )
+
+
                 }
             })
         })

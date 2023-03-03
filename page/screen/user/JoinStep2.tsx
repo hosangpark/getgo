@@ -167,9 +167,14 @@ const JoinStep2 = ({ route }: any) => {
                 let params = {
                     ...userInfo,
                     idx: res.data.user_idx,
+                    mt_na: inputLoginInfo.areaCode,
+                    mt_hp: inputLoginInfo.mt_hp,
+                    mt_area: route.params.area,
+                    mt_lat: route.params.mt_lat,
+                    mt_log: route.params.mt_log,
                 }
                 dispatch(UserInfoAction.updateUserInfo(JSON.stringify(params)));
-                setAutoUserData(params)
+                setAutoUserData(res.data.user_idx)
                 cusToast(res.data.message)
                 navigation.navigate('JoinStep3');
             }
