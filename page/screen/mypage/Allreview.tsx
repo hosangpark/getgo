@@ -3,6 +3,7 @@ import React from 'react';
 
 import {View, ViewStyle,Text, ScrollView, SafeAreaView, useWindowDimensions } from 'react-native';
 import { BackHeader } from '../../../components/header/BackHeader';
+import { useFocusEffect,} from '@react-navigation/native';
 import { TabView, SceneMap,TabBar } from "react-native-tab-view";
 import ReviewBuy from './ReviewBuy';
 import ReviewSale from './ReviewSale';
@@ -87,7 +88,7 @@ export default function AllreView() {
           url: `/user/review_list?mt_idx=${userInfo.idx}`,
           }).then(
             res=>{
-              setReviewBuy(res.data.list)
+              setReviewBuy(res.data.list.reverse())
               setRt_type_buy(res.data.rt_type)
             }
           ).catch(
@@ -102,7 +103,7 @@ export default function AllreView() {
           url: `/user/seller_reviews_list?mt_idx=${userInfo.idx}`,
           }).then(
             res=>{
-              setReviewSale(res.data.list)
+              setReviewSale(res.data.list.reverse())
               setRt_type_sale(res.data.rt_type)
             }
           ).catch(
@@ -110,10 +111,13 @@ export default function AllreView() {
           })
         };
     
-      React.useEffect(() => {
-        getReviewSaleData();
-        getReviewBuyData()
-      }, []);
+    useFocusEffect(
+        React.useCallback(() => {
+          getReviewSaleData();
+          getReviewBuyData()
+          return () => {};
+        }, []),
+      );    
 
   return (
     <SafeAreaView style={{flex:1,backgroundColor:'#fff'}}>

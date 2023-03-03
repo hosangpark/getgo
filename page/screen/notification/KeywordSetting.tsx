@@ -61,6 +61,7 @@ const keywordList = async() =>{
     }
     }).then(
       res=>{
+        console.log('rrr:',res.data)
         settextInput(res.data.list)
         setMaxTextCount(res.data.total_count)
       }

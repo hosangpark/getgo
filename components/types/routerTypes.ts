@@ -78,7 +78,8 @@ export type MainNavigatorParams = { //props가 없으면 undefined 있으면 {pr
     ReportPost : {
         mt_declaration_idx:number
     }
-    ReporChat : {
+    ReportChat : {
+        room_idx:number,
         mt_declaration_idx:number
     }
 
@@ -140,12 +141,7 @@ export type MainNavigatorParams = { //props가 없으면 undefined 있으면 {pr
     /**MYpage - Transaction */
     SaledList : undefined;
     SendReview : {
-        id: number,
-        profileimg: any, 
-        nickname : string,
-        category: string,
-        title: string,
-        SlideImage: number[],
+        room_idx:number
     };
     PurchaseList : undefined;
     InterestsList : undefined;

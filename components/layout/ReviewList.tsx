@@ -15,12 +15,17 @@ import { foramtDate } from "../utils/funcKt";
 
 
 
-export const ReviewList = ({item,  deleteReview ,enterReview,Toggle,listmodal,setListmodal}:
-  ({item:ReviewItemType , deleteReview:(item:ReviewItemType)=>void, enterReview:(item:ReviewItemType)=>void, Toggle:(itemid:number)=>void ,listmodal:any,setListmodal:(e:boolean)=>void})
+export const ReviewList = ({item,  deleteReview ,Toggle,listmodal,setListmodal}:
+  ({item:ReviewItemType , deleteReview:(item:ReviewItemType)=>void, Toggle:(itemid:number)=>void ,listmodal:any,setListmodal:(e:boolean)=>void})
   ) => {
     const {t} = useTranslation()
     const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
     const [noticeState,noticeToggle] = useState(false)
+    
+    const enterReview=()=>{
+      navigation.navigate('ReviewDetail',item)
+    }
+
   return(
     <View
     style={{paddingVertical:17,flexDirection:'row',justifyContent:'space-between',alignItems:'center',overflow:'visible',
@@ -44,14 +49,6 @@ export const ReviewList = ({item,  deleteReview ,enterReview,Toggle,listmodal,se
               </Text>
             </View>
             <View style={{flexDirection:'row',alignItems:'center',marginTop:6,}}>
-            {!noticeState ?
-              null
-              :
-              <Text style={{color:'red',marginRight:5,justifyContent:'center'}}>
-                차단중
-              {/* <Image style={{width:20,height:20}} source={require('../../assets/img/top_alim.png')}/> */}
-              </Text>
-            }
             <Text style={[style.text_re,{fontSize:15,color:colors.BLACK_COLOR_2}]} numberOfLines={1}>  
               {item.rt_content}
             </Text>
@@ -68,23 +65,20 @@ export const ReviewList = ({item,  deleteReview ,enterReview,Toggle,listmodal,se
       <View style={{position:'absolute',backgroundColor:colors.WHITE_COLOR,right:35,top:20,borderRadius:5,elevation:10,
       paddingVertical:15,zIndex:999}}>
           <TouchableOpacity style={{flex:1,paddingVertical:10,paddingHorizontal:25}}
-          onPress={()=>noticeToggle(!noticeState)}
-          >
-            <Text style={[style.text_me,{fontSize:14,color:colors.BLACK_COLOR_1}]}>
-            {!noticeState ?
-              t('알림 끄기')
-              :
-              t('알림 켜기')
-            }
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={{flex:1,paddingVertical:10,paddingHorizontal:25}}
           onPress={()=>deleteReview(item)}
           >
             <Text style={[style.text_me,{fontSize:14,color:colors.BLACK_COLOR_1}]}>
-            {t('채팅방삭제')}
+            {t('리뷰삭제')}
             </Text>
           </TouchableOpacity>
+          <TouchableOpacity style={{flex:1,paddingVertical:10,paddingHorizontal:25}}
+          onPress={()=>Toggle(item.rt_idx)}
+          >
+            <Text style={[style.text_me,{fontSize:14,color:colors.BLACK_COLOR_1}]}>
+            {t('닫기')}
+            </Text>
+          </TouchableOpacity>
+
       </View> : null
       }
     </View>

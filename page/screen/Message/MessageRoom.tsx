@@ -50,13 +50,13 @@ const MessageRoom = ({route}:Props) => {
   const [items, setitem] = useState<any>()
 
   const {t} = useTranslation()
-    const [inputChat, setInputChat] = React.useState('');
 
+    const [inputChat, setInputChat] = React.useState('');
     const [selectImg, setSelectImg] = React.useState({
       uri : '',
       type : '',
       name : '',
-    })    
+    })
 
     const [tempChatList,setTempChatList] = React.useState([
       {ctt_content_type:0 ,ctt_send_idx : 0 , ctt_msg : '네! 그걸로 살게요', ctt_sdate : '15:00', ctt_file1:'',mt_image1:''},
@@ -223,19 +223,12 @@ const ChatTypeCheck = async(type:string)=>{
       if(selectImg.uri != ''){
         setInputChat('');
       }
-    },[selectImg.uri])
+    },[selectImg.uri])    
 
-    const SendReview = ()=>{
-      // navigation.navigate('SendReview',route.params)
-    }
-    
-    
 
-  
 
   React.useEffect(() => {
     setIsLoading(true)
-    // console.log(route.params.items)
     if(route.params.type == 'messageChat'){
       getRoomData(route.params.items.chr_id);
       getChatData(route.params.items.chr_id);
@@ -285,6 +278,8 @@ const ChatTypeCheck = async(type:string)=>{
           :
           <MessageRoomHeader item={items == undefined? null : {
             username:items.mt_nickname,
+            room_idx:items.room_idx,
+            ctt_push:route.params.items.ctt_push,
             rt_idx:items.rt_idx,
             tradeImg:items.data[0] ==undefined? null:items.data[0].pt_image1,
             producttitle:items.data[0] ==undefined? null:items.data[0].pt_title,
@@ -292,7 +287,6 @@ const ChatTypeCheck = async(type:string)=>{
             salestate:items.data[0] ==undefined? null:items.data[0].pt_sale_now,
             mt_seller_idx:items.data[0] ==undefined? null:items.data[0].mt_seller_idx,
           }}
-          navigatieSendReview = {SendReview}
         // username={items.mt_nickname} 
         //   tradeImg={items.data[0].pt_image1} producttitle={items.data[0].pt_title} 
         //   price={NumberComma(items.data[0].pt_selling_price)} 

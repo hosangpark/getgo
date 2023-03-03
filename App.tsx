@@ -6,7 +6,8 @@
  * @flow strict-local
  */
 
-import React, { createRef,useRef,useState } from 'react';
+import React, { createRef,useRef,useState,useCallback } from 'react';
+import {Alert,Platform} from 'react-native';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import Router from './Router';
 
@@ -16,7 +17,7 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 import Toast from 'react-native-toast-message'; //toast...
 import { toastConfig } from './components/navigation/toastConfig'; //toast...custom
-
+import messaging from '@react-native-firebase/messaging';
 import {Provider} from 'react-redux' //redux...provider
 import initStore from './redux/store';//redux...init
 import { requestTrackingPermission } from 'react-native-tracking-transparency';
@@ -26,21 +27,50 @@ import { requestTrackingPermission } from 'react-native-tracking-transparency';
 import SplashScreen from 'react-native-splash-screen';
 import logsStorage from './components/utils/logStorage';
 
-const App = () => {
+import {localNotificationService} from './components/utils/pushNoti';
+import axios from 'axios';
 
+
+
+
+
+
+
+const App = () => {
   const store = initStore();
   const navigationRef = createRef();
-  
 
-  const PushDatas = async () => { //PUSH 셋팅
-    PushNotification.configure({
-      onNotification: async function (remoteMessage){
-        // switch(remoteMessage)
-          // console.log('navi ? ' ,navigationRef);
-        await onPushNavigate(remoteMessage.data, navigationRef.current?.navigate);
-      }
-    })
-  }
+  const getFcmToken = useCallback(async () => {
+    const fcmToken = await messaging().getToken();
+    console.log(fcmToken)
+  }, []);
+
+  React.useEffect(()=>{
+    getFcmToken()
+  },[])
+
+  React.useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      notificationDisplay(remoteMessage)
+      // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage))
+    });
+    return unsubscribe;
+  }, []);
+
+  const notificationDisplay = (remoteMessage:any) => {
+    console.log('notificationDisplay');
+    console.log('body: ' + remoteMessage.notification.body);
+    console.log('title: ' + remoteMessage.notification.title);
+    if (Platform.OS === 'android') {
+      PushNotification.localNotification({
+        channelId: "getgo",
+        title: remoteMessage.notification.title,
+        message: remoteMessage.notification.body,
+        autoCancel: true,
+      });
+    }
+  };
+
 
   const tracking = async () => {
     const trackingStatus = await requestTrackingPermission();
@@ -61,8 +91,6 @@ const App = () => {
       SplashScreen.hide();
     }, 2000);
   },[])
-
-
 
   return (
     <Provider store={store}>

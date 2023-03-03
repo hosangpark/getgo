@@ -41,23 +41,36 @@ const ReviewSale = ({items,ReviewCount,Remove,rt_type}:{items:any,ReviewCount:nu
 
   const [reviewData,setReviewData] = useState<ReviewItemType[]>([])
 
-  const enterReview = (item:ReviewItemType) => {
-    navigation.navigate('ReviewDetail',{item:item,rt_type:rt_type})
-  }
-
   const deleteReview = async(target:ReviewItemType) => {
-    await client({
-      method: 'get',
-      url: `/user/reviews-received?rt_idx=${target}`,
-      }).then(
-        res=>{
-          const remove = reviewData.filter((item:ReviewItemType) => item.rt_idx !== target.rt_idx)
-          setReviewData(remove)
-          cusToast(t(res.data.message))
-        }
-      ).catch(
-        err=>console.log(err)
+    Alert.alert(
+      t('후기를 삭제하시겠습니까?'),
+      '',
+      [
+        {text: t('삭제'), onPress: async() => {
+          await client({
+            method: 'get',
+            url: `/user/reviews-received?rt_idx=${target}`,
+            }).then(
+              res=>{
+                const remove = reviewData.filter((item:ReviewItemType) => item.rt_idx !== target.rt_idx)
+                setReviewData(remove)
+                cusToast(t(res.data.message))
+                navigation.goBack()
+              }
+            ).catch(
+              err=>console.log(err)
+          )
+        }, style:'cancel'},
+        {
+          text: t('취소'),
+          onPress: () => {
+            console.log('d')
+          },
+          style: 'destructive',
+        },
+      ]
     )
+    
   };
 
   const [listmodal, setListmodal] = useState({})
@@ -84,10 +97,10 @@ const ReviewSale = ({items,ReviewCount,Remove,rt_type}:{items:any,ReviewCount:nu
                   <LoadingIndicator/>
                 :
                 <View>
-                  {items.map((item,index)=>{
+                  {items.map((item:any)=>{
                   return(
-                    <ReviewList key={item.rt_idx} item={item} enterReview={enterReview} deleteReview={deleteReview} Toggle={Toggle} 
-                    listmodal={listmodal} setListmodal={setListmodal} zindexvisual={0-index} />
+                    <ReviewList key={item.rt_idx} item={item} deleteReview={deleteReview} Toggle={Toggle} 
+                    listmodal={listmodal} setListmodal={setListmodal}/>
                     )
                   })}
                   <View style={{height:80}}></View>

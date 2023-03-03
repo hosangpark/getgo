@@ -59,7 +59,7 @@ const MypageSetting = () => {
     }).then(
       (res) => {
         setProfileData(res.data.data[0])
-        setReviewData(res.data.list.reverse())
+        setReviewData(res.data.list)
         setIsLoading(false)
       }
     ).catch(
@@ -286,7 +286,7 @@ const MypageSetting = () => {
             data={reviewData.slice(0, 5)}
             renderItem={({ item }) => {
               return (
-                <ReviewList key={item.rt_idx} item={item} enterReview={enterReview} deleteReview={deleteReview} Toggle={Toggle}
+                <ReviewList key={item.rt_idx} item={item} deleteReview={deleteReview} Toggle={Toggle}
                   listmodal={listmodal} setListmodal={setListmodal} />
               )
             }}

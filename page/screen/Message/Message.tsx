@@ -67,9 +67,8 @@ const Message = () => {
   }
 
   /**알림 차단 수신 */
-  const noticeOnOff = async(e:{chr_id:number,ctt_push:string},noticeState:boolean)=>{
-    let YorN = noticeState? "Y":"N"
-    console.log(YorN)
+  const noticeOnOff = async(e:{chr_id:number,ctt_push:string})=>{
+    let YorN = e.ctt_push == "Y" ? "N":"Y"
     await client({
       method: 'get',
       url: `/product/chat-list-push?chr_idx=${e.chr_id}&ctt_push=${YorN}`
@@ -189,7 +188,7 @@ const Message = () => {
                   <View style={{marginBottom:120}}></View>
                 }
                 showsVerticalScrollIndicator = {false}
-                />
+              />
           }
         <QuitChatRoomModal
           isVisible={chatQuitVisible}

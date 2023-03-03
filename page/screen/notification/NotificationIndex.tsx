@@ -76,22 +76,6 @@ export default function NotificationIndex() {
     )
   };
 
-  const keywordCount = async () => {
-    await client({
-      method: 'get',
-      url: '/user/push_keyword_list',
-      params: {
-        mt_idx: userInfo.idx
-      }
-    }).then(
-      res => {
-        setMaxTextCount(res.data.total_count)
-      }
-    ).catch(
-      err => console.log('keywordList')
-    )
-  };
-
   const KeywordList = async () => {
     await client({
       method: 'get',
@@ -101,7 +85,8 @@ export default function NotificationIndex() {
       }
     }).then(
       res => {
-        setKeywordNotiitem(res.data.list)
+        setMaxTextCount(res.data.total)
+        setKeywordNotiitem(res.data.total_list)
       }
     ).catch(
       err => {
@@ -142,7 +127,6 @@ export default function NotificationIndex() {
   React.useEffect(() => {
     NoticeList()
     KeywordList()
-    keywordCount()
     navigation.addListener('focus', () => {
       KeywordList()
     })

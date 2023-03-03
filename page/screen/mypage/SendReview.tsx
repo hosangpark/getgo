@@ -14,6 +14,9 @@ import { CustomButton } from '../../../components/layout/CustomButton';
 import { ProductItemType } from '../../../components/types/componentType';
 import { BackHandlerCom } from '../../../components/BackHandlerCom';
 import { useTranslation } from 'react-i18next';
+import client from '../../../api/client';
+import LoadingIndicator from '../../../components/layout/Loading';
+import cusToast from '../../../components/navigation/CusToast';
 
 
 
@@ -22,46 +25,87 @@ type Props = StackScreenProps<MainNavigatorParams, 'SendReview'>
 export default function SendReview({route}:Props) {
 const {t} = useTranslation()
 const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
-
+const [items, setitem] = useState<any>()
 const [value,setValue] = useState('')
-const baaaaack = () => {
-  navigation.goBack()
-}
 
 const [choose, setChoose] = useState(0)
 
 const bad_choice = () => {
   setChoose(1)
+  if(choose==1){
+    setChoose(0)
+  }
 }
 const good_choice = () => {
   setChoose(2)
+  if(choose==2){
+    setChoose(0)
+  }
 }
 const verygood_choice = () => {
   setChoose(3)
+  if(choose==3){
+    setChoose(0)
+  }
+}
+const SendReviewComplete = async()=>{
+  await client({
+    method: 'post',
+    url: `/product/review_add`,
+    data:{
+      pt_idx:items.data[0].pt_idx,
+      mt_idx:items.mt_idx,
+      rt_content:value,
+      rt_score:choose
+    }
+    }).then(res=>{
+      cusToast(t(res.data.message))
+      navigation.goBack()
+      navigation.goBack()
+    }).catch(err=>{
+      console.log(err)
+  })
+}
+const getReviewData = async()=>{
+    await client({
+      method: 'get',
+      url: `/product/review_basic?room_idx=${route.params.room_idx}`
+      }).then(res=>{
+        setitem(res.data)
+      }).catch(err=>{
+        console.log(err)
+    })
 }
 
+React.useEffect(()=>{
+  getReviewData()
+},[])
 
   return (
     <SafeAreaView style={{flex:1,backgroundColor:'#fff'}}>
         <BackHeader title={t('후기 작성')} />
+        {items == undefined?
+        <LoadingIndicator/>
+          :
         <ScrollView style={{paddingHorizontal:20,flex:1}}>
           <View style={{flexDirection:'row',backgroundColor:colors.GRAY_COLOR_1,padding:20,
           borderRadius:10,marginBottom:35
           }}>
-            <Image source={route.params.SlideImage[0]} style={{width:44,height:44,marginRight:8,borderRadius:5,}}/>
-            <View style={{flex:1}}>
-              <Text style={[style.text_b,{fontSize:15,color:colors.BLACK_COLOR_1,}]} numberOfLines={2}>
-                {route.params.title}
+            <Image source={{uri:"http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000/uploads/"+items.data[0].pt_image1}} style={{width:65,height:65,marginRight:11,borderRadius:5,}}/>
+            <View style={{flex:1,justifyContent:'center'}}>
+              <Text style={[style.text_b,{fontSize:15,color:colors.BLACK_COLOR_1,marginBottom:5}]} numberOfLines={2}>
+                {items.data[0].pt_title}
               </Text>
               <Text style={[style.text_re,{fontSize:13,color:colors.BLACK_COLOR_1}]}>
-              {t('거래한 이웃')} : {route.params.nickname}
+              {t('거래한 이웃')} : {items.data[0].mt_nickname}
               </Text>
             </View>
           </View>
           <View style={{}}>
             <View style={{alignItems:'center'}}>
               <Text style={[style.text_b,{fontSize:22,color:colors.BLACK_COLOR_1}]}>
-              User.Name{t('님')} "{route.params.nickname}" {t('님과')} </Text>
+              {/* User.Name{t('님')}  */}
+              "{items.data[0].mt_nickname}" {t('님과')} </Text>
               <Text style={[style.text_b,{fontSize:22,color:colors.GREEN_COLOR_3}]}>
               {t('거래가 어떠셨나요?')}</Text>
               <Text style={[style.text_re,{fontSize:13,color:colors.GRAY_COLOR_2}]}>
@@ -127,16 +171,18 @@ const verygood_choice = () => {
             }
             {choose === 1 || choose === 2 || choose === 3 ?
             (<TextInput 
-                style={{borderRadius:5,borderWidth:1,borderColor:colors.GRAY_COLOR_3,minHeight:95,paddingHorizontal:20,marginVertical:20}}
+                style={{borderRadius:5,borderWidth:1,borderColor:colors.GRAY_COLOR_3,minHeight:95,paddingHorizontal:20,marginVertical:20,textAlignVertical: 'top',}}
                 multiline={true}
+                blurOnSubmit={false}
                 value = {value}
                 onChangeText = {setValue}
                 placeholder={t('10자 이상 내용을 입력해주세요.')}/>):null
             }
           </View>
         </ScrollView>
+        }
         <TouchableOpacity 
-          onPress = {()=>{}}
+          onPress = {()=>SendReviewComplete()}
           style={[{alignItems:'center',justifyContent:'center', height:60, backgroundColor:colors.GREEN_COLOR_2}]}>
           <Text style={[style.text_sb,{color:colors.WHITE_COLOR, fontSize:18}]}> 
           {t('후기 보내기')}

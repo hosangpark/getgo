@@ -34,6 +34,7 @@ import ItempostFullSlide from './page/screen/home/ItempostFullSlide'
 import Search from './page/screen/home/Search'
 import ReportUser from './page/screen/home/ReportUser'
 import ReportPost from './page/screen/home/ReportPost'
+import ReportChat from './page/screen/home/ReportChat'
 import Reserve_choice from './page/screen/home/Reserve_choice'
 import ChangePhoneResult from './page/screen/user/ChangePhoneResult';
 // import useSelector from
@@ -240,6 +241,11 @@ const dispatch = useDispatch()
         <MainStack.Screen
           name={"ReportPost"}
           component={ReportPost}
+          options={{headerShown:false}}
+        />
+        <MainStack.Screen
+          name={"ReportChat"}
+          component={ReportChat}
           options={{headerShown:false}}
         />
 

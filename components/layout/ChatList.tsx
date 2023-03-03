@@ -16,18 +16,13 @@ import { foramtDate } from "../utils/funcKt";
 
 
 export const ChatList = ({item,  Delete ,Enter,Toggle,noticeOnOff,listmodal}:
-  ({item:ChatItemType , Delete:(e:number)=>void, Enter:(e:ChatItemType)=>void, Toggle:(itemid:number)=>void, noticeOnOff:(e:{chr_id:number,ctt_push:string},noticeState:boolean)=>void ,listmodal:any})
+  ({item:ChatItemType , Delete:(e:number)=>void, Enter:(e:ChatItemType)=>void, Toggle:(itemid:number)=>void, noticeOnOff:(e:{chr_id:number,ctt_push:string})=>void ,listmodal:any})
   ) => {
     const {t} = useTranslation()
     const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
-    const [noticeState,noticeToggle] = useState(false)
-
     const ToggleBridge = (e:{chr_id:number,ctt_push:string})=>{
-      noticeOnOff(e,noticeState)
-      noticeToggle(!noticeState)
+      noticeOnOff(e)
     }
-
-
 
   return(
     <View key={item.chr_id}

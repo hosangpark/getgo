@@ -38,11 +38,6 @@ const ReviewBuy = ({items,ReviewCount,Remove,rt_type}:{items:any,ReviewCount:num
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const {t} = useTranslation()
   const userInfo = useSelector((state:any) => state.userInfo);
-
-
-  const enterReview = (item:ReviewItemType) => {
-    navigation.navigate('ReviewDetail',{item:item,rt_type:rt_type})
-  }
   
   const deleteReview = async(target:ReviewItemType) => {
     await client({
@@ -50,7 +45,6 @@ const ReviewBuy = ({items,ReviewCount,Remove,rt_type}:{items:any,ReviewCount:num
       url: `/user/reviews-received?rt_idx=${target}`,
       }).then(
         res=>{
-
           cusToast(t(res.data.message))
         }
       ).catch(
@@ -82,9 +76,9 @@ const ReviewBuy = ({items,ReviewCount,Remove,rt_type}:{items:any,ReviewCount:num
                   <LoadingIndicator/>
                 :
                 <View>
-                  {items.map((item:any,index:number)=>{
+                  {items.map((item:any)=>{
                   return(
-                    <ReviewList key={item.rt_idx} item={item} enterReview={enterReview} deleteReview={deleteReview} Toggle={Toggle} 
+                    <ReviewList key={item.rt_idx} item={item} deleteReview={deleteReview} Toggle={Toggle} 
                     listmodal={listmodal} setListmodal={setListmodal} />
                     )
                   })}

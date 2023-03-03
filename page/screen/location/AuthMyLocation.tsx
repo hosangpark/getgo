@@ -79,7 +79,7 @@ const AuthMyLocation = ({route}:Props) => {
 
     const checkAuth = (type:string) => {
         fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + (type == 'now' ? initialLocation.mt_lat :selLocation.mt_lat) + ',' + (type == 'now' ? initialLocation.mt_log : selLocation.mt_log)
-        + '&key=' + 'AIzaSyCiUoFcfZ7Lt2gmTHKMuFKDubxyDg2WiLE' + '&language=ko')
+        + '&key=' + 'AIzaSyCLAAdJRWFwO0UlSXuSsIeSzt2rz5ydQ-E' + '&language=ko')
         .then((response) => response.json())
         .then((responseJson) => {
             if(type == 'now'){ //현재 동

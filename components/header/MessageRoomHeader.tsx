@@ -1,10 +1,10 @@
 import { useState } from 'react';
+import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { MainNavigatorParams } from '../types/routerTypes';
-import { ItemData } from '../../components/data/ItemData'
 import {Image, Pressable, Text, View, TouchableOpacity} from 'react-native';
 import style from '../../assets/style/style';
 import { MessageRoomType } from '../types/componentType';
@@ -14,9 +14,12 @@ import AutoHeightImage from 'react-native-auto-height-image';
 import { CustomButton } from '../layout/CustomButton';
 import { NumberComma } from '../utils/funcKt';
 import { useSelector } from 'react-redux';
+import client from '../../api/client';
+import cusToast from '../navigation/CusToast';
 
 interface MessageRoomItemType{
     item:{
+        room_idx:number
         username:string
         rt_idx:number
         tradeImg:string
@@ -24,11 +27,11 @@ interface MessageRoomItemType{
         price:string
         salestate:number
         mt_seller_idx:number
+        ctt_push:string
     }
-    navigatieSendReview:()=>void
-
 }
-export const MessageRoomHeader = ({item,navigatieSendReview}:
+
+export const MessageRoomHeader = ({item}:
     MessageRoomItemType) => {
 
     const {t} = useTranslation()
@@ -37,13 +40,60 @@ export const MessageRoomHeader = ({item,navigatieSendReview}:
     const [topboxopen,setTopboxopen] = useState(true)
     // const [salestate,setSalestate] = useState(true)
 
-    
     const productDetailClose = () => {
         setTopboxopen(!topboxopen)
         setToggle(!toggle)
     }
-
     const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
+
+    // const noticeOnOff = async()=>{
+    //     let YorN = item.ctt_push=="Y"? "N":"Y"
+    //     await client({
+    //       method: 'get',
+    //       url: `/product/chat-list-push?chr_idx=${item.room_idx}&ctt_push=${YorN}`
+    //       }).then(res=>{
+    //         cusToast(t(res.data.message))
+    //       }).catch(err=>{
+    //         console.log(err)
+    //     })
+    // }
+
+    const navigatieSendReview = () =>{
+        console.log(item)
+        navigation.navigate('SendReview',{room_idx:item.room_idx})
+    }
+
+    const ChatReport = ()=>{
+        navigation.navigate('ReportChat', { 
+            room_idx: item.room_idx,
+            mt_declaration_idx: item.mt_seller_idx
+        });
+    }
+    const quitroom = async() => {
+        Alert.alert(t('채팅방에서 나가시겠습니까?'),t('채팅방을 나가면 채팅 목록 및 대화 내용이 삭제되고 복구 할 수 없습니다.'),
+        [
+            {text: t('나가기'), onPress: async() => {
+                await client({
+                    method: 'get',
+                    url: `/product/chat-list-delete?chr_idx=${item.room_idx}`
+                    }).then(res=>{
+                      cusToast(t(res.data.message))
+                      navigation.goBack()
+                    }).catch(err=>{
+                      console.log(err)
+                    })
+    
+            }, style:'cancel'},
+            {
+              text: t('취소'),
+              onPress: () => {
+                console.log('d')
+              },
+              style: 'destructive',
+            },
+          ])
+      }
+
     return(
         <View>
             <View style={[style.header_,{backgroundColor:'#ffffff',paddingHorizontal:20,borderBottomWidth:1,borderBottomColor:colors.GRAY_COLOR_3}]}>
@@ -60,17 +110,21 @@ export const MessageRoomHeader = ({item,navigatieSendReview}:
             {toggle?
             <View style={{position:'absolute',zIndex:3,right:50,top:20,backgroundColor:'white',borderWidth:1,borderColor:colors.GRAY_COLOR_2,borderRadius:10,paddingHorizontal:15,paddingVertical:10,
             }}>
-                <TouchableOpacity style={{paddingVertical:10}}>
+                {/* <TouchableOpacity style={{paddingVertical:10}} onPress={()=>noticeOnOff()}>
                     <Text style={[style.text_me,{fontSize:14,color:colors.BLACK_COLOR_1}]}>
-                        알림 끄기 OR 켜기
+                        {item.ctt_push=="Y" ?
+                        t('알림 끄기')
+                        :
+                        t('알림 켜기')
+                        }
                     </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{paddingVertical:10}}>
+                </TouchableOpacity> */}
+                <TouchableOpacity style={{paddingVertical:10}} onPress={()=>ChatReport()}>
                     <Text style={[style.text_me,{fontSize:14,color:colors.BLACK_COLOR_1}]}>
                         신고하기
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={{paddingVertical:10}}>
+                <TouchableOpacity style={{paddingVertical:10}} onPress={()=>quitroom()}>
                     <Text style={[style.text_me,{fontSize:14,color:colors.BLACK_COLOR_1}]}>
                         채팅방 나가기
                     </Text>

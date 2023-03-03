@@ -49,15 +49,14 @@ export const LangugaeChange = ({isVisible,selectLag,action,action2}:ModalType) =
       // }}
     >
       <View style={{flex:1,width:'100%',flexDirection:'column',justifyContent:'flex-end',}}>
-        <View style={{backgroundColor:'#fff',borderTopLeftRadius:30, borderTopRightRadius:30,paddingHorizontal:20}}>
+        <View style={{backgroundColor:'#fff',borderTopLeftRadius:30, borderTopRightRadius:30,}}>
           <View style={{justifyContent:'center',alignItems:'flex-start',marginBottom:25,
-              padding:20,}}>
+              paddingVertical:20,}}>
               {langList.map((item,index)=>{
                 return(
-                <TouchableOpacity style={{flexDirection:'row',alignItems:'center',paddingVertical:10,width:'100%',
+                <TouchableOpacity style={{flexDirection:'row',alignItems:'center',paddingHorizontal:40,paddingVertical:10,width:'100%',
                 backgroundColor:selectItem==item.value? colors.GREEN_COLOR_4 : colors.WHITE_COLOR,
-                borderWidth:selectItem==item.value? 1: 0
-              }}
+                }}
                 onPress={()=>ChangeSet(item.value)} key={index}
                 >
                   <Image style={{width:40,height:40,marginRight:30}} source={item.img}/>
@@ -65,7 +64,7 @@ export const LangugaeChange = ({isVisible,selectLag,action,action2}:ModalType) =
                 </TouchableOpacity>
                 )})}
           </View>
-          <View style={{marginBottom:15}}>
+          <View style={{marginBottom:15,paddingHorizontal:20}}>
             <TouchableOpacity style={{
               backgroundColor:colors.GREEN_COLOR_2,height:54,borderRadius:5,justifyContent:'center',alignItems:'center'}}
             onPress={action}

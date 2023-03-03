@@ -31,7 +31,7 @@ import PushNotification from "react-native-push-notification";
  * LTI update could not be added via codemod */
 
 GoogleSignin.configure({
-    webClientId: "800821934601-e2u4hgnqhjbevkvorsqt81ov3igatvnr.apps.googleusercontent.com",
+    webClientId: "447554062576-7glm9t0v5restn3b0kh0c8916vl7fa01.apps.googleusercontent.com",
     offlineAccess: true,
     forceCodeForRefreshToken: true,
 })

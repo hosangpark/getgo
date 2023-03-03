@@ -42,7 +42,7 @@ const ReportPost = ({route}:Props) => {
     {reportlist:t("사기글이에요"), report:false},
     {reportlist:t("기타"), report:false},
   ])
-
+  const [Report,setReport] = useState('')
 
   const selectReport = (e:string)=>{
     const nextitem = ReportList.map(item =>
@@ -70,7 +70,6 @@ const ReportPost = ({route}:Props) => {
       ).catch(error=>{
           console.log(error);
       })
-    navigation.goBack
   }
 
     return (
@@ -83,10 +82,10 @@ const ReportPost = ({route}:Props) => {
               
               {ReportList.map((e,index)=>{
                 return(
-                <TouchableOpacity key={index} style={{flexDirection:'row',marginBottom:15}} onPress={()=>selectReport(e.reportlist)}>
-                  {!e.report?
-                  <Image style={{width:22,height:22,}} source={require('../../../assets/img/check_off.png')}/> :
-                  <Image style={{width:22,height:22}} source={require('../../../assets/img/check_on.png')}/>
+                <TouchableOpacity key={index} style={{flexDirection:'row',marginBottom:15,paddingRight:40}} onPress={()=>setReport(e.reportlist)}>
+                  {e.reportlist === Report?
+                  <Image style={{width:22,height:22}} source={require('../../../assets/img/check_on.png')}/> :
+                  <Image style={{width:22,height:22,}} source={require('../../../assets/img/check_off.png')}/>
                   }
                   <Text style={[style.text_me,{fontSize:15,marginLeft:10,color:colors.BLACK_COLOR_1}]}>{t(e.reportlist)}</Text>
                 </TouchableOpacity>
