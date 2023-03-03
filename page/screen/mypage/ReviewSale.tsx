@@ -38,7 +38,7 @@ const ReviewSale = ({items,ReviewCount,Remove,rt_type}:{items:any,ReviewCount:nu
   const {t} = useTranslation()
   
   const userInfo = useSelector((state:any) => state.userInfo);
-
+  
   const [reviewData,setReviewData] = useState<ReviewItemType[]>([])
 
   const deleteReview = async(target:ReviewItemType) => {

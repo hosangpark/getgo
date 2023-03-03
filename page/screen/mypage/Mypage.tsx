@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import client from '../../../api/client';
 import cusToast from '../../../components/navigation/CusToast';
+import Api from '../../../api/Api';
 
 
 
@@ -144,7 +145,7 @@ const Mypage = () => {
                   require('../../../assets/img/img_profile.png')} />
                 :
                 <Image style={{ width: 85, height: 85, marginRight: 30, borderRadius: 50 }} source={
-                  ProfileData.data[0].mt_image1 ? { uri: 'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000/uploads/' + ProfileData.data[0].mt_image1 } :
+                  ProfileData.data[0].mt_image1 ? { uri: Api.state.imageUrl + ProfileData.data[0].mt_image1 } :
                     require('../../../assets/img/img_profile.png')} />
               }
             </TouchableOpacity>

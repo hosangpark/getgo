@@ -13,19 +13,20 @@ import { useSelector } from 'react-redux';
 import client from '../../../api/client';
 import { ReviewItemDetailType } from '../../../components/types/componentType';
 import cusToast from '../../../components/navigation/CusToast';
+import Api from '../../../api/Api';
 
 
 
 
-export default function ReviewDetail({route}:any) {
-  const {t} = useTranslation()
+export default function ReviewDetail({ route }: any) {
+  const { t } = useTranslation()
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
-  const userInfo = useSelector((state:any) => state.userInfo);
-  const [isLoading ,  setIsLoading] = React.useState<boolean>(true);
-  const [rt_type ,  setRt_type] = React.useState('');
-  const [reviewDetailData,setReviewDetailData] = React.useState<ReviewItemDetailType>([])
+  const userInfo = useSelector((state: any) => state.userInfo);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [rt_type, setRt_type] = React.useState('');
+  const [reviewDetailData, setReviewDetailData] = React.useState<ReviewItemDetailType>([])
 
-  const getReviewDetailData = async() =>{
+  const getReviewDetailData = async () => {
     await client({
       method: 'get',
       url: `/user/review_detail?rt_idx=${route.params.rt_idx}&rt_type=S`,
@@ -86,7 +87,6 @@ export default function ReviewDetail({route}:any) {
               <Text style={[style.text_b,{fontSize:15,color:colors.BLACK_COLOR_1,marginBottom:3,paddingRight:65}]}numberOfLines={2}>{reviewDetailData.pt_title}</Text>
               <Text style={[style.text_re,{fontSize:13,color:colors.BLACK_COLOR_1}]}>
               {t('거래한 이웃')} : {reviewDetailData.mt_nickname}</Text>
-            </View>
           </View>
           <View style={{marginBottom:50}}>
             <Text style={[style.text_re,{fontSize:14,color:colors.BLACK_COLOR_1,lineHeight:22}]}>
@@ -100,8 +100,8 @@ export default function ReviewDetail({route}:any) {
               {t('거래 후기 취소하기')}
               </Text>
           </TouchableOpacity>
-
-        </ScrollView>
+          </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

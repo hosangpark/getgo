@@ -46,18 +46,6 @@ export const MessageRoomHeader = ({item}:
     }
     const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
 
-    // const noticeOnOff = async()=>{
-    //     let YorN = item.ctt_push=="Y"? "N":"Y"
-    //     await client({
-    //       method: 'get',
-    //       url: `/product/chat-list-push?chr_idx=${item.room_idx}&ctt_push=${YorN}`
-    //       }).then(res=>{
-    //         cusToast(t(res.data.message))
-    //       }).catch(err=>{
-    //         console.log(err)
-    //     })
-    // }
-
     const navigatieSendReview = () =>{
         navigation.navigate('SendReview',{room_idx:item.room_idx})
     }

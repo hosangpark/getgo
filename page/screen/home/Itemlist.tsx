@@ -38,8 +38,9 @@ import * as UserInfoAction from '../../../redux/actions/UserInfoAction';
 import * as MyLocationAction from '../../../redux/actions/MyLocationAction';
 import LoadingIndicator from '../../../components/layout/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useTranslation} from 'react-i18next';
-import {BackHandlerCom} from '../../../components/BackHandlerCom';
+import { useTranslation } from 'react-i18next';
+import { BackHandlerCom } from '../../../components/BackHandlerCom';
+import Api, { NodataView } from '../../../api/Api';
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
 
@@ -62,6 +63,7 @@ const ItemList = ({setTabIndex}: itemListType) => {
 
   const userInfo = useSelector((state: any) => state.userInfo);
   const myLocation = useSelector((state: any) => state.myLocation);
+
 
   const Itemupload = () => {
     navigation.navigate('Itemupload', {type: 'ProductUpload', pt_idx: 0});
@@ -100,6 +102,7 @@ const ItemList = ({setTabIndex}: itemListType) => {
 
   /** 데이터 리렌더링 */
   const rerendering = () => {
+    console.log('myLocation', myLocation.select_location, myLocation.location1.mt_area, myLocation.location2.mt_area);
     if (myLocation.select_location == 1) {
       setListChanege(1);
     } else if (myLocation.select_location == 2) {
@@ -111,11 +114,19 @@ const ItemList = ({setTabIndex}: itemListType) => {
 
   /** 지역 상품목록 */
   const getProductListData = async (event: any) => {
+
+
+    if (!event) return;
+
+    console.log('getProductListData', event, userInfo.idx);
+
     await client({
       method: 'get',
       url: `/product/procudt-list?mt_idx=${userInfo.idx}&pt_area=${event}`,
-    })
-      .then(res => {
+    }).then(
+      res => {
+        // console.log(res);
+        console.log('getProductListData2', res.data);
         //if (items !== res.data) {
         setitem(res.data);
         //}
@@ -140,10 +151,11 @@ const ItemList = ({setTabIndex}: itemListType) => {
     }
   };
 
-  React.useEffect(() => {
-    setIsLoading(true);
-    rerendering();
-  }, [myLocation.location1.mt_area]);
+  // React.useEffect(() => {
+  //   setIsLoading(true);
+  //   rerendering();
+  // }, [myLocation.location1.mt_area, myLocation.location2.mt_area, myLocation.select_location]);
+
 
   React.useEffect(() => {
     setIsLoading(true);
@@ -162,10 +174,14 @@ const ItemList = ({setTabIndex}: itemListType) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      getRefreshData();
-      return () => {};
-    }, []),
+
+      rerendering();
+
+      return () => { };
+    }, [myLocation.location1.mt_area, myLocation.location2.mt_area, myLocation.select_location]),
   );
+
+
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
@@ -173,22 +189,23 @@ const ItemList = ({setTabIndex}: itemListType) => {
       {isloading ? (
         <LoadingIndicator />
       ) : (
-        <FlatList
-          style={{paddingHorizontal: 20}}
-          data={items}
-          initialNumToRender={8}
-          onRefresh={onRefresh}
-          refreshing={refreshing}
-          renderItem={({item}) => (
-            <ProductItem item={item} action={rerendering} />
-          )}
-          showsVerticalScrollIndicator={false}
-          // onEndReached={()=>{
-          //   setIsListLoading(true)
-          // }}
-          ListFooterComponent={isListLoading ? <LoadingIndicator /> : null}
-        />
-      )}
+          <FlatList
+            style={{ paddingHorizontal: 20 }}
+            data={items}
+            initialNumToRender={8}
+            onRefresh={onRefresh}
+            refreshing={refreshing}
+            renderItem={({ item }) => (
+              <ProductItem item={item} action={rerendering} />
+            )}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={<NodataView />}
+            // onEndReached={()=>{
+            //   setIsListLoading(true)
+            // }}
+            ListFooterComponent={isListLoading ? <LoadingIndicator /> : null}
+          />
+        )}
       <View
         style={{position: 'absolute', right: 20, bottom: 25, borderRadius: 50}}>
         <TouchableOpacity onPress={Itemupload}>

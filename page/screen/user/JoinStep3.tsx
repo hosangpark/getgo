@@ -6,14 +6,14 @@
  * @flow strict-local
  */
 import React, { useEffect } from 'react';
-import {Alert} from 'react-native';
+import { Alert } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../../components/types/routerTypes';
 import { RouteProp } from '@react-navigation/native';
 
-import {SafeAreaView, ScrollView, Text, View, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
+import { SafeAreaView, ScrollView, Text, View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { colors } from '../../../assets/color';
 import style from '../../../assets/style/style';
 import { BackHeader } from '../../../components/header/BackHeader';
@@ -39,101 +39,121 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const JoinStep3 = () => {
 
-    
+
     // const {authorize,InputName} = useAuthActions()
 
     const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
-    const {t} = useTranslation()
-    const [inputName ,setInputName] = React.useState();
-    const [isOverName , setIsOverName] = React.useState(false);
-    const userInfo = useSelector((state:any) => state.userInfo);
+    const { t } = useTranslation()
+    const [inputName, setInputName] = React.useState();
+    const [isOverName, setIsOverName] = React.useState(false);
+    const userInfo = useSelector((state: any) => state.userInfo);
     const dispatch = useDispatch()
 
-    const NextPage = () =>{
-        if(userInfo){
-            let params={
-                ...userInfo,
-                mt_nickname:inputName
-            }
-            dispatch(UserInfoAction.updateUserInfo(JSON.stringify(params)));
-            navigation.navigate('JoinStep4');
+    const NextPage = async () => {
+        if (userInfo) {
+            const form = new FormData();
+            form.append('mt_idx', userInfo.idx);
+            form.append(`mt_nickname`, inputName);
+
+            await client({
+                method: 'post',
+                url: '/user/profile-edit',
+                headers: { 'Content-Type': 'multipart/form-data' },
+                data: form,
+            }).then(res => {
+
+
+                let params = {
+                    ...userInfo,
+                    mt_nickname: inputName
+                }
+                dispatch(UserInfoAction.updateUserInfo(JSON.stringify(params)));
+                navigation.navigate('JoinStep4');
+
+
+            }).catch(error => {
+                console.log("getUserNickName")
+            })
+
+
+
         }
     }
 
     /** 닉네임 중복체크 */
-    const IdCheck = async() =>{
+    const IdCheck = async () => {
         console.log(userInfo)
         await client({
             method: 'post',
             url: '/user/nickname-check',
-            data:{
-                mt_idx:userInfo.idx,
-                mt_nickname:inputName,
+            data: {
+                mt_idx: userInfo.idx,
+                mt_nickname: inputName,
             }
-            }).then(res => 
-                Alert.alert(
-                    res.data.message,'',[
-                        {
-                            text: t('취소'),
-                            onPress: () => {},
-                            style: 'cancel',
-                        },
-                        {
-                            text: t('계속하기'),
-                            onPress: ()=>{NextPage()},
-                        },
-                    ])
-            ).catch(error => {
-                console.log(error)
-                setIsOverName(true)
-            }
-            )
+        }).then(res =>
+            Alert.alert(
+                res.data.message, '', [
+                {
+                    text: t('취소'),
+                    onPress: () => { },
+                    style: 'cancel',
+                },
+                {
+                    text: t('계속하기'),
+                    onPress: () => { NextPage() },
+                },
+            ])
+        ).catch(error => {
+            console.log(error)
+            setIsOverName(true)
+        }
+        )
     }
-    const Cancel = ()=>{
+    const Cancel = () => {
         navigation.navigate('SelectLogin');
     }
-    React.useEffect(()=>{
-        AsyncStorage.getItem('userIdx', (err, result) => {       
-            if(result){
-            console.log(result)
+    React.useEffect(() => {
+        AsyncStorage.getItem('userIdx', (err, result) => {
+            if (result) {
+                console.log(result)
             }
         })
-      }, [])
+    }, [])
 
 
     return (
-        <SafeAreaView style={{flex:1}}>
-            <BackHeader title=""/>
-            <ScrollView style={[style.default_background,{ flexGrow: 1, paddingHorizontal:20}]}>
-                <View style={{flex:1,justifyContent:'center',marginTop:40}}>
-                    <Text style={[style.text_b,{fontSize:15,color:colors.GREEN_COLOR_3}]}>{t('회원가입 완료')}</Text>
-                    <Text style={[style.text_b,{fontSize:22,color:colors.BLACK_COLOR_2,paddingRight:170}]}>
-                    {t('GETGO에서 사용하실 닉네임을 알려주세요.')}</Text>
+        <SafeAreaView style={{ flex: 1 }}>
+            <BackHeader title="" />
+            <ScrollView style={[style.default_background, { flexGrow: 1, paddingHorizontal: 20 }]}>
+                <View style={{ flex: 1, justifyContent: 'center', marginTop: 40 }}>
+                    <Text style={[style.text_b, { fontSize: 15, color: colors.GREEN_COLOR_3 }]}>{t('회원가입 완료')}</Text>
+                    <Text style={[style.text_b, { fontSize: 22, color: colors.BLACK_COLOR_2, paddingRight: 170 }]}>
+                        {t('GETGO에서 사용하실 닉네임을 알려주세요.')}</Text>
                 </View>
-                <View style={{marginTop:50}}>
-                    <Text style={[style.text_b,{fontSize:15,color:colors.BLACK_COLOR_2}]}>
-                    {t('닉네임')}
+                <View style={{ marginTop: 50 }}>
+                    <Text style={[style.text_b, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
+                        {t('닉네임')}
                     </Text>
-                    <TextInput 
-                        style={[style.input_container,{marginTop:5}]}
+                    <TextInput
+                        style={[style.input_container, { marginTop: 5 }]}
                         placeholder={t('닉네임을 입력해주세요.')}
                         value={inputName}
-                        onChangeText={(text)=>{setIsOverName(false),setInputName(text)}}
+                        onChangeText={(text) => { setIsOverName(false), setInputName(text) }}
                     />
                     {isOverName &&
-                        <Text style={[style.text_re,{marginTop:5,fontSize:13,color:colors.RED_COLOR_1}]}>
+                        <Text style={[style.text_re, { marginTop: 5, fontSize: 13, color: colors.RED_COLOR_1 }]}>
                             {t('이미 사용중인 닉네임입니다.')}</Text>
                     }
                 </View>
 
-                <View style={{marginTop:30}}>
+                <View style={{ marginTop: 30 }}>
                     <CustomButton
                         buttonType='green'
                         action={IdCheck}
                         disable={isOverName}
                         title={t('확인')}
                     />
-                    <View style={{marginTop:10}}>
+                    <View style={{ marginTop: 10 }}>
                         <CustomButton
                             buttonType='white'
                             action={Cancel}
@@ -152,16 +172,16 @@ const JoinStep3 = () => {
 
 export default JoinStep3;
 
-const btnStyle= StyleSheet.create({
-    green_btn : {
-        backgroundColor:colors.GREEN_COLOR_2,
-        borderRadius:5,
-        alignItems:'center',
-        justifyContent:'center',
-        height:45,
+const btnStyle = StyleSheet.create({
+    green_btn: {
+        backgroundColor: colors.GREEN_COLOR_2,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 45,
     },
-    green_font : {
-        fontSize:15,
-        color:colors.WHITE_COLOR,
+    green_font: {
+        fontSize: 15,
+        color: colors.WHITE_COLOR,
     },
 })

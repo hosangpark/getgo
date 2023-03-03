@@ -101,11 +101,6 @@ const SelectLogin = () => {
         let params = {
             ...userInfo,
             idx: 59,
-            mt_na: 82,
-            mt_hp: '01029270185',
-            mt_area: 1,
-            mt_lat: 1,
-            mt_log: 1,
         }
         await AsyncStorage.setItem('userIdx', JSON.stringify(params))
         dispatch(UserInfoAction.userlogin(params));

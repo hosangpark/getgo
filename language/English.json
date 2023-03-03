@@ -252,10 +252,16 @@
     "10자 이상 내용을 입력해주세요.":"Please enter more than 10 characters.",
     "정말로 탈퇴하시겠습니까":"Are you sure you want to leave?",
     "계정을 삭제하면 판매내역, 평가받은 만족도와 후기, 관심, 채팅 모든 활동 정보가 삭제됩니다. 계정 삭제후 7일간 다시 가입할 수 없습니다.": "When you delete your account, all of your sales history, ratings and reviews, interests and chat activity will be deleted. Plus, you cannot sign up again for 7 days after deleting your account.",
-    "이메일등록":"Register Email",
-    "네, 확인했습니다.":"Yes, I am in.",
-    "채팅방에서 나가시겠습니까?":"Would you like to leave the chat room?",
-    "채팅방을 나가면 채팅 목록 및 대화 내용이 삭제되고 복구 할 수 없습니다.":"Once you leave, the chatting list and history will be gone. Are you sure to leave out of this chat room?",
-    "네, 나갈래요":"Yes, I leave. Bye"
+    "이메일등록": "Register Email",
+    "네, 확인했습니다.": "Yes, I am in.",
+    "채팅방에서 나가시겠습니까?": "Would you like to leave the chat room?",
+    "채팅방을 나가면 채팅 목록 및 대화 내용이 삭제되고 복구 할 수 없습니다.": "Once you leave, the chatting list and history will be gone. Are you sure to leave out of this chat room?",
+    "네, 나갈래요": "Yes, I leave. Bye",
+    "내가 등록한 상품입니다.": "This is the product I registered.",
+    "판매자에게 채팅요청을 보냈습니다.": "You have sent a chat request to the seller.",
+    "데이터가 없습니다": "No data",
+    "로딩중": "Loading",
+    "신고 사유를 선택해주세요.": "Please select a reason for reporting.",
+    "기타 사유를 입력해주세요.": "Please enter other reasons."
   }
 }
