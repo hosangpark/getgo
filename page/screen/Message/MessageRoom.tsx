@@ -287,11 +287,6 @@ const ChatTypeCheck = async(type:string)=>{
             salestate:items.data[0] ==undefined? null:items.data[0].pt_sale_now,
             mt_seller_idx:items.data[0] ==undefined? null:items.data[0].mt_seller_idx,
           }}
-        // username={items.mt_nickname} 
-        //   tradeImg={items.data[0].pt_image1} producttitle={items.data[0].pt_title} 
-        //   price={NumberComma(items.data[0].pt_selling_price)} 
-        //   salestate={items.data[0].pt_sale_now} navigatieSendReview={SendReview}
-        //   mt_seller_idx={items.data[0].mt_seller_idx} rt_idx={items.rt_idx}
           />
           }
           {isLoading? 

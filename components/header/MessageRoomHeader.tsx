@@ -59,11 +59,11 @@ export const MessageRoomHeader = ({item}:
     // }
 
     const navigatieSendReview = () =>{
-        console.log(item)
         navigation.navigate('SendReview',{room_idx:item.room_idx})
     }
 
     const ChatReport = ()=>{
+        console.log(item.salestate)
         navigation.navigate('ReportChat', { 
             room_idx: item.room_idx,
             mt_declaration_idx: item.mt_seller_idx

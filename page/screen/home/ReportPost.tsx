@@ -26,6 +26,7 @@ import { SearchHeader } from '../../../components/header/SearchHeader';
 import { TextInput } from 'react-native-gesture-handler';
 import client from '../../../api/client';
 import { useSelector } from 'react-redux';
+import cusToast from '../../../components/navigation/CusToast';
 
 
 type Props = StackScreenProps<MainNavigatorParams, 'ReportPost'>
@@ -64,8 +65,8 @@ const ReportPost = ({route}:Props) => {
           dct_reason_etc:text
           }
       }).then(res=>{
-         navigation.goBack
-         console.log(res.data)
+         navigation.goBack()
+         cusToast(t(res.data.message))
           }
       ).catch(error=>{
           console.log(error);
