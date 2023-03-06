@@ -29,7 +29,7 @@ import logsStorage from './components/utils/logStorage';
 
 import { localNotificationService } from './components/utils/pushNoti';
 import axios from 'axios';
-
+import Api from './api/Api';
 
 
 
@@ -43,6 +43,8 @@ const App = () => {
   const getFcmToken = useCallback(async () => {
     const fcmToken = await messaging().getToken();
     console.log(fcmToken)
+    Api.state.mb_fcm = fcmToken;
+
   }, []);
 
   React.useEffect(() => {

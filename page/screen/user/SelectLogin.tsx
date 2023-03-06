@@ -26,6 +26,7 @@ import client from '../../../api/client';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { liff } from '@line/liff';
 import PushNotification from "react-native-push-notification";
+import Api from '../../../api/Api';
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
@@ -102,6 +103,9 @@ const SelectLogin = () => {
             ...userInfo,
             idx: 59,
         }
+
+        setAutoUserData({ idx: 59, mt_na: '82', mt_hp: '01029270185', auth_number: '1234' })
+
         await AsyncStorage.setItem('userIdx', JSON.stringify(59))
         dispatch(UserInfoAction.userlogin(params));
     }
@@ -156,6 +160,9 @@ const SelectLogin = () => {
         navigation.addListener('focus', async () => {
             await AsyncStorage.getItem('userIdx', async (err, result) => {
                 if (result) {
+
+
+
                     /*
                     idx:args.idx,
         mt_profile_img:args.mt_profile_img,
@@ -168,17 +175,43 @@ const SelectLogin = () => {
         token:args.token,
                     */
 
+                    //setAutoUserData({ idx: 59, mt_na: '82', mt_hp: '01029270185', auth_number: '1234' })
+
+                    let autoUserData = JSON.parse(result);
+
+                    console.log('userIdx', autoUserData);
+
                     await client({
-                        method: 'get',
-                        url: `/user/mypage?mt_idx=${result}`,
-                    }).then(
-                        res => {
-                            console.log('resdata', res.data.data[0]);
-                            dispatch(UserInfoAction.userlogin(JSON.stringify(res.data.data[0])));
+                        method: 'post',
+                        url: '/user/auth',
+                        data: {
+                            mt_na: autoUserData.mt_na,
+                            mt_hp: autoUserData.mt_hp,
+                            auth_number: autoUserData.auth_number,
+                            mt_app_token: Api.state.mb_fcm
                         }
-                    ).catch(
+                    }).then(res => {
+                        console.log('resdata', res.data.user_data);
+                        dispatch(UserInfoAction.userlogin(JSON.stringify(res.data.user_data)));
+                    }).catch(error => {
                         cusToast(t('자동로그인에 실패했습니다.'))
-                    )
+                        console.log(error)
+                        // cusToast(
+                        //     t('기존 정보가 없습니다.')
+                        // )
+                    })
+
+                    // await client({
+                    //     method: 'get',
+                    //     url: `/user/mypage?mt_idx=${result}`,
+                    // }).then(
+                    //     res => {
+                    //         console.log('resdata', res.data.data[0]);
+                    //         dispatch(UserInfoAction.userlogin(JSON.stringify(res.data.data[0])));
+                    //     }
+                    // ).catch(
+                    //     cusToast(t('자동로그인에 실패했습니다.'))
+                    // )
 
 
                 }

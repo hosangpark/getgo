@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Alert,
   SafeAreaView,
@@ -19,7 +19,7 @@ import {
   BackHandler,
   ActivityIndicator,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import ProductItem from '../../../components/layout/ProductItem';
 import style from '../../../assets/style/style';
 
@@ -28,12 +28,12 @@ import {
   useIsFocused,
   useNavigation,
 } from '@react-navigation/native';
-import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
-import {MainNavigatorParams} from '../../../components/types/routerTypes';
-import {MainHeader} from '../../../components/header/MainHeader';
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
+import { MainNavigatorParams } from '../../../components/types/routerTypes';
+import { MainHeader } from '../../../components/header/MainHeader';
 import cusToast from '../../../components/navigation/CusToast';
 import client from '../../../api/client';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as UserInfoAction from '../../../redux/actions/UserInfoAction';
 import * as MyLocationAction from '../../../redux/actions/MyLocationAction';
 import LoadingIndicator from '../../../components/layout/Loading';
@@ -48,10 +48,10 @@ interface itemListType {
   setTabIndex: (index: number) => void;
 }
 
-const ItemList = ({setTabIndex}: itemListType) => {
+const ItemList = ({ setTabIndex }: itemListType) => {
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const isFocused = useIsFocused();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const [exitApp, setExitApp] = React.useState(false);
   const [isloading, setIsLoading] = React.useState<boolean>(false);
@@ -66,7 +66,7 @@ const ItemList = ({setTabIndex}: itemListType) => {
 
 
   const Itemupload = () => {
-    navigation.navigate('Itemupload', {type: 'ProductUpload', pt_idx: 0});
+    navigation.navigate('Itemupload', { type: 'ProductUpload', pt_idx: 0 });
   };
 
   const backAction = () => {
@@ -126,7 +126,7 @@ const ItemList = ({setTabIndex}: itemListType) => {
     }).then(
       res => {
         // console.log(res);
-        console.log('getProductListData2', res.data);
+        // console.log('getProductListData2', res.data);
         //if (items !== res.data) {
         setitem(res.data);
         //}
@@ -184,7 +184,7 @@ const ItemList = ({setTabIndex}: itemListType) => {
 
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       <MainHeader setTabIndex={setTabIndex} setListChanege={setListChanege} />
       {isloading ? (
         <LoadingIndicator />
@@ -207,10 +207,10 @@ const ItemList = ({setTabIndex}: itemListType) => {
           />
         )}
       <View
-        style={{position: 'absolute', right: 20, bottom: 25, borderRadius: 50}}>
+        style={{ position: 'absolute', right: 20, bottom: 25, borderRadius: 50 }}>
         <TouchableOpacity onPress={Itemupload}>
           <Image
-            style={{width: 75, height: 75}}
+            style={{ width: 75, height: 75 }}
             source={require('../../../assets/img/ico_write.png')}
           />
         </TouchableOpacity>
