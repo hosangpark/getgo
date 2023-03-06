@@ -274,42 +274,36 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
         </View>
         :
         <View style={{ flexDirection: 'row', height: 44, justifyContent: 'space-between', marginTop: 15 }}>
-<<<<<<< HEAD
-  {
-    item.pt_sale_now == 1 ?
-    <TouchableOpacity onPress={ChangeReserve}
-=======
           {item.pt_sale_now == "1" ?
             <TouchableOpacity onPress={Action2}
->>>>>>> gunho
-      style={{
-        flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
-        justifyContent: 'center', alignItems: 'center', borderRadius: 5, marginRight: 10
-      }}>
-      <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
-        {t('예약중')}
-      </Text>
-    </TouchableOpacity>
-    :
-    <TouchableOpacity onPress={Action1}
-      style={{
-        flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
-        justifyContent: 'center', alignItems: 'center', borderRadius: 5, marginRight: 10
-      }}>
-      <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
-        {t('판매중')}
-      </Text>
-    </TouchableOpacity>
-  }
-  <TouchableOpacity onPress={Action3}
-    style={{
-      flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
-      justifyContent: 'center', alignItems: 'center', borderRadius: 5
-    }}>
-    <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
-      {t('거래완료')}
-    </Text>
-  </TouchableOpacity>
+              style={{
+                flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
+                justifyContent: 'center', alignItems: 'center', borderRadius: 5, marginRight: 10
+              }}>
+              <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
+                {t('예약중')}
+              </Text>
+            </TouchableOpacity>
+            :
+            <TouchableOpacity onPress={Action1}
+              style={{
+                flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
+                justifyContent: 'center', alignItems: 'center', borderRadius: 5, marginRight: 10
+              }}>
+              <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
+                {t('판매중')}
+              </Text>
+            </TouchableOpacity>
+          }
+          <TouchableOpacity onPress={Action3}
+            style={{
+              flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
+              justifyContent: 'center', alignItems: 'center', borderRadius: 5
+            }}>
+            <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
+              {t('거래완료')}
+            </Text>
+          </TouchableOpacity>
         </View >
       }
     </View >

@@ -34,11 +34,7 @@ import { NodataView } from '../../../api/Api';
 
 
 
-<<<<<<< HEAD
-const SaledList_OnSale = ({items,ReviewCount,Remove,Rerender}:any) => {
-=======
 const SaledList_OnSale = ({ items, ReviewCount, Remove, getOnsaleData, getCompleteData }: any) => {
->>>>>>> gunho
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const { t } = useTranslation()
 
@@ -51,35 +47,6 @@ const SaledList_OnSale = ({ items, ReviewCount, Remove, getOnsaleData, getComple
   }
 
 
-<<<<<<< HEAD
-    return (
-        <SafeAreaView style={{flex:1,backgroundColor:'#fff'}}>
-            <FlatList data={items}
-            style={{paddingHorizontal:20}}
-            ListHeaderComponent={
-              <View style={{flexDirection:'row',paddingTop:15}}>
-                  <Image style={{width:22,height:22,marginRight:7}} source={require('../../../assets/img/ico_review.png')}/>
-                  <Text style={[style.text_b,{fontSize:14,color:colors.BLACK_COLOR_2,marginRight:5}]}>
-                    {t('총')} 
-                  </Text>
-                  <Text style={[style.text_b,{fontSize:14,color:colors.GREEN_COLOR_3}]}>
-                    {ReviewCount}
-                  </Text>
-                  <Text style={[style.text_b,{fontSize:14,color:colors.BLACK_COLOR_2,marginRight:5}]}>
-                    {t('건')} 
-                  </Text>
-                </View>
-              }
-              showsVerticalScrollIndicator={false}
-              renderItem={({item})=>(
-                <ProductSaledList item={item} Remove={Remove} Modify={Modify} Rerender={Rerender}/>
-                )}
-                />
-              
-            <BackHandlerCom />
-        </SafeAreaView>
-    );
-=======
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       <FlatList data={items}
@@ -108,7 +75,6 @@ const SaledList_OnSale = ({ items, ReviewCount, Remove, getOnsaleData, getComple
       <BackHandlerCom />
     </SafeAreaView>
   );
->>>>>>> gunho
 };
 
 export default SaledList_OnSale;

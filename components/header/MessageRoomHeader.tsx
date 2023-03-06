@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert,StyleSheet } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
@@ -16,36 +16,8 @@ import { NumberComma } from '../utils/funcKt';
 import { useSelector } from 'react-redux';
 import client from '../../api/client';
 import cusToast from '../navigation/CusToast';
-<<<<<<< HEAD
-import { SelectBox } from '../layout/SelectBox';
-
-interface MessageRoomItemType{
-    item:{
-        username:string
-        room_idx:number
-        ctt_push:string
-        rt_idx:number
-        pt_idx:number
-        pt_sale_now:number
-        tradeImg:string
-        producttitle:string
-        price:string
-        salestate:number
-        mt_seller_idx:number
-    },
-    Action : ()=>void
-}
-
-export const MessageRoomHeader = ({item,Action}:
-    MessageRoomItemType) => {
-
-    const {t} = useTranslation()
-    const userInfo = useSelector((state:any) => state.userInfo)
-    const [toggle,setToggle] = useState(false)
-    const [topboxopen,setTopboxopen] = useState(true)
-=======
 import { SelectBox } from '../../components/layout/SelectBox';
-import { OptionType } from '../../components/types/componentType';
+
 
 interface MessageRoomItemType {
     item: {
@@ -72,7 +44,6 @@ export const MessageRoomHeader = ({ item, getRoomData }:
     const [toggle, setToggle] = useState(false)
     const [topboxopen, setTopboxopen] = useState(true)
     // const [salestate,setSalestate] = useState(true)
->>>>>>> gunho
 
     console.log('item', item, userInfo.idx);
 
@@ -88,51 +59,9 @@ export const MessageRoomHeader = ({ item, getRoomData }:
         navigation.navigate('SendReview', { room_idx: item.room_idx })
     }
 
-<<<<<<< HEAD
-    const [selectReserve, setSelReserve] = React.useState<OptionType>({
-        label: t('상태변경'),
-        value: '예약상태변경',
-        sel_id: 0,
-      });
-    const [ReserveOptions] = React.useState([
-        { label: t('판매중'), value: '판매중', sel_id: 1 },
-        { label: t('예약중'), value: '예약중', sel_id: 2 },
-        { label: t('거래완료'), value: '거래완료', sel_id: 3 },
-    ]);
-    const ReserveSelect = async (ReserveOption: OptionType) => {
-        if(ReserveOption.sel_id == 3){
-            await client({
-                method: 'get',
-                url: `/product/chatting_status?room_idx=${item.room_idx}&pt_sale_now=${ReserveOption.sel_id}`,
-            })
-            .then(res => {
-            cusToast(t(res.data.message));
-            setSelReserve(ReserveOption);
-            Action()
-            })
-            .catch(err => console.log(err));
-        } else {
-            await client({
-                method: 'get',
-                url: `/product/chatting_status?room_idx=${item.room_idx}&pt_sale_now=${ReserveOption.sel_id}`,
-            })
-            .then(res => {
-            cusToast(t(res.data.message));
-            setSelReserve(ReserveOption);
-            Action()
-            })
-            .catch(err => console.log(err));
-        }
 
-    };
-
-    const ChatReport = ()=>{
-        navigation.navigate('ReportChat', { 
-=======
     const ChatReport = () => {
-        console.log(item.salestate)
         navigation.navigate('ReportChat', {
->>>>>>> gunho
             room_idx: item.room_idx,
             mt_declaration_idx: item.mt_seller_idx
         });
@@ -207,16 +136,12 @@ export const MessageRoomHeader = ({ item, getRoomData }:
         })
     }, [item.salestate])
 
-<<<<<<< HEAD
-    React.useEffect(()=>{
-        console.log('dadadasdqw',item.pt_sale_now)
-        setSelReserve(ReserveOptions[item.pt_sale_now-1])
-    },[])
+    // React.useEffect(() => {
+    //     console.log('dadadasdqw', item.pt_sale_now)
+    //     setSelReserve(ReserveOptions[item.pt_sale_now - 1])
+    // }, [])
 
-    return(
-=======
     return (
->>>>>>> gunho
         <View>
             <View style={[style.header_, { backgroundColor: '#ffffff', paddingHorizontal: 20, borderBottomWidth: 1, borderBottomColor: colors.GRAY_COLOR_3 }]}>
                 <TouchableOpacity onPress={() => { navigation.goBack(); }} style={[{ marginRight: 6 }]}>
@@ -229,277 +154,132 @@ export const MessageRoomHeader = ({ item, getRoomData }:
                     <AutoHeightImage width={28} source={require('../../assets/img/top_menu.png')} />
                 </TouchableOpacity>
             </View>
-<<<<<<< HEAD
-            {toggle?
-            <View style={{position:'absolute',zIndex:3,right:50,top:20,backgroundColor:'white',borderWidth:1,borderColor:colors.GRAY_COLOR_2,borderRadius:10,paddingHorizontal:15,paddingVertical:10,
-            }}>
-                <TouchableOpacity style={{paddingVertical:10}} onPress={()=>ChatReport()}>
-                    <Text style={[style.text_me,{fontSize:14,color:colors.BLACK_COLOR_1}]}>
-                        {t('신고하기')}
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{paddingVertical:10}} onPress={()=>quitroom()}>
-                    <Text style={[style.text_me,{fontSize:14,color:colors.BLACK_COLOR_1}]}>
-                        {t('채팅방 나가기')}
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{paddingVertical:10}}
-                    onPress={productDetailClose}>
-                    <Text style={[style.text_me,{fontSize:14,color:colors.BLACK_COLOR_1}]}>
-                        {topboxopen?
-                        t('상품상세 숨기기')
-                        :
-                        t('상품상세 보이기')
-                        }
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{paddingVertical:10}}
-                    onPress={()=>{setToggle(!toggle)}}>
-                    <Text style={[style.text_me,{fontSize:14,color:colors.BLACK_COLOR_1}]}>               
-                        {t('취소')}
-=======
             {toggle ?
                 <View style={{
                     position: 'absolute', zIndex: 3, right: 50, top: 20, backgroundColor: 'white', borderWidth: 1, borderColor: colors.GRAY_COLOR_2, borderRadius: 10, paddingHorizontal: 15, paddingVertical: 10,
                 }}>
-                    {/* <TouchableOpacity style={{paddingVertical:10}} onPress={()=>noticeOnOff()}>
-                    <Text style={[style.text_me,{fontSize:14,color:colors.BLACK_COLOR_1}]}>
-                        {item.ctt_push=="Y" ?
-                        t('알림 끄기')
-                        :
-                        t('알림 켜기')
-                        }
-                    </Text>
-                </TouchableOpacity> */}
                     <TouchableOpacity style={{ paddingVertical: 10 }} onPress={() => ChatReport()}>
                         <Text style={[style.text_me, { fontSize: 14, color: colors.BLACK_COLOR_1 }]}>
-                            신고하기
-                    </Text>
+                            {t('신고하기')}
+                        </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{ paddingVertical: 10 }} onPress={() => quitroom()}>
                         <Text style={[style.text_me, { fontSize: 14, color: colors.BLACK_COLOR_1 }]}>
-                            채팅방 나가기
-                    </Text>
+                            {t('채팅방 나가기')}
+                        </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{ paddingVertical: 10 }}
                         onPress={productDetailClose}>
                         <Text style={[style.text_me, { fontSize: 14, color: colors.BLACK_COLOR_1 }]}>
-                            상품상세 접기 & 열기
-                    </Text>
+                            {topboxopen ?
+                                t('상품상세 숨기기')
+                                :
+                                t('상품상세 보이기')
+                            }
+                        </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{ paddingVertical: 10 }}
                         onPress={() => { setToggle(!toggle) }}>
                         <Text style={[style.text_me, { fontSize: 14, color: colors.BLACK_COLOR_1 }]}>
-                            취소
->>>>>>> gunho
-                    </Text>
+                            {t('취소')}
+                        </Text>
                     </TouchableOpacity>
                 </View> : null
             }
-<<<<<<< HEAD
-            {topboxopen? 
-            <View style={{padding:20}}>
-                <View style={{flexDirection:'row',alignItems:'center'}}>
-                    <Image style={{width:70,height:70,borderRadius:6}} source={{uri:'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000/uploads/'+item.tradeImg}}/>
-                    <View style={{marginLeft:15}}>
-                        {item.mt_seller_idx === userInfo.idx?
-                        <View style={{ width: 100, height: 15, marginBottom: 18 }}>
-                            <SelectBox
-                                selOption={selectReserve}
-                                options={ReserveOptions}
-                                action={ReserveSelect}
-                                height={0}
-                                paddingVertical={5}
-                                overScrollEnable={() => { }}
-                            />
-                        </View>
-                        :
-                        <View style={{flexDirection:'row'}}>
-                            {item.salestate == 3 && (
-                                <View
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    backgroundColor: colors.GRAY_COLOR_5,
-                                    borderRadius: 3,
-                                    paddingHorizontal: 5,
-                                    paddingVertical: 3,
-                                }}>
-                                <Image
-                                    style={{width: 10, height: 10}}
-                                    source={require('../../assets/img/ico_time.png')}
-                                />
-                                <Text
-                                    style={[
-                                    style.text_me,
-                                    {marginLeft: 3, fontSize: 13, color: colors.WHITE_COLOR},
-                                    ]}>
-                                    {t('거래완료')}
-                                </Text>
-                                </View>
-                            )}
-                            {item.salestate == 1 && (
-                                <View
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    backgroundColor: colors.BLUE_COLOR_1,
-                                    borderRadius: 3,
-                                    paddingHorizontal: 5,
-                                    paddingVertical: 3,
-                                }}>
-                                    <Image
-                                    style={{width: 10, height: 10}}
-                                    source={require('../../assets/img/ico_time.png')}
-                                    />
-                                    <Text style={[style.text_me,{fontSize:13,color:colors.WHITE_COLOR,marginLeft:3}]}>
-                                        {t('판매중')}
-                                    </Text> 
-                                </View>
-                            )}
-                            {item.salestate == 2 && (
-                                <View
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    backgroundColor: colors.GREEN_COLOR_3,
-                                    borderRadius: 3,
-                                    paddingHorizontal: 5,
-                                    paddingVertical: 3,
-                                }}>
-                                    <Image
-                                    style={{width: 10, height: 10}}
-                                    source={require('../../assets/img/ico_time.png')}
-                                    />
-                                    <Text style={[style.text_me,{fontSize:13,color:colors.WHITE_COLOR,marginLeft:3}]}>
-                                        {t('예약중')}
-                                    </Text> 
-                                </View>
-                            )}
-                        </View>
-                        }
-                        <Text style={[style.text_me,{fontSize:15,color:colors.BLACK_COLOR_2,paddingRight:85}]}
-                        numberOfLines={2}
-                        >{item.producttitle}</Text>
-                        <Text style={[style.text_b,{fontSize:15,color:colors.BLACK_COLOR_2}]}>{item.price} 원</Text>
-=======
             {topboxopen ?
                 <View style={{ padding: 20 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Image style={{ width: 70, height: 70, borderRadius: 6 }} source={{ uri: 'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000/uploads/' + item.tradeImg }} />
                         <View style={{ marginLeft: 15 }}>
-                            <View style={{ flexDirection: 'row' }}>
-                                {item.salestate == 3 && (
-                                    <View
-                                        style={{
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            backgroundColor: colors.GRAY_COLOR_5,
-                                            borderRadius: 3,
-                                            paddingHorizontal: 5,
-                                            paddingVertical: 3,
-                                        }}>
-                                        <Image
-                                            style={{ width: 10, height: 10 }}
-                                            source={require('../../assets/img/ico_time.png')}
-                                        />
-                                        <Text
-                                            style={[
-                                                style.text_me,
-                                                { marginLeft: 3, fontSize: 13, color: colors.WHITE_COLOR },
-                                            ]}>
-                                            {t('거래완료')}
-                                        </Text>
-                                    </View>
-                                )}
-                                {item.mt_seller_idx == userInfo.idx ?
-                                    <View style={{ width: 100, height: 23, marginBottom: 12, }}>
-                                        <SelectBox
-                                            selOption={selectReserve}
-                                            options={ReserveOptions}
-                                            action={ReserveSelect}
-                                            height={0}
-                                            paddingVertical={7}
-                                            overScrollEnable={() => { }}
-                                        />
-                                    </View>
-                                    :
-                                    <View>
-                                        {item.salestate == 1 && (
-                                            <View
-                                                style={{
-                                                    flexDirection: 'row',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    backgroundColor: colors.BLUE_COLOR_1,
-                                                    borderRadius: 3,
-                                                    paddingHorizontal: 5,
-                                                    paddingVertical: 3,
-                                                }}>
-                                                <Image
-                                                    style={{ width: 10, height: 10 }}
-                                                    source={require('../../assets/img/ico_time.png')}
-                                                />
-                                                <Text style={[style.text_me, { fontSize: 13, color: colors.WHITE_COLOR, marginLeft: 3 }]}>
-                                                    {t('판매중')}
-                                                </Text>
-                                            </View>
-                                        )}
-                                        {item.salestate == 2 && (
-                                            <View
-                                                style={{
-                                                    flexDirection: 'row',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    backgroundColor: colors.GREEN_COLOR_3,
-                                                    borderRadius: 3,
-                                                    paddingHorizontal: 5,
-                                                    paddingVertical: 3,
-                                                }}>
-                                                <Image
-                                                    style={{ width: 10, height: 10 }}
-                                                    source={require('../../assets/img/ico_time.png')}
-                                                />
-                                                <Text style={[style.text_me, { fontSize: 13, color: colors.WHITE_COLOR, marginLeft: 3 }]}>
-                                                    {t('예약중')}
-                                                </Text>
-                                            </View>
-                                        )}
-                                    </View>}
-                            </View>
+                            {item.mt_seller_idx === userInfo.idx ?
+                                <View style={{ width: 100, height: 15, marginBottom: 18 }}>
+                                    <SelectBox
+                                        selOption={selectReserve}
+                                        options={ReserveOptions}
+                                        action={ReserveSelect}
+                                        height={0}
+                                        paddingVertical={5}
+                                        overScrollEnable={() => { }}
+                                    />
+                                </View>
+                                :
+                                <View style={{ flexDirection: 'row' }}>
+                                    {item.salestate == 3 && (
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                backgroundColor: colors.GRAY_COLOR_5,
+                                                borderRadius: 3,
+                                                paddingHorizontal: 5,
+                                                paddingVertical: 3,
+                                            }}>
+                                            <Image
+                                                style={{ width: 10, height: 10 }}
+                                                source={require('../../assets/img/ico_time.png')}
+                                            />
+                                            <Text
+                                                style={[
+                                                    style.text_me,
+                                                    { marginLeft: 3, fontSize: 13, color: colors.WHITE_COLOR },
+                                                ]}>
+                                                {t('거래완료')}
+                                            </Text>
+                                        </View>
+                                    )}
+                                    {item.salestate == 1 && (
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                backgroundColor: colors.BLUE_COLOR_1,
+                                                borderRadius: 3,
+                                                paddingHorizontal: 5,
+                                                paddingVertical: 3,
+                                            }}>
+                                            <Image
+                                                style={{ width: 10, height: 10 }}
+                                                source={require('../../assets/img/ico_time.png')}
+                                            />
+                                            <Text style={[style.text_me, { fontSize: 13, color: colors.WHITE_COLOR, marginLeft: 3 }]}>
+                                                {t('판매중')}
+                                            </Text>
+                                        </View>
+                                    )}
+                                    {item.salestate == 2 && (
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                backgroundColor: colors.GREEN_COLOR_3,
+                                                borderRadius: 3,
+                                                paddingHorizontal: 5,
+                                                paddingVertical: 3,
+                                            }}>
+                                            <Image
+                                                style={{ width: 10, height: 10 }}
+                                                source={require('../../assets/img/ico_time.png')}
+                                            />
+                                            <Text style={[style.text_me, { fontSize: 13, color: colors.WHITE_COLOR, marginLeft: 3 }]}>
+                                                {t('예약중')}
+                                            </Text>
+                                        </View>
+                                    )}
+                                </View>
+                            }
                             <Text style={[style.text_me, { fontSize: 15, color: colors.BLACK_COLOR_2, paddingRight: 85 }]}
                                 numberOfLines={2}
                             >{item.producttitle}</Text>
                             <Text style={[style.text_b, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>{item.price} 원</Text>
                         </View>
->>>>>>> gunho
                     </View>
-                    {item.salestate == 3 &&
-                        <>
-                            {item.rt_idx == 1 ?
-                                <TouchableOpacity
-                                    onPress={navigatieSendReview}
-                                    style={[{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 40, backgroundColor: colors.WHITE_COLOR, borderRadius: 5, marginTop: 10, borderWidth: 1, borderColor: colors.GRAY_COLOR_3 }]}>
-                                    <Image style={{ width: 20, height: 20, marginRight: 5 }} source={require('../../assets/img/ico_note.png')} />
-                                    <Text style={[style.text_sb, { color: colors.BLACK_COLOR_1, fontSize: 15 }]}>
-                                        {t('후기 보기')}
-                                    </Text>
-                                </TouchableOpacity>
-                                :
-                                item.mt_seller_idx == userInfo.idx ?
-                                    <TouchableOpacity
-                                        onPress={navigatieSendReview}
-                                        style={[{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 40, backgroundColor: colors.WHITE_COLOR, borderRadius: 5, marginTop: 10, borderWidth: 1, borderColor: colors.GRAY_COLOR_3 }]}>
-                                        <Image style={{ width: 20, height: 20, marginRight: 5 }} source={require('../../assets/img/ico_note.png')} />
-                                        <Text style={[style.text_sb, { color: colors.BLACK_COLOR_1, fontSize: 15 }]}>
-                                            {t('후기 보내기')}
-                                        </Text>
-                                    </TouchableOpacity>
-                                    :
+                    <View>
+                        {item.salestate == 3 &&
+                            <>
+                                {item.rt_idx == 1 ?
                                     <TouchableOpacity
                                         onPress={navigatieSendReview}
                                         style={[{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 40, backgroundColor: colors.WHITE_COLOR, borderRadius: 5, marginTop: 10, borderWidth: 1, borderColor: colors.GRAY_COLOR_3 }]}>
@@ -508,12 +288,33 @@ export const MessageRoomHeader = ({ item, getRoomData }:
                                             {t('후기 보기')}
                                         </Text>
                                     </TouchableOpacity>
-                            }
-                        </>
-                    }
-                </View> : null
-            }
+                                    :
+                                    item.mt_seller_idx == userInfo.idx ?
+                                        <TouchableOpacity
+                                            onPress={navigatieSendReview}
+                                            style={[{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 40, backgroundColor: colors.WHITE_COLOR, borderRadius: 5, marginTop: 10, borderWidth: 1, borderColor: colors.GRAY_COLOR_3 }]}>
+                                            <Image style={{ width: 20, height: 20, marginRight: 5 }} source={require('../../assets/img/ico_note.png')} />
+                                            <Text style={[style.text_sb, { color: colors.BLACK_COLOR_1, fontSize: 15 }]}>
+                                                {t('후기 보내기')}
+                                            </Text>
+                                        </TouchableOpacity>
+                                        :
+                                        <TouchableOpacity
+                                            onPress={navigatieSendReview}
+                                            style={[{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 40, backgroundColor: colors.WHITE_COLOR, borderRadius: 5, marginTop: 10, borderWidth: 1, borderColor: colors.GRAY_COLOR_3 }]}>
+                                            <Image style={{ width: 20, height: 20, marginRight: 5 }} source={require('../../assets/img/ico_note.png')} />
+                                            <Text style={[style.text_sb, { color: colors.BLACK_COLOR_1, fontSize: 15 }]}>
+                                                {t('후기 보기')}
+                                            </Text>
+                                        </TouchableOpacity>
+                                }
+                            </>
+                        }
+                    </View>
+                </View> : null}
         </View>
+
     )
 }
+
 

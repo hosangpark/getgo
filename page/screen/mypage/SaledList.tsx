@@ -32,17 +32,6 @@ export default function SaledList() {
     { key: "OnSale", title: t('판매중') },
     { key: 'Complete', title: t('거래완료') },
   ]);
-<<<<<<< HEAD
-  
-const OnSale = () => {
-    return(
-        <SaledList_OnSale items={Saleitems} ReviewCount={Saleitems.length} Remove={RemoveOnsale} Rerender={getOnsaleData}/>
-    )
-}
-const Complete = () => {
-    return(
-        <SaledList_Complete items={Completeitems} ReviewCount={Completeitems.length} Remove={RemoveComplete} Rerender={getCompleteData}/>
-=======
 
   const OnSale = () => {
     return (
@@ -52,7 +41,6 @@ const Complete = () => {
   const Complete = () => {
     return (
       <SaledList_Complete items={Completeitems} ReviewCount={Completeitems.length} Remove={RemoveComplete} getOnsaleData={getOnsaleData} getCompleteData={getCompleteData} />
->>>>>>> gunho
     )
   }
   const renderScene = SceneMap({

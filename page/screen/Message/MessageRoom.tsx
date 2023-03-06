@@ -50,17 +50,8 @@ const MessageRoom = ({ route }: Props) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [items, setitem] = useState<any>()
 
-<<<<<<< HEAD
   const room_idx = route.params.items.room_id || route.params.items.chr_id
 
-  const {t} = useTranslation()
-    const [inputChat, setInputChat] = React.useState('');
-    const [selectImg, setSelectImg] = React.useState({
-      uri : '',
-      type : '',
-      name : '',
-    })
-=======
   const { t } = useTranslation()
   const [inputChat, setInputChat] = React.useState('');
   const [selectImg, setSelectImg] = React.useState({
@@ -68,7 +59,6 @@ const MessageRoom = ({ route }: Props) => {
     type: '',
     name: '',
   })
->>>>>>> gunho
 
   const [tempChatList, setTempChatList] = React.useState([
     { ctt_content_type: 0, ctt_send_idx: 0, ctt_msg: '네! 그걸로 살게요', ctt_sdate: '15:00', ctt_file1: '', mt_image1: '' },
@@ -237,43 +227,16 @@ const MessageRoom = ({ route }: Props) => {
     }
   }, [selectImg.uri])
 
-<<<<<<< HEAD
-  React.useEffect(()=>{
-    if(selectImg.uri != ''){
-      setInputChat('');
-    }
-  },[selectImg.uri])    
-
-  React.useEffect(() => {
-    setIsLoading(true)
-    getRoomData(room_idx);
-    getChatData(room_idx);
-=======
-  const SendReview = () => {
-    // navigation.navigate('SendReview',route.params)
-  }
-
-
   React.useEffect(() => {
     if (selectImg.uri != '') {
       setInputChat('');
     }
   }, [selectImg.uri])
 
-
-
   React.useEffect(() => {
     setIsLoading(true)
-    if (route.params.type == 'messageChat') {
-      getRoomData(route.params.items.chr_id);
-      getChatData(route.params.items.chr_id);
-    } else if (route.params.type == 'reserveChat') {
-      getRoomData(route.params.items.room_id);
-      getChatData(route.params.items.room_id)
-    } else {
-      console.log('other room')
-    }
->>>>>>> gunho
+    getRoomData(room_idx);
+    getChatData(room_idx);
   }, []);
 
 
@@ -296,36 +259,6 @@ const MessageRoom = ({ route }: Props) => {
     };
   }, []);
 
-<<<<<<< HEAD
-  
-    return (
-        <SafeAreaView style={{flex:1,backgroundColor:'#fff'}}>
-          {items == undefined?
-          null
-          :
-          <MessageRoomHeader item={
-            items == undefined? null : {
-            username:items.mt_nickname,
-            room_idx:items.room_idx,
-            ctt_push:route.params.items.ctt_push,
-            rt_idx:items.rt_idx,
-            pt_idx:items.data[0].pt_idx,
-            pt_sale_now:items.data[0].pt_sale_now,
-            tradeImg:items.data[0] ==undefined? null:items.data[0].pt_image1,
-            producttitle:items.data[0] ==undefined? null:items.data[0].pt_title,
-            price:items.data[0] ==undefined? null : NumberComma(items.data[0].pt_selling_price),
-            salestate:items.data[0] ==undefined? null:items.data[0].pt_sale_now,
-            mt_seller_idx:items.data[0] ==undefined? null:items.data[0].mt_seller_idx,
-          }} 
-          Action={()=>{getRoomData(room_idx)}}
-          />
-          }
-          {isLoading? 
-          <LoadingIndicator/>
-          :
-          <>
-          <View style={{flex:1,backgroundColor:colors.BLUE_COLOR_2}}>
-=======
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -353,7 +286,6 @@ const MessageRoom = ({ route }: Props) => {
         :
         <>
           <View style={{ flex: 1, backgroundColor: colors.BLUE_COLOR_2 }}>
->>>>>>> gunho
             <FlatList
               data={tempChatList}
               renderItem={ChatRender}
