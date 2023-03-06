@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert,StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { MainNavigatorParams } from '../types/routerTypes';
 import {Image, Pressable, Text, View, TouchableOpacity} from 'react-native';
 import style from '../../assets/style/style';
-import { MessageRoomType } from '../types/componentType';
+import { MessageRoomType, OptionType } from '../types/componentType';
 import { colors } from '../../assets/color';
 import { ProductItemType } from '../types/componentType';
 import AutoHeightImage from 'react-native-auto-height-image';
@@ -16,29 +16,32 @@ import { NumberComma } from '../utils/funcKt';
 import { useSelector } from 'react-redux';
 import client from '../../api/client';
 import cusToast from '../navigation/CusToast';
+import { SelectBox } from '../layout/SelectBox';
 
 interface MessageRoomItemType{
     item:{
-        room_idx:number
         username:string
+        room_idx:number
+        ctt_push:string
         rt_idx:number
+        pt_idx:number
+        pt_sale_now:number
         tradeImg:string
         producttitle:string
         price:string
         salestate:number
         mt_seller_idx:number
-        ctt_push:string
-    }
+    },
+    Action : ()=>void
 }
 
-export const MessageRoomHeader = ({item}:
+export const MessageRoomHeader = ({item,Action}:
     MessageRoomItemType) => {
 
     const {t} = useTranslation()
     const userInfo = useSelector((state:any) => state.userInfo)
     const [toggle,setToggle] = useState(false)
     const [topboxopen,setTopboxopen] = useState(true)
-    // const [salestate,setSalestate] = useState(true)
 
     const productDetailClose = () => {
         setTopboxopen(!topboxopen)
@@ -50,8 +53,44 @@ export const MessageRoomHeader = ({item}:
         navigation.navigate('SendReview',{room_idx:item.room_idx})
     }
 
+    const [selectReserve, setSelReserve] = React.useState<OptionType>({
+        label: t('상태변경'),
+        value: '예약상태변경',
+        sel_id: 0,
+      });
+    const [ReserveOptions] = React.useState([
+        { label: t('판매중'), value: '판매중', sel_id: 1 },
+        { label: t('예약중'), value: '예약중', sel_id: 2 },
+        { label: t('거래완료'), value: '거래완료', sel_id: 3 },
+    ]);
+    const ReserveSelect = async (ReserveOption: OptionType) => {
+        if(ReserveOption.sel_id == 3){
+            await client({
+                method: 'get',
+                url: `/product/chatting_status?room_idx=${item.room_idx}&pt_sale_now=${ReserveOption.sel_id}`,
+            })
+            .then(res => {
+            cusToast(t(res.data.message));
+            setSelReserve(ReserveOption);
+            Action()
+            })
+            .catch(err => console.log(err));
+        } else {
+            await client({
+                method: 'get',
+                url: `/product/chatting_status?room_idx=${item.room_idx}&pt_sale_now=${ReserveOption.sel_id}`,
+            })
+            .then(res => {
+            cusToast(t(res.data.message));
+            setSelReserve(ReserveOption);
+            Action()
+            })
+            .catch(err => console.log(err));
+        }
+
+    };
+
     const ChatReport = ()=>{
-        console.log(item.salestate)
         navigation.navigate('ReportChat', { 
             room_idx: item.room_idx,
             mt_declaration_idx: item.mt_seller_idx
@@ -82,6 +121,11 @@ export const MessageRoomHeader = ({item}:
           ])
       }
 
+    React.useEffect(()=>{
+        console.log('dadadasdqw',item.pt_sale_now)
+        setSelReserve(ReserveOptions[item.pt_sale_now-1])
+    },[])
+
     return(
         <View>
             <View style={[style.header_,{backgroundColor:'#ffffff',paddingHorizontal:20,borderBottomWidth:1,borderBottomColor:colors.GRAY_COLOR_3}]}>
@@ -98,35 +142,30 @@ export const MessageRoomHeader = ({item}:
             {toggle?
             <View style={{position:'absolute',zIndex:3,right:50,top:20,backgroundColor:'white',borderWidth:1,borderColor:colors.GRAY_COLOR_2,borderRadius:10,paddingHorizontal:15,paddingVertical:10,
             }}>
-                {/* <TouchableOpacity style={{paddingVertical:10}} onPress={()=>noticeOnOff()}>
-                    <Text style={[style.text_me,{fontSize:14,color:colors.BLACK_COLOR_1}]}>
-                        {item.ctt_push=="Y" ?
-                        t('알림 끄기')
-                        :
-                        t('알림 켜기')
-                        }
-                    </Text>
-                </TouchableOpacity> */}
                 <TouchableOpacity style={{paddingVertical:10}} onPress={()=>ChatReport()}>
                     <Text style={[style.text_me,{fontSize:14,color:colors.BLACK_COLOR_1}]}>
-                        신고하기
+                        {t('신고하기')}
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{paddingVertical:10}} onPress={()=>quitroom()}>
                     <Text style={[style.text_me,{fontSize:14,color:colors.BLACK_COLOR_1}]}>
-                        채팅방 나가기
+                        {t('채팅방 나가기')}
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{paddingVertical:10}}
                     onPress={productDetailClose}>
                     <Text style={[style.text_me,{fontSize:14,color:colors.BLACK_COLOR_1}]}>
-                        상품상세 접기 & 열기
+                        {topboxopen?
+                        t('상품상세 숨기기')
+                        :
+                        t('상품상세 보이기')
+                        }
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{paddingVertical:10}}
                     onPress={()=>{setToggle(!toggle)}}>
                     <Text style={[style.text_me,{fontSize:14,color:colors.BLACK_COLOR_1}]}>               
-                        취소
+                        {t('취소')}
                     </Text>
                 </TouchableOpacity>
             </View> : null
@@ -136,6 +175,18 @@ export const MessageRoomHeader = ({item}:
                 <View style={{flexDirection:'row',alignItems:'center'}}>
                     <Image style={{width:70,height:70,borderRadius:6}} source={{uri:'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000/uploads/'+item.tradeImg}}/>
                     <View style={{marginLeft:15}}>
+                        {item.mt_seller_idx === userInfo.idx?
+                        <View style={{ width: 100, height: 15, marginBottom: 18 }}>
+                            <SelectBox
+                                selOption={selectReserve}
+                                options={ReserveOptions}
+                                action={ReserveSelect}
+                                height={0}
+                                paddingVertical={5}
+                                overScrollEnable={() => { }}
+                            />
+                        </View>
+                        :
                         <View style={{flexDirection:'row'}}>
                             {item.salestate == 3 && (
                                 <View
@@ -202,6 +253,7 @@ export const MessageRoomHeader = ({item}:
                                 </View>
                             )}
                         </View>
+                        }
                         <Text style={[style.text_me,{fontSize:15,color:colors.BLACK_COLOR_2,paddingRight:85}]}
                         numberOfLines={2}
                         >{item.producttitle}</Text>
@@ -246,3 +298,4 @@ export const MessageRoomHeader = ({item}:
         </View>
     )
 }
+

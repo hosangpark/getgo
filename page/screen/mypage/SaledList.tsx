@@ -34,12 +34,12 @@ export default function SaledList() {
   
 const OnSale = () => {
     return(
-        <SaledList_OnSale items={Saleitems} ReviewCount={Saleitems.length} Remove={RemoveOnsale}/>
+        <SaledList_OnSale items={Saleitems} ReviewCount={Saleitems.length} Remove={RemoveOnsale} Rerender={getOnsaleData}/>
     )
 }
 const Complete = () => {
     return(
-        <SaledList_Complete items={Completeitems} ReviewCount={Completeitems.length} Remove={RemoveComplete}/>
+        <SaledList_Complete items={Completeitems} ReviewCount={Completeitems.length} Remove={RemoveComplete} Rerender={getCompleteData}/>
     )
 }
   const renderScene = SceneMap({

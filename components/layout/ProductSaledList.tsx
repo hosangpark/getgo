@@ -22,6 +22,8 @@ import { ProductItemType } from '../types/componentType';
 import { useTranslation } from 'react-i18next';
 import { foramtDate, NumberComma } from '../utils/funcKt';
 import Api from '../../api/Api';
+import client from '../../api/client';
+import cusToast from '../navigation/CusToast';
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
@@ -32,8 +34,8 @@ interface ToggleType {
 }
 
 
-const ProductSaledList = ({ item, Remove, Modify }:
-  { item: ProductItemType, Remove: (e: number) => void, Modify: (e: number) => void }) => {
+const ProductSaledList = ({ item, Remove, Modify ,Rerender}:
+  { item: ProductItemType, Remove: (e: number) => void, Modify: (e: number) => void, Rerender:()=>void }) => {
   const { t } = useTranslation()
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const Itempost = () => {
@@ -49,14 +51,52 @@ const ProductSaledList = ({ item, Remove, Modify }:
   const SendReview = () => {
     navigation.navigate('SendReview', item)
   }
-  const Action1 = () => {
-    console.log('판매중')
+
+  const ChangeReserve = async() => {
+    await client({
+      method: 'post',
+      url: '/product/product_status',
+      data: {
+        pt_idx: item.pt_idx,
+        pt_sale_now: 2,
+      },
+    })
+      .then(res => {
+        cusToast(t(res.data.message));
+        Rerender()
+      })
+      .catch(err => console.log(err));
   }
-  const Action2 = () => {
-    console.log('예약중')
+
+  const Action2 = async() => {
+    await client({
+      method: 'post',
+      url: '/product/product_status',
+      data: {
+        pt_idx: item.pt_idx,
+        pt_sale_now: 1,
+      },
+    })
+      .then(res => {
+        cusToast(t(res.data.message));
+        Rerender()
+      })
+      .catch(err => console.log(err));
   }
-  const Action3 = () => {
-    console.log('거래완료')
+  const Action3 = async() => {
+    await client({
+      method: 'post',
+      url: '/product/product_status',
+      data: {
+        pt_idx: item.pt_idx,
+        pt_sale_now: 3,
+      },
+    })
+      .then(res => {
+        cusToast(t(res.data.message));
+        Rerender()
+      })
+      .catch(err => console.log(err));
   }
 
   const ToggleAction = (target: any) => {
@@ -98,7 +138,7 @@ const ProductSaledList = ({ item, Remove, Modify }:
                 position: 'absolute', width: 110, backgroundColor: 'white', zIndex: 2, top: -5,
                 left: 100, elevation: 10, borderRadius: 5, justifyContent: 'center'
               }}>
-                {item.pt_sale_now !== "3" &&
+                {item.pt_sale_now !== 3 &&
                   <TouchableOpacity style={{ paddingHorizontal: 20, flex: 1, justifyContent: 'center', height: 51 }}
                     onPress={() => ToggleAction({ idx: item.pt_idx, type: 'modify' })}>
                     <Text style={[style.text_me, { color: colors.BLACK_COLOR_1, fontSize: 14 }]}>
@@ -132,7 +172,7 @@ const ProductSaledList = ({ item, Remove, Modify }:
               </Text>
 
               <View style={{ flexDirection: 'row', marginTop: 5 }}>
-                {item.pt_sale_now == "1" ?
+                {item.pt_sale_now == 1 ?
                   <Text style={[style.text_me, {
                     backgroundColor: colors.BLUE_COLOR_1,
                     borderRadius: 5, fontSize: 12, marginRight: 8, color: colors.WHITE_COLOR,
@@ -143,7 +183,7 @@ const ProductSaledList = ({ item, Remove, Modify }:
                     {t('판매중')}
                   </Text>
                   :
-                  item.pt_sale_now == "2" ?
+                  item.pt_sale_now == 2 ?
                     <Text style={[style.text_me, {
                       backgroundColor: colors.GREEN_COLOR_2,
                       borderRadius: 5, fontSize: 12, marginRight: 8, color: colors.WHITE_COLOR,
@@ -188,7 +228,7 @@ const ProductSaledList = ({ item, Remove, Modify }:
           </View>
         </View>
       </View>
-      {item.pt_sale_now == "3" ?
+      {item.pt_sale_now == 3 ?
         <View style={{ flexDirection: 'row', height: 44, justifyContent: 'space-between', marginTop: 15 }}>
           <TouchableOpacity style={{
             flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
@@ -203,14 +243,14 @@ const ProductSaledList = ({ item, Remove, Modify }:
         </View>
         :
         <View style={{ flexDirection: 'row', height: 44, justifyContent: 'space-between', marginTop: 15 }}>
-          {item.pt_sale_now == "1" ?
-            <TouchableOpacity onPress={Action1}
+          {item.pt_sale_now == 1 ?
+            <TouchableOpacity onPress={ChangeReserve}
               style={{
                 flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
                 justifyContent: 'center', alignItems: 'center', borderRadius: 5, marginRight: 10
               }}>
               <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
-                {t('판매중')}
+                {t('예약중')}
               </Text>
             </TouchableOpacity>
             :
@@ -220,7 +260,7 @@ const ProductSaledList = ({ item, Remove, Modify }:
                 justifyContent: 'center', alignItems: 'center', borderRadius: 5, marginRight: 10
               }}>
               <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
-                {t('예약중')}
+                {t('판매중')}
               </Text>
             </TouchableOpacity>
           }

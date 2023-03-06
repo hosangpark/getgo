@@ -33,7 +33,7 @@ import cusToast from '../../../components/navigation/CusToast';
 
 
 
-const SaledList_OnSale = ({items,ReviewCount,Remove}:any) => {
+const SaledList_OnSale = ({items,ReviewCount,Remove,Rerender}:any) => {
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const {t} = useTranslation()
 
@@ -66,7 +66,7 @@ const SaledList_OnSale = ({items,ReviewCount,Remove}:any) => {
               }
               showsVerticalScrollIndicator={false}
               renderItem={({item})=>(
-                <ProductSaledList item={item} Remove={Remove} Modify={Modify}/>
+                <ProductSaledList item={item} Remove={Remove} Modify={Modify} Rerender={Rerender}/>
                 )}
                 />
               

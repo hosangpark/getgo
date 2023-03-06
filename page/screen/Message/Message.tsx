@@ -146,7 +146,6 @@ const Message = () => {
       getChatListData()
     });
 
-
     return () => {
       ws.disconnect()
       console.log('disconnect Server List');

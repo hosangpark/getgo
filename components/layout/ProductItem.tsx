@@ -184,7 +184,7 @@ const ProductItem = ({
                     justifyContent: 'center',
                     backgroundColor: (item.pt_sale_now == "1" ?
                       colors.BLUE_COLOR_1
-                      : item.pt_sale_now == "2" ? colors.GRAY_COLOR_5 : colors.GREEN_COLOR_2),
+                      : item.pt_sale_now == "2" ? colors.GREEN_COLOR_2 : colors.GRAY_COLOR_5),
                     borderRadius: 3,
                     paddingHorizontal: 5,
                     paddingVertical: 3,

@@ -50,6 +50,8 @@ const MessageRoom = ({ route }: Props) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [items, setitem] = useState<any>()
 
+  const room_idx = route.params.items.room_id || route.params.items.chr_id
+
   const {t} = useTranslation()
     const [inputChat, setInputChat] = React.useState('');
     const [selectImg, setSelectImg] = React.useState({
@@ -138,7 +140,7 @@ const MessageRoom = ({ route }: Props) => {
 
   const ChatTypeCheck = async (type: string) => {
     const form = new FormData();
-    form.append('crt_idx', route.params.items.chr_id);
+    form.append('crt_idx', room_idx);
     form.append(`ctt_room_id`, route.params.items.ctt_id);
     form.append(`ctt_send_idx`, userInfo.idx);
     if (type == 'messageChat') {
@@ -162,9 +164,8 @@ const MessageRoom = ({ route }: Props) => {
     }).catch(err => {
       console.log('err:', err)
     })
-    console.log(form)
     ws.emit('SendListUpdate', { mt_idx: items.mt_idx });
-    ws.emit('SendMessage', { room_idx: route.params.items.chr_id, msg: inputChat ? inputChat : null });
+    ws.emit('SendMessage', { room_idx: room_idx, msg: inputChat ? inputChat : null });
 
   }
   const sendChat = async (type: string) => {
@@ -219,19 +220,6 @@ const MessageRoom = ({ route }: Props) => {
       setIsLoading(false)
     })
   };
-  const setComplete = async (roomidx: number) => {
-    await client({
-      method: 'get',
-      url: `/product/chatting_status?room_idx=${roomidx}&pt_sale_now=3`,
-      //url: `/product/chating-list?room_idx=1&mt_idx=${userInfo.idx}`,
-    }).then(res => {
-      getRoomData(roomidx);
-      setIsLoading(false)
-    }).catch(err => {
-      console.log('setComplete')
-      setIsLoading(false)
-    })
-  }
 
   React.useEffect(() => {
     if (selectImg.uri != '') {
@@ -239,53 +227,29 @@ const MessageRoom = ({ route }: Props) => {
     }
   }, [selectImg.uri])
 
-  const SendReview = () => {
-    // navigation.navigate('SendReview',route.params)
-  }
-
-
-    React.useEffect(()=>{
-      if(selectImg.uri != ''){
-        setInputChat('');
-      }
-    },[selectImg.uri])    
-
-
+  React.useEffect(()=>{
+    if(selectImg.uri != ''){
+      setInputChat('');
+    }
+  },[selectImg.uri])    
 
   React.useEffect(() => {
     setIsLoading(true)
-    if(route.params.type == 'messageChat'){
-      getRoomData(route.params.items.chr_id);
-      getChatData(route.params.items.chr_id);
-    } else if (route.params.type == 'reserveChat') {
-      getRoomData(route.params.items.room_id);
-      getChatData(route.params.items.room_id)
-    } else {
-      console.log('other room')
-    }
+    getRoomData(room_idx);
+    getChatData(room_idx);
   }, []);
 
 
 
-  // const sendMessage = () => {
-  //   let message = {
-  //     type: 'Chat',
-  //     user: user,
-  //     message: messageText,
-  //     room: route.params.room,
-  //   };
-  //   webSocket.current.emit('message', message);
-  //   setMessageText('');
-  // };
 
   React.useEffect(() => {
     ws.on('connect', () => {
       console.log('room connect')
-      ws.emit('join', { room_idx: route.params.items.chr_id });
+      ws.emit('join', { room_idx: room_idx });
     });
 
     ws.on('revMessage', e => {
-      getChatData(route.params.items.chr_id)
+      getChatData(room_idx)
       console.log('revMessage', e);
     });
 
@@ -301,17 +265,21 @@ const MessageRoom = ({ route }: Props) => {
           {items == undefined?
           null
           :
-          <MessageRoomHeader item={items == undefined? null : {
+          <MessageRoomHeader item={
+            items == undefined? null : {
             username:items.mt_nickname,
             room_idx:items.room_idx,
             ctt_push:route.params.items.ctt_push,
             rt_idx:items.rt_idx,
+            pt_idx:items.data[0].pt_idx,
+            pt_sale_now:items.data[0].pt_sale_now,
             tradeImg:items.data[0] ==undefined? null:items.data[0].pt_image1,
             producttitle:items.data[0] ==undefined? null:items.data[0].pt_title,
             price:items.data[0] ==undefined? null : NumberComma(items.data[0].pt_selling_price),
             salestate:items.data[0] ==undefined? null:items.data[0].pt_sale_now,
             mt_seller_idx:items.data[0] ==undefined? null:items.data[0].mt_seller_idx,
-          }}
+          }} 
+          Action={()=>{getRoomData(room_idx)}}
           />
           }
           {isLoading? 

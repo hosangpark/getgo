@@ -101,7 +101,8 @@ export type MainNavigatorParams = { //props가 없으면 undefined 있으면 {pr
     MessageRoom : {
         items:{
             chr_id: number,
-            crt_last_date: string | null
+            room_id:number,
+            crt_last_date: string | null,
             ctt_id: string, 
             ctt_msg: string | null, 
             ctt_push: string | null, 

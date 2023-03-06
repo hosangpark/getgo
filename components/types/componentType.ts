@@ -102,7 +102,7 @@ export type ProductItemType = {
     pt_lon: string,
     description: string,
     pt_selling_price: number,
-    pt_sale_now: string,
+    pt_sale_now: number,
     pt_hit: number,
     pt_chat: number,
     pt_wish: number,
