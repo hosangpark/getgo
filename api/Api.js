@@ -40,7 +40,7 @@ class Api {
       siteUrl: 'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000',
       imageUrl: 'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000/uploads/',
       socketUrl: 'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:3333',
-      deepLinkUrl: 'https://getgo.page.link/bjYi',
+      deepLinkUrl: 'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:3000/bridge',
       path: '/api/',
       option: {
         method: 'POST',
