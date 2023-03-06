@@ -16,16 +16,16 @@ import Api from '../../api/Api';
 
 
 
-export const ChatList = ({item,  Delete ,Enter,Toggle,noticeOnOff,listmodal}:
-  ({item:ChatItemType , Delete:(e:number)=>void, Enter:(e:ChatItemType)=>void, Toggle:(itemid:number)=>void, noticeOnOff:(e:{chr_id:number,ctt_push:string})=>void ,listmodal:any})
-  ) => {
-    const {t} = useTranslation()
-    const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
-    const ToggleBridge = (e:{chr_id:number,ctt_push:string})=>{
-      noticeOnOff(e)
-    }
+export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal }:
+  ({ item: ChatItemType, Delete: (e: number) => void, Enter: (e: ChatItemType) => void, Toggle: (itemid: number) => void, noticeOnOff: (e: { chr_id: number, ctt_push: string }) => void, listmodal: any })
+) => {
+  const { t } = useTranslation()
+  const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
+  const ToggleBridge = (e: { chr_id: number, ctt_push: string }) => {
+    noticeOnOff(e)
+  }
 
-  return(
+  return (
     <View key={item.chr_id}
       style={{
         paddingVertical: 17, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', overflow: 'visible',

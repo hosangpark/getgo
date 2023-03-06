@@ -92,7 +92,7 @@ const Itempost = ({ route }: Props) => {
         url: fullcodeUrl,
       });
 
-      Linking.openURL(fullcodeUrl);
+      // Linking.openURL(fullcodeUrl);
 
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -170,7 +170,8 @@ const Itempost = ({ route }: Props) => {
     }
 
     if (userInfo.idx == items.data[0].mt_seller_idx) {
-      navigation.navigate('Reserve_choice', { target });
+      //채팅응답
+      navigation.navigate('Reserve_choice', { target, type: 'reserveChat' });
     } else {
       await client({
         method: 'post',
@@ -256,6 +257,18 @@ const Itempost = ({ route }: Props) => {
 
   /** 상품 판매상태변경 */
   const ReserveSelect = async (item: OptionType) => {
+
+    if (item.sel_id == '3') {
+      navigation.navigate('Reserve_choice', {
+        target: {
+          id: items.data[0].pt_idx,
+          image: items.data[0].pt_image1,
+          title: items.data[0].pt_title,
+        }, type: 'Complete'
+      });
+      return;
+    }
+
     await client({
       method: 'post',
       url: '/product/product_status',

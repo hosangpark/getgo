@@ -46,11 +46,11 @@ const ReportUser = ({ route }: Props) => {
     { reportlist: t('연애 목적의 대화를 시도해요'), report: false },
     { reportlist: t('기타'), report: false },
   ])
-  const [Report,setReport] = useState('')
+  const [Report, setReport] = useState('')
 
-  const selectReport = (e:string)=>{
+  const selectReport = (e: string) => {
     const nextitem = ReportList.map(item =>
-      item.reportlist === e ? {...item, report: !item.report} : item,
+      item.reportlist === e ? { ...item, report: !item.report } : item,
     );
     setReportList(nextitem);
   }
@@ -77,42 +77,42 @@ const ReportUser = ({ route }: Props) => {
     await client({
       method: 'post',
       url: '/product/declaration_chat',
-      data:{
-          room_idx:"",
-          mt_idx:userInfo.idx,
-          mt_declaration_idx:route.params.mt_declaration_idx,
-          dct_reason:ReportList,
-          dct_type:"2",
-          dct_reason_etc:text
-          }
-      }).then(res=>{
-         navigation.goBack()
-         cusToast(t(res.data.message))
-          }
-      ).catch(error=>{
-          console.log(error);
-      })
+      data: {
+        room_idx: "",
+        mt_idx: userInfo.idx,
+        mt_declaration_idx: route.params.mt_declaration_idx,
+        dct_reason: dct_reason,
+        dct_type: "2",
+        dct_reason_etc: text
+      }
+    }).then(res => {
+      navigation.goBack()
+      cusToast(t(res.data.message))
+    }
+    ).catch(error => {
+      console.log(error);
+    })
   }
 
-    return (
-    <SafeAreaView style={[style.default_background , {flex:1}]}>
-        <BackHeader title={t('사용자 신고')}/>     
-            <ScrollView style={{paddingHorizontal:20}}>
-              <Text style={[style.text_b, {color:colors.BLACK_COLOR_1,fontSize:22,marginTop:35, marginBottom:30, width:'60%',lineHeight:40}]}>
-              {t('사용자를 신고하고자하는 이유를 선택하세요')}
-              </Text>
-              
-              {ReportList.map((e,index)=>{
-                return(
-                <TouchableOpacity key={index} style={{flexDirection:'row',marginBottom:15,paddingRight:40}} onPress={()=>setReport(e.reportlist)}>
-                  {e.reportlist === Report?
-                  <Image style={{width:22,height:22}} source={require('../../../assets/img/check_on.png')}/> :
-                  <Image style={{width:22,height:22,}} source={require('../../../assets/img/check_off.png')}/>
-                  }
-                  <Text style={[style.text_me,{fontSize:15,marginLeft:10,color:colors.BLACK_COLOR_1}]}>{t(e.reportlist)}</Text>
-                </TouchableOpacity>
-                )
-              })}
+  return (
+    <SafeAreaView style={[style.default_background, { flex: 1 }]}>
+      <BackHeader title={t('사용자 신고')} />
+      <ScrollView style={{ paddingHorizontal: 20 }}>
+        <Text style={[style.text_b, { color: colors.BLACK_COLOR_1, fontSize: 22, marginTop: 35, marginBottom: 30, width: '60%', lineHeight: 40 }]}>
+          {t('사용자를 신고하고자하는 이유를 선택하세요')}
+        </Text>
+
+        {ReportList.map((e, index) => {
+          return (
+            <TouchableOpacity key={index} style={{ flexDirection: 'row', marginBottom: 15, paddingRight: 40 }} onPress={() => setReport(e.reportlist)}>
+              {e.reportlist === Report ?
+                <Image style={{ width: 22, height: 22 }} source={require('../../../assets/img/check_on.png')} /> :
+                <Image style={{ width: 22, height: 22, }} source={require('../../../assets/img/check_off.png')} />
+              }
+              <Text style={[style.text_me, { fontSize: 15, marginLeft: 10, color: colors.BLACK_COLOR_1 }]}>{t(e.reportlist)}</Text>
+            </TouchableOpacity>
+          )
+        })}
 
         {ReportList.map((e, index) => {
           return (

@@ -68,8 +68,8 @@ const Message = () => {
   }
 
   /**알림 차단 수신 */
-  const noticeOnOff = async(e:{chr_id:number,ctt_push:string})=>{
-    let YorN = e.ctt_push == "Y" ? "N":"Y"
+  const noticeOnOff = async (e: { chr_id: number, ctt_push: string }) => {
+    let YorN = e.ctt_push == "Y" ? "N" : "Y"
     await client({
       method: 'get',
       url: `/product/chat-list-push?chr_idx=${e.chr_id}&ctt_push=${YorN}`

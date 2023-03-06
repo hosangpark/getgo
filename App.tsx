@@ -51,27 +51,7 @@ const App = () => {
     getFcmToken()
   }, [])
 
-  React.useEffect(() => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      notificationDisplay(remoteMessage)
-      // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage))
-    });
-    return unsubscribe;
-  }, []);
 
-  const notificationDisplay = (remoteMessage: any) => {
-    console.log('notificationDisplay');
-    console.log('body: ' + remoteMessage.notification.body);
-    console.log('title: ' + remoteMessage.notification.title);
-    if (Platform.OS === 'android') {
-      PushNotification.localNotification({
-        channelId: "getgo",
-        title: remoteMessage.notification.title,
-        message: remoteMessage.notification.body,
-        autoCancel: true,
-      });
-    }
-  };
 
 
   const tracking = async () => {
