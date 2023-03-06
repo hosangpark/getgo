@@ -86,11 +86,13 @@ const Itempost = ({ route }: Props) => {
       //   shopUrl = 'https://apps.apple.com/kr/app/id1572757670';
       // }
       // let fullcodeUrl = Api.state.siteUrl + '/bridge.php?code=' + items.data[0].pt_idx;
-      let fullcodeUrl = Api.state.deepLinkUrl + '?code=' + items.data[0].pt_idx;
+      let fullcodeUrl = Api.state.deepLinkUrl + '?type=product&code=' + items.data[0].pt_idx;
       const result = await Share.share({
         message: `[Getgo] ${items.data[0].pt_title} / ￦ ${NumberComma(items.data[0].pt_selling_price)} `,
         url: fullcodeUrl,
       });
+
+      Linking.openURL(fullcodeUrl);
 
       if (result.action === Share.sharedAction) {
         if (result.activityType) {

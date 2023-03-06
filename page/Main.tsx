@@ -11,6 +11,7 @@ import {
   Alert,
   Image,
   SafeAreaView, Text, View,
+  Linking,
 } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Login from './screen/user/SelectLogin';
@@ -22,15 +23,37 @@ import NotificationIndex from './screen/notification/NotificationIndex';
 import Mypage from './screen/mypage/Mypage'
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/reducers';
+import Api from '../api/Api';
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
 
-const Main = () => {
+const Main = ({ navigation }) => {
 
   const Tab = createBottomTabNavigator();
   const [tabIndex, setTabIndex] = React.useState(1);
   // const Isloginn = useSelector((state: RootState) => state.auth.isLogin);
+
+
+  //앱이 꺼져있다가 실행됬을떄 intent 처리
+  const links = async () => {
+
+    const initialUrl = await Linking.getInitialURL();
+    // console.log('initialUrl', initialUrl);
+
+    let pt_idx = Api.urlGetCode(initialUrl);
+
+    if (initialUrl && pt_idx) {
+      console.log('앱이 꺼져있다가 실행됬을떄 intent 처리', initialUrl);
+
+      // navigation.replace('post', {family_code: fitCode});
+      navigation.navigate('Itempost', { pt_idx: pt_idx });
+
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
