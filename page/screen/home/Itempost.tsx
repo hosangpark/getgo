@@ -85,7 +85,8 @@ const Itempost = ({ route }: Props) => {
       // } else {
       //   shopUrl = 'https://apps.apple.com/kr/app/id1572757670';
       // }
-      let fullcodeUrl = Api.state.siteUrl + '/bridge.php?code=' + items.data[0].pt_idx;
+      // let fullcodeUrl = Api.state.siteUrl + '/bridge.php?code=' + items.data[0].pt_idx;
+      let fullcodeUrl = Api.state.deepLinkUrl + '?code=' + items.data[0].pt_idx;
       const result = await Share.share({
         message: `[Getgo] ${items.data[0].pt_title} / ￦ ${NumberComma(items.data[0].pt_selling_price)} `,
         url: fullcodeUrl,
@@ -108,6 +109,11 @@ const Itempost = ({ route }: Props) => {
 
 
   const ReportPost = (target: number, pt_idx: any) => {
+    if (target == userInfo.idx) {
+      cusToast(t('내가 등록한 상품입니다.'))
+      return false;
+    }
+
     navigation.navigate('ReportPost', { mt_declaration_idx: target, pt_idx: pt_idx });
   };
   const gofullscreen = () => {
@@ -156,10 +162,10 @@ const Itempost = ({ route }: Props) => {
   const Reserve_choice = async (target: ChoiceType) => {
 
     //거래완료
-    // if (items.data[0].pt_sale_now == '3') {
-    //   cusToast(t('이미 거래가 완료된 상품입니다.'));
-    //   return false;
-    // }
+    if (items.data[0].pt_sale_now == '3') {
+      cusToast(t('이미 거래가 완료된 상품입니다.'));
+      return false;
+    }
 
     if (userInfo.idx == items.data[0].mt_seller_idx) {
       navigation.navigate('Reserve_choice', { target });

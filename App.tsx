@@ -6,9 +6,9 @@
  * @flow strict-local
  */
 
-import React, { createRef,useRef,useState,useCallback } from 'react';
-import {Alert,Platform} from 'react-native';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import React, { createRef, useRef, useState, useCallback } from 'react';
+import { Alert, Platform } from 'react-native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import Router from './Router';
 
 import { onPushNavigate } from './components/navigation/onPushNavigate'; //push...
@@ -18,7 +18,7 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import Toast from 'react-native-toast-message'; //toast...
 import { toastConfig } from './components/navigation/toastConfig'; //toast...custom
 import messaging from '@react-native-firebase/messaging';
-import {Provider} from 'react-redux' //redux...provider
+import { Provider } from 'react-redux' //redux...provider
 import initStore from './redux/store';//redux...init
 import { requestTrackingPermission } from 'react-native-tracking-transparency';
 
@@ -27,9 +27,9 @@ import { requestTrackingPermission } from 'react-native-tracking-transparency';
 import SplashScreen from 'react-native-splash-screen';
 import logsStorage from './components/utils/logStorage';
 
-import {localNotificationService} from './components/utils/pushNoti';
+import { localNotificationService } from './components/utils/pushNoti';
 import axios from 'axios';
-
+import Api from './api/Api';
 
 
 
@@ -43,11 +43,13 @@ const App = () => {
   const getFcmToken = useCallback(async () => {
     const fcmToken = await messaging().getToken();
     console.log(fcmToken)
+    Api.state.mb_fcm = fcmToken;
+
   }, []);
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     getFcmToken()
-  },[])
+  }, [])
 
   React.useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
@@ -57,7 +59,7 @@ const App = () => {
     return unsubscribe;
   }, []);
 
-  const notificationDisplay = (remoteMessage:any) => {
+  const notificationDisplay = (remoteMessage: any) => {
     console.log('notificationDisplay');
     console.log('body: ' + remoteMessage.notification.body);
     console.log('title: ' + remoteMessage.notification.title);
@@ -79,25 +81,25 @@ const App = () => {
     }
   }
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     setTimeout(() => {
       tracking();
-   },1000);
-  },[])
+    }, 1000);
+  }, [])
 
   React.useEffect(() => {
     //setTimeout을 이용하면 몇초간 스플래시 스크린을 보여주고 싶은지 설정할 수 있다.
     setTimeout(() => {
       SplashScreen.hide();
     }, 2000);
-  },[])
+  }, [])
 
   return (
     <Provider store={store}>
-          <NavigationContainer>
-            <Router />
-          </NavigationContainer>
-          <Toast config={toastConfig}/>
+      <NavigationContainer>
+        <Router />
+      </NavigationContainer>
+      <Toast config={toastConfig} />
     </Provider>
   );
 };

@@ -29,6 +29,7 @@ import client from '../../../api/client';
 import logsStorage from '../../../components/utils/logStorage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import cusToast from '../../../components/navigation/CusToast';
+import Api from '../../../api/Api';
 
 
 // import { useAuthActions } from '../../../redux/actions/UserInfoAction';
@@ -160,16 +161,23 @@ const JoinStep2 = ({ route }: any) => {
                 mt_area: route.params.area,
                 mt_lat: route.params.mt_lat,
                 mt_log: route.params.mt_log,
-                mat_status: 'N'
+                mat_status: 'N',
+                mt_app_token: Api.state.mb_fcm
             }
         }).then((res) => {
             if (res.data) {
                 let params = {
                     ...userInfo,
                     idx: res.data.user_idx,
+                    mt_na: inputLoginInfo.areaCode,
+                    mt_hp: inputLoginInfo.mt_hp,
+                    mt_area: route.params.area,
+                    mt_lat: route.params.mt_lat,
+                    mt_log: route.params.mt_log,
                 }
                 dispatch(UserInfoAction.updateUserInfo(JSON.stringify(params)));
-                setAutoUserData(params)
+
+                setAutoUserData({ idx: res.data.user_idx, mt_na: inputLoginInfo.areaCode, mt_hp: inputLoginInfo.mt_hp, auth_number: authCode })
                 cusToast(res.data.message)
                 navigation.navigate('JoinStep3');
             }

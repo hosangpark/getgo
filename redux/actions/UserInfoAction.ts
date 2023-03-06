@@ -1,62 +1,62 @@
 import { types } from "../types";
 
-export function userlogin(data:any){
+export function userlogin(data: any) {
     const args = JSON.parse(data);
     return {
         type: types.USER_LOGIN,
-        idx:args.idx,
-        mt_profile_img:args.mt_profile_img,
-        mt_na:args.mt_na,
-        mt_hp:args.mt_hp,
-        mt_nickname:args.mt_nickname,
-        mt_email:args.mt_email,
-        sell_count:args.sell_count,
-        trade_com_count:args.trade_com_count,
-        token:args.token,
-        islogin:true,
+        idx: args.idx,
+        mt_profile_img: args.mt_profile_img ?? null,
+        mt_na: args.mt_na ?? null,
+        mt_hp: args.mt_hp ?? null,
+        mt_nickname: args.mt_nickname ?? null,
+        mt_email: args.mt_email ?? null,
+        sell_count: args.sell_count ?? 0,
+        trade_com_count: args.trade_com_count ?? 0,
+        token: args.token ?? null,
+        islogin: true,
     };
 }
-export function updateUserInfo(data:any){
+export function updateUserInfo(data: any) {
     const args = JSON.parse(data);
     return {
         type: types.UPDATE_USER_INFO,
-        idx:args.idx,
-        mt_profile_img:args.mt_profile_img,
-        mt_na:args.mt_na,
-        mt_hp:args.mt_hp,
-        mt_nickname:args.mt_nickname,
-        mt_email:args.mt_email,
-        sell_count:args.sell_count,
-        trade_com_count:args.trade_com_count,
-        token:args.token,
-        islogin:args.islogin,
+        idx: args.idx,
+        mt_profile_img: args.mt_profile_img,
+        mt_na: args.mt_na,
+        mt_hp: args.mt_hp,
+        mt_nickname: args.mt_nickname,
+        mt_email: args.mt_email,
+        sell_count: args.sell_count,
+        trade_com_count: args.trade_com_count,
+        token: args.token,
+        islogin: args.islogin,
     };
 }
-export function updateEmail(data:any){
+export function updateEmail(data: any) {
     const args = JSON.parse(data);
     return {
         type: types.UPDATE_EMAIL,
-        mt_email:args.mt_email,
+        mt_email: args.mt_email,
     };
 }
-export function updatePhone(data:any){
+export function updatePhone(data: any) {
     const args = JSON.parse(data);
     return {
         type: types.UPDATE_EMAIL,
-        mt_hp:args.mt_hp,
+        mt_hp: args.mt_hp,
     };
 }
-export function updateNickname(data:any){
+export function updateNickname(data: any) {
     const args = JSON.parse(data);
     return {
         type: types.UPDATE_NICKNAME,
-        mt_nickname:args.mt_nickname,
+        mt_nickname: args.mt_nickname,
     };
 }
 
-export function logOut(){
+export function logOut() {
     return {
-        type : types.LOGOUT,
+        type: types.LOGOUT,
     }
 }
 
@@ -79,7 +79,7 @@ export function logOut(){
 
 // export function updateUserInfo(data : any){
 //     const args = JSON.parse(data);
-    
+
 //     return {
 //         type: types.UPDATE_USER_INFO,
 //         idx:args.idx,

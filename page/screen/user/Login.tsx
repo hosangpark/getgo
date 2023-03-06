@@ -26,6 +26,7 @@ import client from '../../../api/client';
 import * as UserInfoAction from '../../../redux/actions/UserInfoAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import cusToast from '../../../components/navigation/CusToast';
+import Api from '../../../api/Api';
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
@@ -123,10 +124,11 @@ const Login = () => {
                 mt_na: inputLoginInfo.areaCode,
                 mt_hp: inputLoginInfo.mt_hp,
                 // auth_number: '1234'
-                auth_number: authCode
+                auth_number: authCode,
+                mt_app_token: Api.state.mb_fcm
             }
         }).then(res => {
-            setAutoUserData(res.data.user_idx)
+            setAutoUserData({ idx: res.data.user_idx, mt_na: inputLoginInfo.areaCode, mt_hp: inputLoginInfo.mt_hp, auth_number: authCode })
             navigation.navigate('SelectLogin')
             cusToast(t(res.data.message))
         }).catch(error => {
