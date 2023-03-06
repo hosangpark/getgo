@@ -48,7 +48,7 @@
 
                 <data
                     android:scheme="http"
-                    android:host="ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:3000"
+                    android:host="ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com"
                     android:pathPrefix="/bridge" />
             </intent-filter>
         </activity>

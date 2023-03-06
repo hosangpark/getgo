@@ -22,8 +22,8 @@ import { ProductItemType } from '../types/componentType';
 import { useTranslation } from 'react-i18next';
 import { foramtDate, NumberComma } from '../utils/funcKt';
 import Api from '../../api/Api';
-import client from '../../api/client';
 import cusToast from '../navigation/CusToast';
+import client from '../../api/client';
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
@@ -34,8 +34,8 @@ interface ToggleType {
 }
 
 
-const ProductSaledList = ({ item, Remove, Modify ,Rerender}:
-  { item: ProductItemType, Remove: (e: number) => void, Modify: (e: number) => void, Rerender:()=>void }) => {
+const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData }:
+  { item: ProductItemType, Remove: (e: number) => void, Modify: (e: number) => void, getOnsaleData: (e: any) => void, getCompleteData: (e: any) => void }) => {
   const { t } = useTranslation()
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const Itempost = () => {
@@ -52,7 +52,7 @@ const ProductSaledList = ({ item, Remove, Modify ,Rerender}:
     navigation.navigate('SendReview', item)
   }
 
-  const ChangeReserve = async() => {
+  const ChangeReserve = async () => {
     await client({
       method: 'post',
       url: '/product/product_status',
@@ -68,7 +68,7 @@ const ProductSaledList = ({ item, Remove, Modify ,Rerender}:
       .catch(err => console.log(err));
   }
 
-  const Action2 = async() => {
+  const Action2 = async () => {
     await client({
       method: 'post',
       url: '/product/product_status',
@@ -83,21 +83,52 @@ const ProductSaledList = ({ item, Remove, Modify ,Rerender}:
       })
       .catch(err => console.log(err));
   }
-  const Action3 = async() => {
+  const Action3 = async () => {
+
+    navigation.navigate('Reserve_choice', {
+      target: {
+        id: item.pt_idx,
+        image: item.pt_image1,
+        title: item.pt_title,
+      }, type: 'Complete'
+    });
+    return;
+
+    // await client({
+    //   method: 'post',
+    //   url: '/product/product_status',
+    //   data: {
+    //     pt_idx: item.pt_idx,
+    //     pt_sale_now: 3,
+    //   },
+    // })
+    //   .then(res => {
+    //     cusToast(t(res.data.message));
+    //     Rerender()
+    //   })
+    //   .catch(err => console.log(err));
+  }
+
+  /** 상품 판매상태변경 */
+  const ReserveSelect = async (pt_idx, pt_sale_now) => {
+    if (!pt_idx || !pt_sale_now) return;
+
+
     await client({
       method: 'post',
       url: '/product/product_status',
       data: {
-        pt_idx: item.pt_idx,
-        pt_sale_now: 3,
+        pt_idx: pt_idx,
+        pt_sale_now: pt_sale_now,
       },
     })
       .then(res => {
         cusToast(t(res.data.message));
-        Rerender()
+        if (typeof getOnsaleData == 'function') getOnsaleData();
+        if (typeof getCompleteData == 'function') getCompleteData();
       })
       .catch(err => console.log(err));
-  }
+  };
 
   const ToggleAction = (target: any) => {
     if (target.type == "modify") {
@@ -243,39 +274,45 @@ const ProductSaledList = ({ item, Remove, Modify ,Rerender}:
         </View>
         :
         <View style={{ flexDirection: 'row', height: 44, justifyContent: 'space-between', marginTop: 15 }}>
-          {item.pt_sale_now == 1 ?
-            <TouchableOpacity onPress={ChangeReserve}
-              style={{
-                flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
-                justifyContent: 'center', alignItems: 'center', borderRadius: 5, marginRight: 10
-              }}>
-              <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
-                {t('예약중')}
-              </Text>
-            </TouchableOpacity>
-            :
+<<<<<<< HEAD
+  {
+    item.pt_sale_now == 1 ?
+    <TouchableOpacity onPress={ChangeReserve}
+=======
+          {item.pt_sale_now == "1" ?
             <TouchableOpacity onPress={Action2}
-              style={{
-                flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
-                justifyContent: 'center', alignItems: 'center', borderRadius: 5, marginRight: 10
-              }}>
-              <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
-                {t('판매중')}
-              </Text>
-            </TouchableOpacity>
-          }
-          <TouchableOpacity onPress={Action3}
-            style={{
-              flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
-              justifyContent: 'center', alignItems: 'center', borderRadius: 5
-            }}>
-            <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
-              {t('거래완료')}
-            </Text>
-          </TouchableOpacity>
-        </View>
+>>>>>>> gunho
+      style={{
+        flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
+        justifyContent: 'center', alignItems: 'center', borderRadius: 5, marginRight: 10
+      }}>
+      <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
+        {t('예약중')}
+      </Text>
+    </TouchableOpacity>
+    :
+    <TouchableOpacity onPress={Action1}
+      style={{
+        flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
+        justifyContent: 'center', alignItems: 'center', borderRadius: 5, marginRight: 10
+      }}>
+      <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
+        {t('판매중')}
+      </Text>
+    </TouchableOpacity>
+  }
+  <TouchableOpacity onPress={Action3}
+    style={{
+      flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
+      justifyContent: 'center', alignItems: 'center', borderRadius: 5
+    }}>
+    <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
+      {t('거래완료')}
+    </Text>
+  </TouchableOpacity>
+        </View >
       }
-    </View>
+    </View >
   );
 };
 

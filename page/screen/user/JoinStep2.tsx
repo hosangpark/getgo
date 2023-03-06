@@ -151,7 +151,7 @@ const JoinStep2 = ({ route }: any) => {
 
     /** 회원가입 */
     const getUserAccount = async () => {
-        await client<{ data: string, user_idx: number, message: string }>({
+        await client({
             method: 'post',
             url: '/user/account',
             data: {
@@ -177,7 +177,7 @@ const JoinStep2 = ({ route }: any) => {
                 }
                 dispatch(UserInfoAction.updateUserInfo(JSON.stringify(params)));
 
-                setAutoUserData({ idx: res.data.user_idx, mt_na: inputLoginInfo.areaCode, mt_hp: inputLoginInfo.mt_hp, auth_number: authCode })
+                setAutoUserData({ idx: res.data.user_idx, mt_na: inputLoginInfo.areaCode, mt_hp: inputLoginInfo.mt_hp, auth_number: authCode, mt_app_token: Api.state.mb_fcm })
                 cusToast(res.data.message)
                 navigation.navigate('JoinStep3');
             }
