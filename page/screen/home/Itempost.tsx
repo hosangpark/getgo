@@ -46,6 +46,7 @@ import LoadingIndicator from '../../../components/layout/Loading';
 import cusToast from '../../../components/navigation/CusToast';
 import { useTranslation } from 'react-i18next';
 import Api from '../../../api/Api';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 type Props = StackScreenProps<MainNavigatorParams, 'Itempost'>;
 const Itempost = ({ route }: Props) => {
@@ -77,6 +78,22 @@ const Itempost = ({ route }: Props) => {
   //   console.log(profileToggle);
   // };
 
+  // const buildLink = async () => {
+  //   const link = await dynamicLinks().buildLink({
+  //     link: Api.state.siteUrl + '/bridge?type=product&code=' + items.data[0].pt_idx,
+  //     domainUriPrefix: 'https://getgo.page.link',
+  //     social: {
+  //       descriptionText: items?.data[0]?.pt_selling_price ? '￦' + items.data[0].pt_selling_price : '',
+  //       imageUrl: filterslideImage.length ? filterslideImage[0].uri : null,
+  //       title: items?.data[0]?.pt_title
+  //     },
+  //   });
+
+
+  //   return link;
+  // }
+
+
   const SHOWLOG = async () => {
     try {
       // let shopUrl = '';
@@ -85,13 +102,18 @@ const Itempost = ({ route }: Props) => {
       // } else {
       //   shopUrl = 'https://apps.apple.com/kr/app/id1572757670';
       // }
-      // let fullcodeUrl = Api.state.siteUrl + '/bridge.php?code=' + items.data[0].pt_idx;
-      let fullcodeUrl = Api.state.deepLinkUrl + '?type=product&code=' + items.data[0].pt_idx;
+      let fullcodeUrl = Api.state.siteUrl + '/bridge?code=' + items.data[0].pt_idx;
+
+      // let fullcodeUrl = await buildLink();
+      // console.log('urls', fullcodeUrl);
+      // return;
+
       const result = await Share.share({
         message: `[Getgo] ${items.data[0].pt_title} / ￦ ${NumberComma(items.data[0].pt_selling_price)} `,
         url: fullcodeUrl,
       });
 
+      console.log('fullcodeUrl', fullcodeUrl);
       // Linking.openURL(fullcodeUrl);
 
       if (result.action === Share.sharedAction) {
@@ -296,7 +318,7 @@ const Itempost = ({ route }: Props) => {
 
   return (
     <SafeAreaView style={[style.default_background, { flex: 1 }]}>
-      <ItemPostHeader myProduct={myProduct} pt_idx={items.data[0].pt_idx} />
+      <ItemPostHeader myProduct={myProduct} pt_idx={items.data[0].pt_idx} pt_sale_now={items.data[0].pt_sale_now} />
       <ScrollView>
         {isloading ? <LoadingIndicator /> : null}
         {filterslideImage.length ? (
@@ -307,7 +329,7 @@ const Itempost = ({ route }: Props) => {
           />
         ) : <View style={{ height: 50, backgroundColor: colors.GRAY_COLOR_4 }}></View>}
         <View style={{ marginVertical: 24, marginHorizontal: 20 }}>
-          {myProduct && (
+          {myProduct && items.data[0].pt_sale_now != 3 ? (
             <View style={{ width: 100, height: 20, marginBottom: 12 }}>
               <SelectBox
                 selOption={selectReserve}
@@ -318,7 +340,7 @@ const Itempost = ({ route }: Props) => {
                 overScrollEnable={() => { }}
               />
             </View>
-          )}
+          ) : null}
           <View
             style={{
               flexDirection: 'row',

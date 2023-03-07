@@ -38,10 +38,6 @@ const SaledList_OnSale = ({ items, ReviewCount, Remove, getOnsaleData, getComple
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const { t } = useTranslation()
 
-
-
-
-
   const Modify = (target: number) => {
     navigation.navigate('Itemupload', { type: "ProductModify", pt_idx: target })
   }

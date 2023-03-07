@@ -1,7 +1,5 @@
 import React from 'react';
-
-
-import { View, ViewStyle, Text, ScrollView, SafeAreaView, useWindowDimensions } from 'react-native';
+import { View, ViewStyle, Text, ScrollView, SafeAreaView, useWindowDimensions, Alert } from 'react-native';
 import { BackHeader } from '../../../components/header/BackHeader';
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import SaledList_OnSale from './SaledList_OnSale';
@@ -15,16 +13,13 @@ import { useSelector } from 'react-redux';
 import cusToast from '../../../components/navigation/CusToast';
 import { useFocusEffect } from '@react-navigation/native';
 
+export default function SaledList({ route }) {
 
-
-
-
-export default function SaledList() {
-
+  // console.log('route?.params?.target', route?.params?.target);
   const { t } = useTranslation()
   const layout = useWindowDimensions();
   const userInfo = useSelector((state: any) => state.userInfo);
-  const [index, setIndex] = React.useState(0);
+  const [index, setIndex] = React.useState(route?.params?.target ?? 0);
   const [Saleitems, setsaleitem] = React.useState([])
   const [Completeitems, setCompleteitem] = React.useState([])
   const [isloading, setIsLoading] = React.useState(true);
@@ -49,37 +44,57 @@ export default function SaledList() {
   });
 
   const RemoveComplete = async (target: number) => {
-    await client({
-      method: 'get',
-      url: `/product/sales_completed_delete`,
-      params: {
-        ot_idx: target
-      }
-    }).then(
-      res => {
-        cusToast(t(res.data.message))
-        getCompleteData()
-      }).catch(
-        err => console.log(err)
-      )
+    Alert.alert(t('정말 삭제하시겠습니까?'), '', [
+      {
+        text: t('확인'), onPress: async () => {
+          await client({
+            method: 'get',
+            url: `/product/sales_completed_delete`,
+            params: {
+              ot_idx: target
+            }
+          }).then(
+            res => {
+              cusToast(t(res.data.message))
+              getCompleteData()
+            }).catch(
+              err => console.log(err)
+            )
+        }
+      },
+      { text: t('취소') }
+    ])
+
+
   };
 
 
   const RemoveOnsale = async (target: number) => {
-    await client({
-      method: 'get',
-      url: `product/sales_delete`,
-      params: {
-        pt_idx: target
-      }
-    }).then(
-      res => {
-        cusToast(res.data.message)
-        getOnsaleData()
-      }).catch(
-        err => {
-          console.log(err)
-        })
+
+    Alert.alert(t('정말 삭제하시겠습니까?'), '', [
+      {
+        text: t('확인'), onPress: async () => {
+          await client({
+            method: 'get',
+            url: `product/sales_delete`,
+            params: {
+              pt_idx: target
+            }
+          }).then(
+            res => {
+              cusToast(res.data.message)
+              getOnsaleData()
+            }).catch(
+              err => {
+                console.log(err)
+              })
+        }
+      },
+      { text: t('취소') }
+
+    ])
+
+
   };
 
   const getOnsaleData = async () => {
@@ -116,10 +131,13 @@ export default function SaledList() {
       })
   };
 
-  useFocusEffect(React.useCallback(() => {
-    getCompleteData();
-    getOnsaleData()
-  }, []))
+  useFocusEffect(
+    React.useCallback(() => {
+      getOnsaleData()
+      getCompleteData();
+
+    }, [])
+  )
 
   // React.useEffect(() => {
 

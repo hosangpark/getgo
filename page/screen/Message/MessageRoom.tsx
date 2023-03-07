@@ -29,6 +29,7 @@ import { MessageRoomHeader } from '../../../components/header/MessageRoomHeader'
 import LoadingIndicator from '../../../components/layout/Loading';
 import io from 'socket.io-client';
 import Api from '../../../api/Api';
+import cusToast from '../../../components/navigation/CusToast';
 
 type MessageType = {
   type: string;
@@ -241,6 +242,11 @@ const MessageRoom = ({ route }: Props) => {
 
 
 
+  const tradeDoneSend = (mt_idx) => {
+
+    ws.emit('tradeDone', { mt_idx: mt_idx });
+  }
+
 
   React.useEffect(() => {
     ws.on('connect', () => {
@@ -252,6 +258,14 @@ const MessageRoom = ({ route }: Props) => {
       getChatData(room_idx)
       console.log('revMessage', e);
     });
+
+    ws.on('tradeDone', e => {
+      cusToast(t('거래가 완료되었습니다.'));
+
+      console.log('tradeDone');
+      //거래완료나 진행중을 받을경우 상단을 새로고침
+      getRoomData(room_idx);
+    })
 
     return () => {
       ws.disconnect();
@@ -278,6 +292,7 @@ const MessageRoom = ({ route }: Props) => {
           salestate: items.data[0] == undefined ? null : items.data[0].pt_sale_now,
           mt_seller_idx: items.data[0] == undefined ? null : items.data[0].mt_seller_idx,
         }}
+          tradeDoneSend={tradeDoneSend}
           getRoomData={getRoomData}
         />
       }

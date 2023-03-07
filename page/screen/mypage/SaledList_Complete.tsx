@@ -39,17 +39,9 @@ const SaledList_Complete = ({ items, ReviewCount, Remove, getOnsaleData, getComp
   const { t } = useTranslation()
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
 
-  const enterReview = () => {
-    console.log('d')
+  const Modify = (target: number) => {
+    navigation.navigate('Itemupload', { type: "ProductModify", pt_idx: target })
   }
-
-  const Modify = () => {
-
-  }
-
-
-
-
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>

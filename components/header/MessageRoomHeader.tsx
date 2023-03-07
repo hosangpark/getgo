@@ -34,6 +34,7 @@ interface MessageRoomItemType {
         pt_idx: number
     },
     getRoomData: () => void
+    tradeDoneSend: () => void
 }
 
 export const MessageRoomHeader = ({ item, getRoomData }:
@@ -106,11 +107,11 @@ export const MessageRoomHeader = ({ item, getRoomData }:
 
     const ReserveSelect = async (val: OptionType) => {
 
-        console.log('asdasdas', {
-            pt_idx: item.pt_idx,
-            pt_sale_now: val.sel_id,
-            mt_idx: item.mt_idx,
-        });
+        // console.log('asdasdas', {
+        //     pt_idx: item.pt_idx,
+        //     pt_sale_now: val.sel_id,
+        //     mt_idx: item.mt_idx,
+        // });
         await client({
             method: 'post',
             url: '/product/product_status',
@@ -123,17 +124,20 @@ export const MessageRoomHeader = ({ item, getRoomData }:
             .then(res => {
                 cusToast(t(res.data.message));
                 getRoomData(item.room_idx);
+                if (val.sel_id == 3) tradeDoneSend(item.mt_idx);
             })
             .catch(err => console.log(err));
     };
 
     React.useEffect(() => {
-        let no = item.salestate - 1;
-        setSelReserve({
-            label: ReserveOptions[no].label,
-            value: ReserveOptions[no].value,
-            sel_id: ReserveOptions[no].sel_id
-        })
+        if (item.salestate) {
+            let no = item.salestate - 1;
+            setSelReserve({
+                label: ReserveOptions[no].label,
+                value: ReserveOptions[no].value,
+                sel_id: ReserveOptions[no].sel_id
+            })
+        }
     }, [item.salestate])
 
     // React.useEffect(() => {

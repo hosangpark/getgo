@@ -256,9 +256,10 @@
     "신고 사유를 선택해주세요.": "Please select a reason for reporting.",
     "기타 사유를 입력해주세요.": "Please enter other reasons.",
     "자신을 신고 할 수는 없습니다.": "You can't report yourself.",
-    "신고하기":"Laporan",
-    "채팅방 나가기":"Tinggalkan chat room",
-    "상품상세 숨기기":"Sembunyikan rincian produk",
-    "상품상세 보이기":"Tampilkan rincian produk"
+    "신고하기": "Laporan",
+    "채팅방 나가기": "Tinggalkan chat room",
+    "상품상세 숨기기": "Sembunyikan rincian produk",
+    "상품상세 보이기": "Tampilkan rincian produk",
+    "정말 삭제하시겠습니까?": "Are you sure you want to delete it?"
   }
 }

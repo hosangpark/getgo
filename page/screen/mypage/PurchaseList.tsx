@@ -14,7 +14,7 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import style from '../../../assets/style/style';
 import { colors } from '../../../assets/color';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../../components/types/routerTypes';
 import { BackHeader } from '../../../components/header/BackHeader'
@@ -47,24 +47,36 @@ const SaledList_OnSale = () => {
   }
 
   const Modify = () => {
-    navigation.navigate('Itemupload')
+    //구매내역은 수정이 안되어야됨
+
+    // navigation.navigate('Itemupload', { type: 'ProductModify', pt_idx: pt_idx });
   }
 
-  const Remove = async (target: number) => {
-    await client({
-      method: 'get',
-      url: `/product/purchase-completed_delete?ot_idx=${target}`,
-      params: {
-        ot_idx: target
-      }
-    }).then(
-      res => {
-        cusToast(t(res.data.message))
-        const remove = items.filter((item: any) => item.ot_idx !== target)
-        setitem(remove)
-      }).catch(
-        err => console.log(err)
-      )
+  const Remove = (target: number) => {
+
+    Alert.alert(t('정말 삭제하시겠습니까?'), '', [
+      {
+        text: t('확인'), onPress: async () => {
+          await client({
+            method: 'get',
+            url: `/product/purchase-completed_delete?ot_idx=${target}`,
+            params: {
+              ot_idx: target
+            }
+          }).then(
+            res => {
+              cusToast(t(res.data.message))
+              const remove = items.filter((item: any) => item.ot_idx !== target)
+              setitem(remove)
+            }).catch(
+              err => console.log(err)
+            )
+        }
+      },
+      { text: t('취소') }
+
+    ])
+
   }
 
 
@@ -86,9 +98,15 @@ const SaledList_OnSale = () => {
   };
 
   React.useEffect(() => {
-    setIsLoading(true)
-    getData();
+
   }, []);
+
+  useFocusEffect(React.useCallback(
+    () => {
+      setIsLoading(true)
+      getData();
+    }, [],
+  ))
 
   const ReviewCount = items.length
 

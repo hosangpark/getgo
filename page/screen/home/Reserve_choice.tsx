@@ -68,7 +68,7 @@ const Reserve_choice = ({ route }: Props) => {
   }
 
   /** 상품 판매상태변경 */
-  const ReserveSelect = async (mt_idx) => {
+  const ReserveSelect = async (mt_idx: any) => {
 
     await client({
       method: 'post',

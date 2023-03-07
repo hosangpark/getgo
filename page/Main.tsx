@@ -51,9 +51,6 @@ const Main = () => {
     getFcmToken()
   }, [])
 
-  React.useEffect(() => {
-
-  }, []);
 
 
 
@@ -93,9 +90,6 @@ const Main = () => {
   //     ]);
   //   }
   // };
-
-
-
 
   const notificationDisplay = (remoteMessage: any, isSave = false) => {
     console.log('notificationDisplay');
@@ -163,8 +157,6 @@ const Main = () => {
         },
       ]);
     }
-
-
   };
 
   //앱이 꺼져있다가 실행됬을떄 intent 처리
