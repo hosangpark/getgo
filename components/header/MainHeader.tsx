@@ -52,6 +52,7 @@ const getLocationData = async () => {
       }).then(
         res=>
         {
+            console.log("res.data",res.data)
           if(res.data.list.length === 1){
             let params={
               ...myLocation,

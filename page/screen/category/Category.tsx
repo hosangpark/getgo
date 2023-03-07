@@ -65,11 +65,12 @@ const Category = ({ setTabIndex }: MainHeaderType) => {
     let tmp = 0;
     if (tmp == 0) {
       if ((exitApp == undefined || !exitApp) && isFocused) {
-        cusToast(t('한번 더 누르시면 종료됩니다'));
-        setExitApp(true);
-        timeout = setTimeout(() => {
-          setExitApp(false);
-        }, 2000);
+        navigation.goBack();
+        // cusToast(t('한번 더 누르시면 종료됩니다'));
+        // setExitApp(true);
+        // timeout = setTimeout(() => {
+        //   setExitApp(false);
+        // }, 2000);
       } else {
         // appTimeSave();
         clearTimeout(timeout);

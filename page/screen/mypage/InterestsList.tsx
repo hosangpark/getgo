@@ -42,30 +42,6 @@ const InterestsList = () => {
   const [isloading, setIsLoading] = useState(false)
   const [items, setitem] = useState([])
 
-  // const heartOn = (e:number) =>{
-  //   const nextitem = items.map(item => item.id === e? {...item, Btn:!item.Btn} : item,)
-  //   setitem(nextitem)
-  // }
-  // const Itemupload = () => {
-  //     navigation.navigate('Itemupload');
-  // }
-  const Delete = async()=>{
-    await client<any>({
-      method: 'get',
-      url: `/product/add_like_delete`,
-      params:{
-        wp_idx:userInfo.idx
-      }
-      }).then(
-        res=>{
-        setitem(res.data)
-        // getData()
-      }).catch(
-        err=>console.log(err)
-      )
-  };
-  
-
 
   const getListData = async () => {
     await client({
@@ -102,7 +78,7 @@ const InterestsList = () => {
              )}
             />
           }
-            <BackHandlerCom />
+            <BackHandlerCom/>
         </SafeAreaView>
     );
 };

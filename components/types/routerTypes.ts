@@ -135,6 +135,7 @@ export type MainNavigatorParams = { //props가 없으면 undefined 있으면 {pr
     SettingModifyEmail :undefined;
     SettingModifyPhone :undefined;
     SettingTerms : undefined;
+    SettingServiceLocation : undefined;
     SettingPolicy : undefined;
     SettingLogout : undefined;
     SettingWithdrawal : undefined;

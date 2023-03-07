@@ -9,7 +9,7 @@
 import React,{useState} from 'react';
 import {
     Alert,
-  SafeAreaView, ScrollView, Text, View,StyleSheet, FlatList, Image,Button
+  SafeAreaView, ScrollView, Text, View,Linking
 } from 'react-native';
 import style from '../../../assets/style/style';
 import { colors } from '../../../assets/color';
@@ -18,6 +18,8 @@ import { BackHandlerCom } from '../../../components/BackHandlerCom';
 import { useTranslation } from 'react-i18next';
 import client from '../../../api/client';
 import LoadingIndicator from '../../../components/layout/Loading';
+import AutoHeightWebView from 'react-native-autoheight-webview';
+import { widthPercentageToDP } from 'react-native-responsive-screen';
 
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
@@ -28,7 +30,6 @@ import LoadingIndicator from '../../../components/layout/Loading';
 const SettingTerms = () => {
   const {t} = useTranslation()  
   const [items, setitem] = useState<any>([])
-  const [isloading, setIsLoading] = useState(false);
 
   const getData = async () => {
     await client({
@@ -36,31 +37,70 @@ const SettingTerms = () => {
       url: '/user/agreetype?agree_type=1',
       }).then(
         res=>{
-          setitem(res.data)
-          setIsLoading(false)
+          setitem(res.data[0])
       }).catch(
         err=>console.log(err)
       )
     };
-
    
   React.useEffect(() => {
-    setIsLoading(true)
     getData();
     }, []);
     return (
         <SafeAreaView style={{flex:1,backgroundColor:'#fff'}}>
           <BackHeader title={t('이용약관')}/>
-          {isloading?
-          <LoadingIndicator/>
-            :
             <ScrollView style={{paddingHorizontal:20}}>
-              <Text style={[style.text_b,{fontSize:13,color:colors.BLACK_COLOR_1,paddingTop:30,paddingBottom:20}]}>제 1조(목적)</Text>
-              <Text style={[style.text_re,{fontSize:15,color:colors.BLACK_COLOR_1}]}>
-             {/* {items[0] == undefined?  'd' :items[0].st_agree1} */}
-              </Text>
+              <View style={{flex: 1}}>
+              {items == undefined?
+                <LoadingIndicator/>
+                :
+              <AutoHeightWebView
+                style={{
+                  width: widthPercentageToDP('100%') - 44,
+                  overflow: 'hidden',
+                  marginVertical: 25,
+
+                  // marginHorizontal: 22,
+                  minHeight: 300,
+                  justifyContent: 'center',
+                  alignItems: 'flex-start',
+                }}
+                scrollEnabled={false}
+                // onNavigationStateChange={e => {
+                //   console.log('e', e);
+                //   return false;
+                // }}
+                onShouldStartLoadWithRequest={e => {
+                  console.log('eee', e);
+                  if (e.url == 'about:blank') return true;
+                  else {
+                    Linking.openURL(e.url);
+                  }
+                  return false;
+                }}
+                // allowsLinkPreview={false}
+                javaScriptEnabled={true}
+                javaScriptCanOpenWindowsAutomatically={true}
+                customStyle={`
+                * {
+                  // font-family: 'NotoSansKr';
+                  font-size: 14px;
+                  line-height: 20px;
+                  color: '#323232';
+                  word-break: break-word;
+                  }
+                  div {display:block;}
+                  img { max-width: 100%;}
+              `}
+                source={{html: items.st_agree1}}
+                scalesPageToFit={false}
+                viewportContent={
+                  'width=device-width, user-scalable=no, initial-scale=1.0'
+                }
+              />
+              }
+            </View>
             </ScrollView>
-          }
             <BackHandlerCom />
         </SafeAreaView>
     );

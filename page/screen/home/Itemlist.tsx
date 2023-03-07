@@ -78,7 +78,7 @@ const ItemList = ({ setTabIndex }: itemListType) => {
         setExitApp(true);
         timeout = setTimeout(() => {
           setExitApp(false);
-        }, 4000);
+        }, 1000);
       } else {
         // appTimeSave();
         clearTimeout(timeout);
@@ -215,7 +215,6 @@ const ItemList = ({ setTabIndex }: itemListType) => {
           />
         </TouchableOpacity>
       </View>
-      <BackHandlerCom />
     </SafeAreaView>
   );
 };

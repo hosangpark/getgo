@@ -99,15 +99,7 @@ const SelectLogin = () => {
     const userInfo = useSelector((state: any) => state.userInfo);
     /** 라인 로그인 */
     const lineLogin = async () => {
-        let params = {
-            ...userInfo,
-            idx: 59,
-        }
-
-        setAutoUserData({ idx: 59, mt_na: '82', mt_hp: '01029270185', auth_number: '1234' })
-
-        await AsyncStorage.setItem('userIdx', JSON.stringify(59))
-        dispatch(UserInfoAction.userlogin(params));
+        console.log('2')
     }
 
     const backAction = () => {

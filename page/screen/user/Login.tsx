@@ -238,7 +238,7 @@ const Login = () => {
                         <Text style={[style.text_me, { fontSize: 13 }]}>
                             {t('서비스 약관동의')}
                         </Text>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=>navigation.navigate('SettingTerms')}>
                             <Text style={[style.text_re, { fontSize: 13, textDecorationLine: 'underline', color: colors.GRAY_COLOR_2 }]}>
                                 {t('자세히 보기')}
                             </Text>
@@ -246,7 +246,7 @@ const Login = () => {
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
                         <Text style={[style.text_me, { fontSize: 13 }]}>{t('개인정보 처리방침')}</Text>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=>navigation.navigate('SettingPolicy')}>
                             <Text style={[style.text_re, { fontSize: 13, textDecorationLine: 'underline', color: colors.GRAY_COLOR_2 }]}>
                                 {t('자세히 보기')}
                             </Text>
@@ -254,7 +254,7 @@ const Login = () => {
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
                         <Text style={[style.text_me, { fontSize: 13 }]}>{t('위치기반서비스')}</Text>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=>navigation.navigate('SettingServiceLocation')}>
                             <Text style={[style.text_re, { fontSize: 13, textDecorationLine: 'underline', color: colors.GRAY_COLOR_2 }]}>
                                 {t('자세히 보기')}</Text>
                         </TouchableOpacity>

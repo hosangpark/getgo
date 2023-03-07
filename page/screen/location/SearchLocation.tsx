@@ -70,8 +70,9 @@ const SearchLocation = ({route}:Props) => {
     ]);
 
     const FindLocation = (type:string) => {
+        console.log('nowLocation',nowLocation)
         fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + (type == 'now' ? nowLocation.mt_lat : null) + ',' + (type == 'now' ? nowLocation.mt_log : null)
-        + '&key=' + 'AIzaSyCiUoFcfZ7Lt2gmTHKMuFKDubxyDg2WiLE' + '&language=ko')
+        + '&key=' + 'AIzaSyC-iZoncRIA4y1xF8zFRkTT2Kp8A3CPC0o' + '&language=ko')
         .then((response) => response.json())
         .then((responseJson) => {
             if(type == 'now'){ //현재 동
@@ -180,33 +181,6 @@ const SearchLocation = ({route}:Props) => {
                     })
                 }
                 else if(type == 'set' && selectIdx){
-                    // let params={
-                    //     ...myLocation,
-                    // }
-                    // if(selectIdx == '1'){
-                    //     params = {
-                    //         ...myLocation,
-                    //         location1:{
-                    //             ...myLocation.location1,
-                    //             mt_area:res.data.mt_area,
-                    //             mt_lat:nowLocation.mt_lat,
-                    //             mt_log:nowLocation.mt_log,
-                    //         }
-                    //     }
-                    // }
-                    // else if(selectIdx == '2'){
-                    //     params = {
-                    //         ...myLocation,
-                    //         location2:{
-                    //             ...myLocation.location2,
-                    //             mt_area:res.data.mt_area,
-                    //             mt_lat:nowLocation.mt_lat,
-                    //             mt_log:nowLocation.mt_log,
-                    //         }
-                    //     }
-                    // }
-                    // dispatch(MyLocationAction.updateMyLocation(JSON.stringify(params)));
-                    console.log(res.data)
                     navigation.navigate('AuthMyLocation',{
                         setLocation:{
                             mt_lat:res.data.mt_lat,

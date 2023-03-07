@@ -41,9 +41,6 @@ type RegionType = {
 type Props = StackScreenProps<MainNavigatorParams, 'AuthMyLocation'>
 const AuthMyLocation = ({route}:Props) => {
 
-    /** 현재거리&지정거리 계산 */
-
-
     const {selectIdx, setLocation} = route.params;
     const {mt_lat:nowLat,mt_log:nowLng} = setLocation;
     const {t} = useTranslation()
@@ -60,8 +57,8 @@ const AuthMyLocation = ({route}:Props) => {
         mt_log:nowLng,
     });
     const [initialLocation, setNowLocation] = React.useState<LocationType>({
-        mt_lat:nowLat,
-        mt_log:nowLng,
+        mt_lat:0,
+        mt_log:0,
     })
 
     const [nowLongName , setNowLongName] = React.useState('');
@@ -77,19 +74,13 @@ const AuthMyLocation = ({route}:Props) => {
         //  console.log(getDistanceBetweenPoints(nowLocation.mt_lat, nowLocation.mt_log, selLocation.mt_lat, selLocation.mt_log, 'kilometers'))
     }
 
-    const checkAuth = (type:string) => {
-        fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + (type == 'now' ? initialLocation.mt_lat :selLocation.mt_lat) + ',' + (type == 'now' ? initialLocation.mt_log : selLocation.mt_log)
-        + '&key=' + 'AIzaSyCLAAdJRWFwO0UlSXuSsIeSzt2rz5ydQ-E' + '&language=ko')
+    const checkAuth = () => {
+        fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + (selLocation.mt_lat) + ',' + (selLocation.mt_log)
+        + '&key=' + 'AIzaSyC-iZoncRIA4y1xF8zFRkTT2Kp8A3CPC0o' + '&language=ko')
         .then((response) => response.json())
         .then((responseJson) => {
-            if(type == 'now'){ //현재 동
-                setNowLongName(responseJson.results[0].address_components[1].long_name);
-                setFulladdress(responseJson.results[0].address_components[3].long_name +' '+ responseJson.results[0].address_components[2].long_name +' '+ responseJson.results[0].address_components[1].long_name)
-            }
-            else if(type =='sel'){ //선택한 동
-                setSelLongName(responseJson.results[0].address_components[1].long_name);
-                setFulladdress(responseJson.results[0].address_components[3].long_name +' '+ responseJson.results[0].address_components[2].long_name +' '+ responseJson.results[0].address_components[1].long_name)
-            }
+            setSelLongName(responseJson.results[0].address_components[1].long_name);
+            setFulladdress(responseJson.results[0].address_components[3].long_name +' '+ responseJson.results[0].address_components[2].long_name +' '+ responseJson.results[0].address_components[1].long_name)
         }).catch((err) => console.log("udonPeople error : " + err));
     }
 
@@ -106,7 +97,7 @@ const AuthMyLocation = ({route}:Props) => {
             mat_status:"Y",
             }
             }).then(res=>{
-                if(selectIdx == 1){
+                if(selectIdx == "1"){
                     let params={
                         ...myLocation,
                         isLocAuth1:true,
@@ -160,10 +151,7 @@ const AuthMyLocation = ({route}:Props) => {
           setIsLoading(false)
     };
     
-
-    const getLoaction= ()=>{
-        geoLocation(setNowLocation,setIsLoading);
-    }
+        /** 현재거리&지정거리 계산 */
     const getDistanceBetweenPoints = ({latitude1, longitude1, latitude2, longitude2, unit}:any) => {
         let theta = longitude1 - longitude2;
         let distance = 60 * 1.1515 * (180/Math.PI) * Math.acos(
@@ -179,40 +167,48 @@ const AuthMyLocation = ({route}:Props) => {
     }
 
     const ChangeComplete = () => {
-        if(selectIdx == '1' && myLocation.location1.mat_idx !== ''){
-            DeleteLocation(myLocation.location1.mat_idx)
-        } else if(selectIdx == '2' && myLocation.location2.mat_idx !== '') {
-            DeleteLocation(myLocation.location2.mat_idx)
+        if(distance > 25){
+            cusToast(t('25km이상 거리는 동네설정불가'))
         } else{
-            setMyLocation()
-            navigation.navigate('Main')
+            if(selectIdx == '1' && myLocation.location1.mat_idx !== ''){
+                DeleteLocation(myLocation.location1.mat_idx)
+            } else if(selectIdx == '2' && myLocation.location2.mat_idx !== '') {
+                DeleteLocation(myLocation.location2.mat_idx)
+            } else{
+                setMyLocation()
+            }
         }
     }
     
+    /** 처음 위치 */
+    React.useEffect(()=>{
+        geoLocation(setNowLocation,setIsLoading);
+        /**2초마다 현재위치 리셋 */
+        const LocationTimer = setInterval(() => {
+            geoLocation(setNowLocation,setIsLoading);
+          }, 2000);
+        return () => {
+        clearInterval(LocationTimer);
+        }
+    },[])
+    
+    /** 드래그시 위치 */
+    React.useEffect(()=>{
+        checkAuth();
+    },[selLocation])
+
     /** 거리계산 */
     React.useEffect(()=>{
-        console.log(route.params)
         getDistanceBetweenPoints({
             latitude1:initialLocation.mt_lat, 
             longitude1:initialLocation.mt_log, 
             latitude2:selLocation.mt_lat, 
             longitude2:selLocation.mt_log, 
             unit:'kilometers'})
-        if(distance > 15){
-            cusToast(t('15km 이상 거리는 동네설정불가'))
-        }
-    },[selLocation])
+    },[selLocation, initialLocation])
 
-    /** 드래그시 위치 */
-    React.useEffect(()=>{
-        checkAuth('sel');
-    },[selLocation])
 
-    /** 처음 위치 */
-    React.useEffect(()=>{
-        getLoaction()
-        checkAuth('now');
-    },[nowLongName])
+
 
 
     return (
@@ -243,8 +239,9 @@ const AuthMyLocation = ({route}:Props) => {
                 >
                     <Image style={{width:30,height:50}} resizeMode={'contain'} source={require('../../../assets/img/marker_town.png')}/>
                 </Marker>
-                    
-                
+                <View style={{alignItems:'center',marginTop:'100%',position:'absolute'}}>
+                    <Text style={{color:'blue'}}>{t('현재위치와의 거리')} {distance} {t('km')}</Text>
+                </View>
                 </MapView>
                 {nowLongName == selLongName ?
                 <>

@@ -65,7 +65,7 @@ const SetMyLocation = () => {
                         mt_area:res.data.list[0].mat_area,
                         mt_address:res.data.list[0].mat_area,
                         mt_lat:res.data.list[0].mat_lat,
-                        mt_log:res.data.list[0].mt_log,
+                        mt_log:res.data.list[0].mat_log,
                         mat_status:res.data.list[0].mat_status,
                         mat_idx:res.data.list[0].mat_idx
                     },
@@ -80,7 +80,7 @@ const SetMyLocation = () => {
                           mt_area:res.data.list[0].mat_area,
                           mt_address:res.data.list[0].mat_area,
                           mt_lat:res.data.list[0].mat_lat,
-                          mt_log:res.data.list[0].mt_log,
+                          mt_log:res.data.list[0].mat_lon,
                           mat_status:res.data.list[0].mat_status,
                           mat_idx:res.data.list[0].mat_idx
                       },
@@ -88,7 +88,7 @@ const SetMyLocation = () => {
                           mt_area:res.data.list[1].mat_area,
                           mt_address:res.data.list[1].mat_area,
                           mt_lat:res.data.list[1].mat_lat,
-                          mt_log:res.data.list[1].mt_log,
+                          mt_log:res.data.list[1].mat_lon,
                           mat_status:res.data.list[1].mat_status,
                           mat_idx:res.data.list[1].mat_idx
                       }
@@ -128,8 +128,8 @@ const SetMyLocation = () => {
         geoLocation(setNowLocation,setIsLoading);
     }
     React.useEffect(()=>{
+        getLocationData()
         getLoaction();
-        console.log(myLocation)
     },[])
 
 
@@ -150,8 +150,8 @@ const SetMyLocation = () => {
                             geoLocation(setNowLocation,setIsLoading);
                             navigation.navigate('AuthMyLocation',{
                                 setLocation:{
-                                mt_lat:nowLocation.mt_lat,
-                                mt_log:nowLocation.mt_log,
+                                mt_lat:JSON.parse(myLocation.location1.mt_lat),
+                                mt_log:JSON.parse(myLocation.location1.mt_log),
                             },selectIdx:'1'})
                         
                     }} style={[myLocation.select_location == myLocation.location1.mt_address ? style.green_button : style.white_button_gb,{flexDirection:'row',justifyContent:'space-between',}]}>
@@ -176,8 +176,8 @@ const SetMyLocation = () => {
                             geoLocation(setNowLocation,setIsLoading);
                             navigation.navigate('AuthMyLocation',{
                                 setLocation:{
-                                mt_lat:nowLocation.mt_lat,
-                                mt_log:nowLocation.mt_log,
+                                mt_lat:JSON.parse(myLocation.location2.mt_lat),
+                                mt_log:JSON.parse(myLocation.location2.mt_log),
                             },selectIdx:'2'})
 
                     }}

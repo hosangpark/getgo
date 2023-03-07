@@ -26,7 +26,7 @@ type SetLocationType = {
 export const geoLocation = (setLocation:({}:SetLocationType)=>void,setIsLoading:(loading:boolean)=>void) => { // 경위도 가져오기
     requestPermission().then(result => {
         if(result === 'granted'){
-            Geolocation.getCurrentPosition(position => {
+            Geolocation.getCurrentPosition((position) => {
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
     
@@ -47,11 +47,11 @@ export const geoLocation = (setLocation:({}:SetLocationType)=>void,setIsLoading:
                     console.log('gps꺼져있음');
                 }
                 else{
-                    console.log('error ? ' , error);
+                    console.log('error 333333333? ' , error);
                 }
                 
             },
-            { enableHighAccuracy: false, timeout: 5000, maximumAge: 10000 });
+            { enableHighAccuracy: false, timeout: 1000000, maximumAge: 10000 });
         }
     })
     

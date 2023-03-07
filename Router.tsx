@@ -81,6 +81,7 @@ import SettingModifyPhone from './page/screen/mypage/SettingModifyPhone'
 import SettingAnnounce from './page/screen/mypage/SettingAnnounce'
 import SettingAnnounceDetail from './page/screen/mypage/SettingAnnounceDetail'
 import SettingTerms from './page/screen/mypage/SettingTerms'
+import SettingServiceLocation from './page/screen/mypage/SettingServiceLocation'
 import SettingPolicy from './page/screen/mypage/SettingPolicy'
 import SettingWithdrawal from './page/screen/mypage/SettingWithdrawal'
 
@@ -327,6 +328,11 @@ const dispatch = useDispatch()
         <MainStack.Screen
           name={"SettingTerms"}
           component={SettingTerms}
+          options={{headerShown:false,...TransitionPresets.SlideFromRightIOS}}
+        />
+        <MainStack.Screen
+          name={"SettingServiceLocation"}
+          component={SettingServiceLocation}
           options={{headerShown:false,...TransitionPresets.SlideFromRightIOS}}
         />
         <MainStack.Screen
