@@ -1,11 +1,11 @@
 /**
  * @format
  */
-import React, { createRef,useRef,useState } from 'react';
-import {AppRegistry , Text, TextInput,} from 'react-native';
+import React, { createRef, useRef, useState } from 'react';
+import { AppRegistry, Text, TextInput, } from 'react-native';
 import App from './App';
-import {name as appName} from './app.json';
-
+import { name as appName } from './app.json';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification from 'react-native-push-notification';
 import messaging from '@react-native-firebase/messaging';
@@ -18,31 +18,30 @@ TextInput.defaultProps = TextInput.defaultProps || {};
 TextInput.defaultProps.allowFontScaling = false;
 
 
-
-
-const notificationDisplay = (remoteMessage) => {
-  console.log('notificationDisplay');
-  console.log('body: ' + remoteMessage.notification.body);
-  console.log('title: ' + remoteMessage.notification.title);
-  if (Platform.OS === 'android') {
-    PushNotification.localNotification({
-      channelId: "getgo",
-      title: remoteMessage.notification.title,
-      message: remoteMessage.notification.body,
-      data:{
-        content_idx : remoteMessage.data.content_idx ? remoteMessage.data.content_idx : '',
-        content_idx2 : remoteMessage.data.content_idx2 ? remoteMessage.data.content_idx2 : '',
-      },
-      autoCancel: true,
+// Register background handler // app closed & background 일때
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.log('Message handled in the background!', remoteMessage);
+  if (Platform.OS === 'ios') {
+    PushNotificationIOS.getApplicationIconBadgeNumber(function (number) {
+      PushNotificationIOS.setApplicationIconBadgeNumber(number + 1);
     });
   }
-};
-
-messaging().setBackgroundMessageHandler(async remoteMessage => {
-    console.log("Background:",remoteMessage)
-    notificationDisplay(remoteMessage)
 });
 
+async function registerAppWithFCM() {
+  if (!messaging().isDeviceRegisteredForRemoteMessages) {
+    await messaging().registerDeviceForRemoteMessages();
+  }
+}
+async function requestUserPermission() {
+  const settings = await messaging().requestPermission();
+
+  if (settings) {
+    console.log('Permission settings:', settings);
+  }
+}
+registerAppWithFCM();
+requestUserPermission();
 
 
 AppRegistry.registerComponent(appName, () => App);

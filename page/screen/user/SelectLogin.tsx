@@ -27,6 +27,7 @@ import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-si
 import { liff } from '@line/liff';
 import PushNotification from "react-native-push-notification";
 import Api from '../../../api/Api';
+import messaging from '@react-native-firebase/messaging';
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
@@ -153,7 +154,9 @@ const SelectLogin = () => {
             await AsyncStorage.getItem('userIdx', async (err, result) => {
                 if (result) {
 
-
+                    //비동기라서 app에서 못 가져오는 경우가 발생되므로 로그인시 여기서도 발급
+                    const fcmToken = await messaging().getToken();
+                    Api.state.mb_fcm = fcmToken;
 
                     /*
                     idx:args.idx,
@@ -166,7 +169,6 @@ const SelectLogin = () => {
         trade_com_count:args.trade_com_count,
         token:args.token,
                     */
-
                     //setAutoUserData({ idx: 59, mt_na: '82', mt_hp: '01029270185', auth_number: '1234' })
 
                     let autoUserData = JSON.parse(result);

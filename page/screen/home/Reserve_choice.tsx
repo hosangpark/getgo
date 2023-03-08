@@ -25,7 +25,11 @@ import { foramtDate } from '../../../components/utils/funcKt';
 import Api, { NodataView } from '../../../api/Api';
 import { useDispatch, useSelector } from 'react-redux';
 import cusToast from '../../../components/navigation/CusToast';
-
+import {
+  ChoiceType,
+  OptionType,
+  Reserve_SelectBoxType,
+} from '../../../components/types/componentType';
 
 
 
@@ -43,6 +47,10 @@ const Reserve_choice = ({ route }: Props) => {
   const userInfo = useSelector((state: any) => state.userInfo);
   const [reserve_user_data, setreserve_user_data] = React.useState<any>([]);
 
+  //기본값은 예약자 선택
+  const type = route?.params?.type ?? 'reserveChat'
+  const pt_idx = route?.params?.target?.id ?? '';
+
   const Chat = async (item: any) => {
 
     await client({
@@ -58,6 +66,25 @@ const Reserve_choice = ({ route }: Props) => {
     })
       .catch(err => console.log(err))
   }
+
+  /** 상품 판매상태변경 */
+  const ReserveSelect = async (mt_idx: any) => {
+
+    await client({
+      method: 'post',
+      url: '/product/product_status',
+      data: {
+        pt_idx: pt_idx,
+        mt_idx: mt_idx,
+        pt_sale_now: '3',
+      },
+    })
+      .then(res => {
+        cusToast(t(res.data.message));
+        navigation.goBack()
+      })
+      .catch(err => console.log(err));
+  };
 
   const getReserveData = async () => {
     await client({
@@ -80,7 +107,7 @@ const Reserve_choice = ({ route }: Props) => {
 
   return (
     <SafeAreaView style={[style.default_background, { flex: 1 }]}>
-      <BackHeader title={t('예약자 선택')} />
+      <BackHeader title={type == 'reserveChat' ? t('예약자 선택') : t('예약자 선택')} />
       <View style={{ paddingHorizontal: 20 }}>
         <View style={{ backgroundColor: colors.GREEN_COLOR_4, padding: 20, flexDirection: 'row', marginBottom: 5, borderRadius: 10 }}>
           {route.params && route.params.target && route.params.target.image ? <Image
@@ -125,7 +152,7 @@ const Reserve_choice = ({ route }: Props) => {
                   width: 85, height: 36, justifyContent: 'center',
                   alignItems: 'center', backgroundColor: colors.BLUE_COLOR_1, borderRadius: 5
                 }}
-                  onPress={() => Chat(item)}
+                  onPress={() => type == 'reserveChat' ? Chat(item) : ReserveSelect(item.mt_idx)}
                 >
                   <Text style={[style.text_sb, { color: colors.WHITE_COLOR }]}>{t('예약자 선택')}</Text>
                 </TouchableOpacity>

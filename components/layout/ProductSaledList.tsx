@@ -24,6 +24,7 @@ import { foramtDate, NumberComma } from '../utils/funcKt';
 import Api from '../../api/Api';
 import client from '../../api/client';
 import cusToast from '../navigation/CusToast';
+import { useSelector } from 'react-redux';
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
@@ -34,10 +35,13 @@ interface ToggleType {
 }
 
 
-const ProductSaledList = ({ item, Remove, Modify ,Rerender}:
-  { item: ProductItemType, Remove: (e: number) => void, Modify: (e: number) => void, Rerender:()=>void }) => {
+const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData }:
+  { item: ProductItemType, Remove: (e: number) => void, Modify: (e: number) => void, getOnsaleData: (e: any) => void, getCompleteData: (e: any) => void }) => {
   const { t } = useTranslation()
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
+
+  const userInfo = useSelector((state: any) => state.userInfo);
+
   const Itempost = () => {
     if (item.pt_idx) {
       navigation.navigate('Itempost', { pt_idx: item.pt_idx });
@@ -51,55 +55,59 @@ const ProductSaledList = ({ item, Remove, Modify ,Rerender}:
   const SendReview = () => {
     navigation.navigate('SendReview', item)
   }
+  const ReviewDetail = (rt_idx) => {
+    navigation.navigate('ReviewDetail', { rt_idx: rt_idx })
+  }
+  const Action1 = () => {
+    console.log('판매중')
 
-  const ChangeReserve = async() => {
-    await client({
-      method: 'post',
-      url: '/product/product_status',
-      data: {
-        pt_idx: item.pt_idx,
-        pt_sale_now: 2,
-      },
-    })
-      .then(res => {
-        cusToast(t(res.data.message));
-        Rerender()
-      })
-      .catch(err => console.log(err));
+    ReserveSelect(item.pt_idx, '1');
+
+  }
+  const Action2 = () => {
+    console.log('예약중')
+    ReserveSelect(item.pt_idx, '2');
+
+  }
+  const Action3 = () => {
+    console.log('거래완료')
+
+    // ReserveSelect(item.pt_idx, '3');
+
+    navigation.navigate('Reserve_choice', {
+      target: {
+        id: item.pt_idx,
+        image: item.pt_image1,
+        title: item.pt_title,
+      }, type: 'Complete'
+    });
+    return;
+
   }
 
-  const Action2 = async() => {
+  /** 상품 판매상태변경 */
+  const ReserveSelect = async (pt_idx, pt_sale_now) => {
+    if (!pt_idx || !pt_sale_now) return;
+
+
     await client({
       method: 'post',
       url: '/product/product_status',
       data: {
-        pt_idx: item.pt_idx,
-        pt_sale_now: 1,
+        pt_idx: pt_idx,
+        pt_sale_now: pt_sale_now,
       },
     })
       .then(res => {
         cusToast(t(res.data.message));
-        Rerender()
+        if (typeof getOnsaleData == 'function') getOnsaleData();
+        if (typeof getCompleteData == 'function') getCompleteData();
       })
       .catch(err => console.log(err));
-  }
-  const Action3 = async() => {
-    await client({
-      method: 'post',
-      url: '/product/product_status',
-      data: {
-        pt_idx: item.pt_idx,
-        pt_sale_now: 3,
-      },
-    })
-      .then(res => {
-        cusToast(t(res.data.message));
-        Rerender()
-      })
-      .catch(err => console.log(err));
-  }
+  };
 
   const ToggleAction = (target: any) => {
+
     if (target.type == "modify") {
       Modify(target.idx)
     } else if (target.type == "delete") {
@@ -137,22 +145,15 @@ const ProductSaledList = ({ item, Remove, Modify ,Rerender}:
             {toggleOpen ? (
               <View style={{
                 position: 'absolute', width: 110, backgroundColor: 'white', zIndex: 2, top: -5,
-                left: 85, elevation: 10, borderRadius: 5, justifyContent: 'center'
+                right: 30, elevation: 10, borderRadius: 5, justifyContent: 'center'
               }}>
-                {item.pt_sale_now == "3" ?
-                  <TouchableOpacity style={{ paddingHorizontal: 20, flex: 1, justifyContent: 'center', height: 51 }} onPress={Action2}>
-                    <Text style={[style.text_me, { color: colors.BLACK_COLOR_1, fontSize: 14 }]}>
-                      {t('판매중 변경')}
-                    </Text>
-                  </TouchableOpacity>
-                  :
+                {item.pt_sale_now !== 3 && item.mt_seller_id == userInfo.idx ?
                   <TouchableOpacity style={{ paddingHorizontal: 20, flex: 1, justifyContent: 'center', height: 51 }}
                     onPress={() => ToggleAction({ idx: item.pt_idx, type: 'modify' })}>
                     <Text style={[style.text_me, { color: colors.BLACK_COLOR_1, fontSize: 14 }]}>
                       {t('게시글 수정')}
                     </Text>
-                  </TouchableOpacity>
-                }
+                  </TouchableOpacity> : null}
                 <TouchableOpacity style={{ paddingHorizontal: 20, flex: 1, justifyContent: 'center', height: 51 }}
                   onPress={() => ToggleAction({ idx: item.ot_idx ? item.ot_idx : item.pt_idx, type: 'delete' })}>
                   <Text style={[style.text_me, { color: colors.BLACK_COLOR_1, fontSize: 14 }]}>
@@ -237,21 +238,33 @@ const ProductSaledList = ({ item, Remove, Modify ,Rerender}:
       </View>
       {item.pt_sale_now == "3" ?
         <View style={{ flexDirection: 'row', height: 44, justifyContent: 'space-between', marginTop: 15 }}>
-          <TouchableOpacity style={{
-            flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
-            justifyContent: 'center', alignItems: 'center', borderRadius: 5
-          }}
-            onPress={SendReview}
-          >
-            <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
-              {t('후기 보내기')}
-            </Text>
-          </TouchableOpacity>
+          {!item.rt_idx ?
+            <TouchableOpacity style={{
+              flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
+              justifyContent: 'center', alignItems: 'center', borderRadius: 5
+            }}
+              onPress={SendReview}
+            >
+              <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
+                {t('후기 보내기')}
+              </Text>
+            </TouchableOpacity>
+            :
+            <TouchableOpacity style={{
+              flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
+              justifyContent: 'center', alignItems: 'center', borderRadius: 5
+            }}
+              onPress={() => ReviewDetail(item.rt_idx)}
+            >
+              <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
+                {t('보낸 후기 보기')}
+              </Text>
+            </TouchableOpacity>}
         </View>
         :
         <View style={{ flexDirection: 'row', height: 44, justifyContent: 'space-between', marginTop: 15 }}>
           {item.pt_sale_now == "1" ?
-            <TouchableOpacity onPress={ChangeReserve}
+            <TouchableOpacity onPress={Action2}
               style={{
                 flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
                 justifyContent: 'center', alignItems: 'center', borderRadius: 5, marginRight: 10
@@ -261,7 +274,7 @@ const ProductSaledList = ({ item, Remove, Modify ,Rerender}:
               </Text>
             </TouchableOpacity>
             :
-            <TouchableOpacity onPress={Action2}
+            <TouchableOpacity onPress={Action1}
               style={{
                 flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
                 justifyContent: 'center', alignItems: 'center', borderRadius: 5, marginRight: 10

@@ -29,6 +29,7 @@ import { MessageRoomHeader } from '../../../components/header/MessageRoomHeader'
 import LoadingIndicator from '../../../components/layout/Loading';
 import io from 'socket.io-client';
 import Api from '../../../api/Api';
+import cusToast from '../../../components/navigation/CusToast';
 
 type MessageType = {
   type: string;
@@ -52,13 +53,13 @@ const MessageRoom = ({ route }: Props) => {
 
   const room_idx = route.params.items.room_id || route.params.items.chr_id
 
-  const {t} = useTranslation()
-    const [inputChat, setInputChat] = React.useState('');
-    const [selectImg, setSelectImg] = React.useState({
-      uri : '',
-      type : '',
-      name : '',
-    })
+  const { t } = useTranslation()
+  const [inputChat, setInputChat] = React.useState('');
+  const [selectImg, setSelectImg] = React.useState({
+    uri: '',
+    type: '',
+    name: '',
+  })
 
   const [tempChatList, setTempChatList] = React.useState([
     { ctt_content_type: 0, ctt_send_idx: 0, ctt_msg: '네! 그걸로 살게요', ctt_sdate: '15:00', ctt_file1: '', mt_image1: '' },
@@ -227,11 +228,11 @@ const MessageRoom = ({ route }: Props) => {
     }
   }, [selectImg.uri])
 
-  React.useEffect(()=>{
-    if(selectImg.uri != ''){
+  React.useEffect(() => {
+    if (selectImg.uri != '') {
       setInputChat('');
     }
-  },[selectImg.uri])    
+  }, [selectImg.uri])
 
   React.useEffect(() => {
     setIsLoading(true)
@@ -240,6 +241,11 @@ const MessageRoom = ({ route }: Props) => {
   }, []);
 
 
+
+  const tradeDoneSend = (mt_idx) => {
+
+    ws.emit('tradeDone', { mt_idx: mt_idx });
+  }
 
 
   React.useEffect(() => {
@@ -252,6 +258,14 @@ const MessageRoom = ({ route }: Props) => {
       getChatData(room_idx)
       console.log('revMessage', e);
     });
+
+    ws.on('tradeDone', e => {
+      cusToast(t('거래가 완료되었습니다.'));
+
+      console.log('tradeDone');
+      //거래완료나 진행중을 받을경우 상단을 새로고침
+      getRoomData(room_idx);
+    })
 
     return () => {
       ws.disconnect();

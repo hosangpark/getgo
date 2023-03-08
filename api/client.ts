@@ -2,7 +2,8 @@ import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import cusToast from '../components/navigation/CusToast';
 
 const client = axios.create({
-  baseURL: 'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000/api',
+  // baseURL: 'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000/api',
+  baseURL: 'http://getgo.id:4000/api',
   headers: { 'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHgiOjEsImlhdCI6MTY3MzQ4MzQ2NX0.ZbFX8K1lEEX2Ce-2dPQl7hyq6Y4DBlzL_4fdIu9TzH8` },
   timeout: 1500,
   maxRedirects: 3,

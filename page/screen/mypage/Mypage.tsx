@@ -46,7 +46,7 @@ const Mypage = () => {
     navigation.navigate('ProfileModify');
   }
   const SaledList = (target: number) => {
-    navigation.navigate('SaledList', {target})
+    navigation.navigate('SaledList', { target: target })
   }
   const PurchaseList = () => {
     navigation.navigate('PurchaseList')
