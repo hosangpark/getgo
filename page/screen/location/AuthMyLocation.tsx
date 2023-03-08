@@ -184,12 +184,12 @@ const AuthMyLocation = ({route}:Props) => {
     React.useEffect(()=>{
         geoLocation(setNowLocation,setIsLoading);
         /**2초마다 현재위치 리셋 */
-        const LocationTimer = setInterval(() => {
-            geoLocation(setNowLocation,setIsLoading);
-          }, 2000);
-        return () => {
-        clearInterval(LocationTimer);
-        }
+        // const LocationTimer = setInterval(() => {
+        //     geoLocation(setNowLocation,setIsLoading);
+        //   }, 2000);
+        // return () => {
+        // clearInterval(LocationTimer);
+        // }
     },[])
     
     /** 드래그시 위치 */
@@ -199,6 +199,7 @@ const AuthMyLocation = ({route}:Props) => {
 
     /** 거리계산 */
     React.useEffect(()=>{
+        console.log("nowLongName",nowLongName)
         getDistanceBetweenPoints({
             latitude1:initialLocation.mt_lat, 
             longitude1:initialLocation.mt_log, 
@@ -239,22 +240,21 @@ const AuthMyLocation = ({route}:Props) => {
                 >
                     <Image style={{width:30,height:50}} resizeMode={'contain'} source={require('../../../assets/img/marker_town.png')}/>
                 </Marker>
-                <View style={{alignItems:'center',marginTop:'100%',position:'absolute'}}>
+                <View style={{marginTop:10,marginLeft:10}}>
                     <Text style={{color:'blue'}}>{t('현재위치와의 거리')} {distance} {t('km')}</Text>
                 </View>
                 </MapView>
-                {nowLongName == selLongName ?
+                {selLongName == myLocation.location1.mt_area || selLongName == myLocation.location2.mt_area?
                 <>
                 <View style={{alignItems:'center',marginTop:20,width:'100%'}}>
                     <Text style={[style.text_sb,{fontSize:18,color:colors.BLACK_COLOR_2}]}>{t('현재 위치가')}</Text>
-                    <Text style={[style.text_sb,{fontSize:18,color:colors.BLACK_COLOR_2}]}>{t('내동네로 설정한')}<Text style={{color:colors.GREEN_COLOR_2}}>`{nowLongName}`</Text>{t('에 있습니다.')}</Text>
-                    
+                    <Text style={[style.text_sb,{fontSize:18,color:colors.BLACK_COLOR_2}]}>{t('내동네로 설정한')}<Text style={{color:colors.GREEN_COLOR_2}}>`{selLongName}`</Text>{t('에 있습니다.')}</Text>
                 </View>
                 <View style={{padding:20}}>
                     <CustomButton 
                         buttonType='green'
                         title={t('동네인증완료')}
-                        action={ChangeComplete}
+                        action={()=>navigation.navigate('Main')}
                         disable={false}
                     />
                 </View>

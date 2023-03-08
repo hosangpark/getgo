@@ -46,7 +46,7 @@ const Mypage = () => {
     navigation.navigate('ProfileModify');
   }
   const SaledList = (target: number) => {
-    navigation.navigate('SaledList', target)
+    navigation.navigate('SaledList', {target})
   }
   const PurchaseList = () => {
     navigation.navigate('PurchaseList')
@@ -112,12 +112,7 @@ const Mypage = () => {
     setIsLoading(true)
     getProfileData()
   }, [])
-
-
-  // React.useEffect(() => {
-  //   setIsLoading(true)
-  //   getProfileData()
-  // }, [])
+  
   React.useEffect(() => {
     if (ProfileData == undefined) {
       setIsLoading(true)
@@ -243,7 +238,7 @@ const Mypage = () => {
           </View>
           <View style={{}}>
             <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 12 }}
-              onPress={() => SaledList(1)}
+              onPress={() => SaledList(0)}
             >
               <Text style={[style.text_me, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
                 {t('판매내역')}

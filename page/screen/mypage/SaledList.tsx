@@ -13,12 +13,13 @@ import { useTranslation } from 'react-i18next';
 import client from '../../../api/client';
 import { useSelector } from 'react-redux';
 import cusToast from '../../../components/navigation/CusToast';
+import LoadingIndicator from '../../../components/layout/Loading';
 
 
 
 
 
-export default function SaledList() {
+export default function SaledList({route}) {
 
   const {t} = useTranslation()
   const layout = useWindowDimensions();
@@ -34,12 +35,12 @@ export default function SaledList() {
   
 const OnSale = () => {
     return(
-        <SaledList_OnSale items={Saleitems} ReviewCount={Saleitems.length} Remove={RemoveOnsale} Rerender={getOnsaleData}/>
+        <SaledList_OnSale items={Saleitems} ReviewCount={Saleitems.length} Remove={RemoveOnsale} Rerender={rerendering}/>
     )
 }
 const Complete = () => {
     return(
-        <SaledList_Complete items={Completeitems} ReviewCount={Completeitems.length} Remove={RemoveComplete} Rerender={getCompleteData}/>
+        <SaledList_Complete items={Completeitems} ReviewCount={Completeitems.length} Remove={RemoveComplete} Rerender={rerendering}/>
     )
 }
   const renderScene = SceneMap({
@@ -90,6 +91,11 @@ const Complete = () => {
       }).then(
         res=>{
           setsaleitem(res.data)
+          console.log(route.params.target)
+          if(route.params.target == 1){
+            setIndex(1)
+          }
+          setIsLoading(false)
       }).catch(
         err=>{
           console.log('getOnsaleData')
@@ -105,14 +111,17 @@ const Complete = () => {
       }
       }).then(
         res=>{
-          console.log(res.data)
           setCompleteitem(res.data)
+          
         }
       ).catch(
         err=>{console.log('getOnsaleData')
       })
     };
-
+  const rerendering =()=> {
+    getCompleteData(),
+    getOnsaleData()
+  }
   React.useEffect(() => {
     getCompleteData();
     getOnsaleData()
@@ -122,6 +131,9 @@ const Complete = () => {
   return (
     <SafeAreaView style={{flex:1,backgroundColor:'#fff'}}>
         <BackHeader title={t('나의 판매내역')} />
+        {isloading ? 
+        <LoadingIndicator />
+        : 
         <TabView
           navigationState={{ index, routes }}
           renderScene={renderScene}
@@ -149,6 +161,7 @@ const Complete = () => {
             />
           )}
         />
+        }
         <BackHandlerCom />
     </SafeAreaView>
   );

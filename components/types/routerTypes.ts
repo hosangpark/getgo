@@ -133,7 +133,9 @@ export type MainNavigatorParams = { //props가 없으면 undefined 있으면 {pr
     
     MypageSetting : undefined;
     SettingModifyEmail :undefined;
-    SettingModifyPhone :undefined;
+    SettingModifyPhone :{
+        PhoneNumber:number
+    };
     SettingTerms : undefined;
     SettingServiceLocation : undefined;
     SettingPolicy : undefined;
@@ -141,7 +143,7 @@ export type MainNavigatorParams = { //props가 없으면 undefined 있으면 {pr
     SettingWithdrawal : undefined;
 
     /**MYpage - Transaction */
-    SaledList : undefined;
+    SaledList : {target:number};
     SendReview : {
         room_idx:number
     };

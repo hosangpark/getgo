@@ -111,7 +111,7 @@ const Login = () => {
         // setTimer(false);
     }
     /**자동로그인 */
-    const setAutoUserData = async (userdata: string) => {
+    const setAutoUserData = async (userdata: {[key:string]:string}) => {
         await AsyncStorage.setItem('userIdx', JSON.stringify(userdata))
     }
 
@@ -260,7 +260,7 @@ const Login = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{ flexDirection: 'row', marginVertical: 20, justifyContent: 'center' }}>
+                {/* <View style={{ flexDirection: 'row', marginVertical: 20, justifyContent: 'center' }}>
                     <Text style={[style.text_re, { fontSize: 13, color: colors.GRAY_COLOR_2 }]}>
                         {t('휴대폰 번호가 변경되었나요?')}
                     </Text>
@@ -268,7 +268,7 @@ const Login = () => {
                         <Text style={[style.text_b, { marginLeft: 10, color: colors.GREEN_COLOR_2, textDecorationLine: 'underline', fontSize: 13 }]}>
                             {t('번호변경하기')}</Text>
                     </TouchableOpacity>
-                </View>
+                </View> */}
             </ScrollView>
             <View style={style.bottom_wrapper}>
                 <TouchableOpacity onPress={LoginComplete} disabled={!isInputEnd} style={[style.bottom_btn, isInputEnd ? style.bottom_btn_green : style.bottom_btn_gray]}>

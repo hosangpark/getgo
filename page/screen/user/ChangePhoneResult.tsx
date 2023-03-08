@@ -60,7 +60,8 @@ const ChangePhoneResult = ({route}:Props) => {
             <View style={style.bottom_wrapper}>
                 <TouchableOpacity 
                     onPress={()=>{
-                        navigation.navigate('SelectLogin');
+                        navigation.goBack()
+                        navigation.goBack()
                     }} 
                     disabled={false} 
                     style={[style.bottom_btn, style.bottom_btn_green]}

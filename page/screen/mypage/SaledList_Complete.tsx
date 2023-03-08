@@ -34,7 +34,7 @@ import cusToast from '../../../components/navigation/CusToast';
 
 
 
-const SaledList_Complete = ({items,ReviewCount,Remove}:any) => {
+const SaledList_Complete = ({items,ReviewCount,Remove,Rerender}:any) => {
   const {t} = useTranslation()
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
 
@@ -42,8 +42,8 @@ const SaledList_Complete = ({items,ReviewCount,Remove}:any) => {
     console.log('d')
   }
 
-  const Modify = () => {
-    
+  const Modify = (target:number) => {
+    navigation.navigate('Itemupload',{type:"ProductModify",pt_idx:target})
   }
 
 
@@ -67,7 +67,7 @@ const SaledList_Complete = ({items,ReviewCount,Remove}:any) => {
               }
               showsVerticalScrollIndicator={false}
               renderItem={({item})=>(
-                <ProductSaledList item={item} Remove={Remove} Modify={Modify}/>
+                <ProductSaledList item={item} Remove={Remove} Modify={Modify} Rerender={Rerender}/>
               )}
             />
           

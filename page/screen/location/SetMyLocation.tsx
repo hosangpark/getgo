@@ -65,7 +65,7 @@ const SetMyLocation = () => {
                         mt_area:res.data.list[0].mat_area,
                         mt_address:res.data.list[0].mat_area,
                         mt_lat:res.data.list[0].mat_lat,
-                        mt_log:res.data.list[0].mat_log,
+                        mt_log:res.data.list[0].mat_lon,
                         mat_status:res.data.list[0].mat_status,
                         mat_idx:res.data.list[0].mat_idx
                     },
@@ -108,19 +108,31 @@ const SetMyLocation = () => {
     };
     
     const DeleteLocation = async(target:number) => {
-        await client({
-          method: 'post',
-          url: '/user/area_delete',
-          data:{
-            mat_idx:target,
-          }}).then(
-            res=>{
-                cusToast(t(res.data.message))
-                setIsLoading(false)
-                getLocationData()
-            }
-          ).catch(err=>console.log(err))
-          setIsLoading(false)
+        Alert.alert('선택한 지역을 삭제하시겠습니까?','',[
+            {text: t('삭제'), onPress: async() => {
+                await client({
+                    method: 'post',
+                    url: '/user/area_delete',
+                    data:{
+                      mat_idx:target,
+                    }}).then(
+                      res=>{
+                          cusToast(t(res.data.message))
+                          setIsLoading(false)
+                          getLocationData()
+                      }
+                    ).catch(err=>console.log(err))
+                    setIsLoading(false)
+              }, style:'cancel'},
+              {
+                text: t('취소'),
+                onPress: () => {
+                  console.log('d')
+                },
+                style: 'destructive',
+              },
+        ])
+        
     };
 
     const getLoaction = async() => {
@@ -130,6 +142,7 @@ const SetMyLocation = () => {
     React.useEffect(()=>{
         getLocationData()
         getLoaction();
+        console.log(myLocation)
     },[])
 
 

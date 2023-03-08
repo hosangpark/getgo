@@ -73,7 +73,7 @@ const MypageSetting = () => {
     navigation.navigate('SettingModifyEmail');
   }
   const ModifyPhone = () => {
-    navigation.navigate('SettingModifyPhone')
+    navigation.navigate('SettingModifyPhone',{PhoneNumber:profileData.mt_hp})
   }
 
   const Announce = () => {

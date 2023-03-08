@@ -113,6 +113,7 @@ const ProductSaledList = ({ item, Remove, Modify ,Rerender}:
   const [toggleOpen, setToggleOpen] = useState(false)
   const Toggle = () => {
     setToggleOpen(!toggleOpen)
+    console.log(item)
   }
 
 
@@ -136,9 +137,15 @@ const ProductSaledList = ({ item, Remove, Modify ,Rerender}:
             {toggleOpen ? (
               <View style={{
                 position: 'absolute', width: 110, backgroundColor: 'white', zIndex: 2, top: -5,
-                left: 100, elevation: 10, borderRadius: 5, justifyContent: 'center'
+                left: 85, elevation: 10, borderRadius: 5, justifyContent: 'center'
               }}>
-                {item.pt_sale_now !== 3 &&
+                {item.pt_sale_now == "3" ?
+                  <TouchableOpacity style={{ paddingHorizontal: 20, flex: 1, justifyContent: 'center', height: 51 }} onPress={Action2}>
+                    <Text style={[style.text_me, { color: colors.BLACK_COLOR_1, fontSize: 14 }]}>
+                      {t('판매중 변경')}
+                    </Text>
+                  </TouchableOpacity>
+                  :
                   <TouchableOpacity style={{ paddingHorizontal: 20, flex: 1, justifyContent: 'center', height: 51 }}
                     onPress={() => ToggleAction({ idx: item.pt_idx, type: 'modify' })}>
                     <Text style={[style.text_me, { color: colors.BLACK_COLOR_1, fontSize: 14 }]}>
@@ -172,7 +179,7 @@ const ProductSaledList = ({ item, Remove, Modify ,Rerender}:
               </Text>
 
               <View style={{ flexDirection: 'row', marginTop: 5 }}>
-                {item.pt_sale_now == 1 ?
+                {item.pt_sale_now == "1" ?
                   <Text style={[style.text_me, {
                     backgroundColor: colors.BLUE_COLOR_1,
                     borderRadius: 5, fontSize: 12, marginRight: 8, color: colors.WHITE_COLOR,
@@ -183,7 +190,7 @@ const ProductSaledList = ({ item, Remove, Modify ,Rerender}:
                     {t('판매중')}
                   </Text>
                   :
-                  item.pt_sale_now == 2 ?
+                  item.pt_sale_now == "2" ?
                     <Text style={[style.text_me, {
                       backgroundColor: colors.GREEN_COLOR_2,
                       borderRadius: 5, fontSize: 12, marginRight: 8, color: colors.WHITE_COLOR,
@@ -228,7 +235,7 @@ const ProductSaledList = ({ item, Remove, Modify ,Rerender}:
           </View>
         </View>
       </View>
-      {item.pt_sale_now == 3 ?
+      {item.pt_sale_now == "3" ?
         <View style={{ flexDirection: 'row', height: 44, justifyContent: 'space-between', marginTop: 15 }}>
           <TouchableOpacity style={{
             flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,
@@ -243,7 +250,7 @@ const ProductSaledList = ({ item, Remove, Modify ,Rerender}:
         </View>
         :
         <View style={{ flexDirection: 'row', height: 44, justifyContent: 'space-between', marginTop: 15 }}>
-          {item.pt_sale_now == 1 ?
+          {item.pt_sale_now == "1" ?
             <TouchableOpacity onPress={ChangeReserve}
               style={{
                 flex: 1, borderWidth: 1, borderColor: colors.GRAY_COLOR_3,

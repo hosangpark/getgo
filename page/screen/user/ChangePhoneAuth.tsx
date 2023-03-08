@@ -23,6 +23,8 @@ import { SelectBox } from '../../../components/layout/SelectBox';
 import { OptionType } from '../../../components/types/componentType';
 import { frontPhoneList } from '../../../components/static/staticList';
 import { useTranslation } from 'react-i18next';
+import client from '../../../api/client';
+import { validateEmail } from '../../../components/utils/funcKt';
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
 
@@ -30,6 +32,9 @@ const ChangePhoneAuth = () => {
 
     const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
     const {t} = useTranslation()
+    const [inputEmail, setInputEmail] = React.useState('');
+    const [isAuthEmail, setIsAuthEmail] = React.useState(false);
+    const [emailcheck, setEmailcheck] = React.useState(false)
     const [inputInfo, setInputInfo] = React.useState({
         phone : '',
         email : '',
@@ -47,6 +52,49 @@ const ChangePhoneAuth = () => {
         setInputInfo({...inputInfo, [type]:text});
     }
 
+    const EmailAuthSend = () => {
+        if (inputInfo.email !== '') {
+            setIsAuthEmail(true)
+            validateEmail(inputInfo.email) ?
+                [setEmailcheck(true), getEmailApi()]
+                :
+                [setEmailcheck(false)]
+        }
+    }
+    /** 인증메일 보내기 */
+    const getEmailApi = async () => {
+        console.log('인증번호 보냈음')
+        // await client({
+        //     method: 'post',
+        //     url: '/user/auth-email',
+        //     data: {
+        //         mt_idx: userInfo.idx,
+        //         mt_email: inputEmail,
+        //     }
+        // }).then((res) => {
+        //     cusToast(t(res.data.message))
+        // }).catch(error => {
+        //     console.log(error);
+        // })
+    }
+
+    /** 인증메일 확인 */
+    const getEmailCheckApi = async () => {
+        await client({
+            method: 'get',
+            url: '/user/email-check',
+            params: {
+                mt_idx: userInfo.idx,
+                mt_email: inputEmail,
+            }
+        }).then((res) => {
+            cusToast(t(res.data.message))
+
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+    
     const action = () =>{
         navigation.navigate('Main');
     }
@@ -107,13 +155,20 @@ const ChangePhoneAuth = () => {
                                 disable={inputInfo.email == ''}
                                 title={t('인증요청')}
                                 buttonType={'green'}
-                                action={()=>{setEmailAuth(true)}}
+                                action={EmailAuthSend}
                             />
                         </View>
                     </View>
-                    
-                    {emailAuth &&
-                        <Text style={[style.text_re,{marginTop:5,fontSize:13,color:colors.BLUE_COLOR_1}]}>{t('인증되었습니다!')}</Text>
+                    {isAuthEmail &&
+                        <View>
+                            {emailcheck ?
+                                <Text style={[style.text_re, { marginTop: 5, fontSize: 13, color: colors.BLUE_COLOR_1 }]}>
+                                    {t('보낸 메일을 확인해주세요!')}</Text>
+                                :
+                                <Text style={[style.text_re, { marginTop: 5, fontSize: 13, color: colors.RED_COLOR_1 }]}>
+                                    {t('이메일을 형식을 확인해주세요!')}</Text>
+                            }
+                        </View>
                     }
                 </View>
                 <View style={[style.gray_box,{marginTop:20,paddingHorizontal:20,paddingVertical:20,borderRadius:6,alignItems:'center',justifyContent:'center'}]}>
