@@ -184,12 +184,12 @@ const AuthMyLocation = ({route}:Props) => {
     React.useEffect(()=>{
         geoLocation(setNowLocation,setIsLoading);
         /**2초마다 현재위치 리셋 */
-        // const LocationTimer = setInterval(() => {
-        //     geoLocation(setNowLocation,setIsLoading);
-        //   }, 2000);
-        // return () => {
-        // clearInterval(LocationTimer);
-        // }
+        const LocationTimer = setInterval(() => {
+            geoLocation(setNowLocation,setIsLoading);
+          }, 2000);
+        return () => {
+        clearInterval(LocationTimer);
+        }
     },[])
     
     /** 드래그시 위치 */
@@ -199,7 +199,6 @@ const AuthMyLocation = ({route}:Props) => {
 
     /** 거리계산 */
     React.useEffect(()=>{
-        console.log("nowLongName",nowLongName)
         getDistanceBetweenPoints({
             latitude1:initialLocation.mt_lat, 
             longitude1:initialLocation.mt_log, 
@@ -290,6 +289,3 @@ const AuthMyLocation = ({route}:Props) => {
 
 
 export default AuthMyLocation
-
-
-

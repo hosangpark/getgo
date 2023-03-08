@@ -131,6 +131,7 @@ export type ReviewItemType = {
     pt_area:string,
     rt_wdate:string,
     review_image1:string,
+    mt_image1:string,
     review_nickname:string,
 }
 export type ReviewItemDetailType = {

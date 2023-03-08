@@ -29,7 +29,7 @@ import * as UserInfoAction from '../../../redux/actions/UserInfoAction';
 import client from '../../../api/client';
 import logsStorage from '../../../components/utils/logStorage';
 import cusToast from '../../../components/navigation/CusToast';
-import Api from '../../../api/Api';
+import Api, { NodataView } from '../../../api/Api';
 
 
 
@@ -288,7 +288,7 @@ const MypageSetting = () => {
         </View>
         :
 
-        <View style={{ marginBottom: 20, flex: 1, }}>
+        <View style={{flex: 1}}>
           <FlatList
             style={{ flex: 1 }}
             data={reviewData.slice(0, 5)}
@@ -298,8 +298,11 @@ const MypageSetting = () => {
                   listmodal={listmodal} setListmodal={setListmodal} />
               )
             }}
-            inverted={true}
-            contentContainerStyle={{ paddingHorizontal: 20 }}
+            contentContainerStyle={{ paddingHorizontal: 20, flexDirection: 'column-reverse' }}
+            ListHeaderComponent={
+              <View style={{ marginBottom: 120 }}></View>
+            }
+            ListEmptyComponent={<NodataView></NodataView>}
             showsVerticalScrollIndicator={false}
             onEndReachedThreshold={0.1}
           />

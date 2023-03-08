@@ -41,12 +41,14 @@ export const ReviewList = ({item,  deleteReview ,Toggle,listmodal,setListmodal}:
           <Image style={{ width: 40, height: 40, borderRadius: 50, marginRight: 20 }} source={item.review_image1 ? {
             uri: Api.state.imageUrl + item.review_image1
           }
-            : require('../../assets/img/img_profile.png')
+            : item.mt_image1? {uri: Api.state.imageUrl + item.mt_image1} 
+            :
+            require('../../assets/img/img_profile.png')
           } />
           <View style={{ width: '80%' }}>
             <View style={{ flexDirection: 'row' }}>
               <Text style={[style.text_sb, { fontSize: 12, color: colors.BLACK_COLOR_1 }]}>
-                {item.mt_nickname}
+                {item.mt_nickname || item.review_nickname}
               </Text>
               <Text style={[style.text_li, { fontSize: 12, color: colors.GRAY_COLOR_2, marginLeft: 5 }]}>
                 {item.pt_area} / {foramtDate(item.rt_wdate)}
