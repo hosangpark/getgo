@@ -51,7 +51,7 @@ const MessageRoom = ({ route }: Props) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [items, setitem] = useState<any>()
 
-  const room_idx = route.params.items.room_id || route.params.items.chr_id
+  const [room_idx, setRoom_idx] = useState(route.params.items.room_id ? parseInt(route.params.items.room_id) : parseInt(route.params.items.chr_id))
 
   const { t } = useTranslation()
   const [inputChat, setInputChat] = React.useState('');
@@ -142,7 +142,7 @@ const MessageRoom = ({ route }: Props) => {
   const ChatTypeCheck = async (type: string) => {
     const form = new FormData();
     form.append('crt_idx', room_idx);
-    form.append(`ctt_room_id`, route.params.items.ctt_id);
+    form.append(`ctt_room_id`, items.cct_room_id);
     form.append(`ctt_send_idx`, userInfo.idx);
     if (type == 'messageChat') {
       form.append(`ctt_content_type`, 1);
@@ -155,6 +155,7 @@ const MessageRoom = ({ route }: Props) => {
         uri: Platform.OS === 'ios' ? selectImg.uri.replace('file://', '') : selectImg.uri,
       });
     }
+
     await client({
       method: 'post',
       url: `/product/chat-send`,
@@ -165,7 +166,7 @@ const MessageRoom = ({ route }: Props) => {
     }).catch(err => {
       console.log('err:', err)
     })
-    ws.emit('SendListUpdate', { mt_idx: items.mt_idx });
+    // ws.emit('SendListUpdate', { mt_idx: items.mt_idx });
     ws.emit('SendMessage', { room_idx: room_idx, msg: inputChat ? inputChat : null });
 
   }
@@ -180,11 +181,11 @@ const MessageRoom = ({ route }: Props) => {
     }
     else if (selectImg.uri == '' && inputChat != '') {
       console.log('1')
-      ChatTypeCheck(type = "messageChat")
+      ChatTypeCheck("messageChat")
     }
     else {
       console.log('2')
-      ChatTypeCheck(type = "imageChat")
+      ChatTypeCheck("imageChat")
     }
     setInputChat('');
     setSelectImg({
@@ -222,6 +223,8 @@ const MessageRoom = ({ route }: Props) => {
     })
   };
 
+
+
   React.useEffect(() => {
     if (selectImg.uri != '') {
       setInputChat('');
@@ -235,72 +238,85 @@ const MessageRoom = ({ route }: Props) => {
   }, [selectImg.uri])
 
   React.useEffect(() => {
-    setIsLoading(true)
-    getRoomData(room_idx);
-    getChatData(room_idx);
-  }, []);
-
-
-
-  const tradeDoneSend = (mt_idx) => {
-
-    ws.emit('tradeDone', { mt_idx: mt_idx });
-  }
-
-
-  React.useEffect(() => {
-    ws.on('connect', () => {
-      console.log('room connect')
-      ws.emit('join', { room_idx: room_idx });
-    });
-
-    ws.on('revMessage', e => {
-      getChatData(room_idx)
-      console.log('revMessage', e);
-    });
-
-    ws.on('tradeDone', e => {
-      cusToast(t('거래가 완료되었습니다.'));
-
-      console.log('tradeDone');
-      //거래완료나 진행중을 받을경우 상단을 새로고침
+    if (room_idx) {
+      setIsLoading(true)
       getRoomData(room_idx);
-    })
+      getChatData(room_idx);
 
+      ws.on('connect', () => {
+        console.log('room connect room_idx', room_idx)
+        ws.emit('join', { room_idx: room_idx });
+      });
+
+      ws.on('revMessage', e => {
+        getChatData(room_idx)
+        console.log('revMessage', e, room_idx);
+      });
+
+      ws.on('tradeDone', e => {
+        cusToast(t('거래가 완료되었습니다.'));
+
+        console.log('tradeDone');
+        //거래완료나 진행중을 받을경우 상단을 새로고침
+        getRoomData(room_idx);
+      })
+
+      console.log('join', room_idx);
+      ws.emit('join', { room_idx: room_idx });
+
+
+    }
+
+
+  }, [room_idx]);
+
+  React.useEffect(() => {
+    if (route.params.items.room_id || route.params.items.chr_id) {
+      let temp_room_id = route.params.items.room_id ? parseInt(route.params.items.room_id) : parseInt(route.params.items.chr_id)
+      setRoom_idx(temp_room_id)
+    }
+  }, [route.params.items.room_id, route.params.items.chr_id])
+
+  React.useEffect(() => {
     return () => {
       ws.disconnect();
       console.log('room disconnect')
     };
   }, []);
 
-  
-    return (
-        <SafeAreaView style={{flex:1,backgroundColor:'#fff'}}>
-          {items == undefined?
-          null
-          :
-          <MessageRoomHeader item={
-            items == undefined? null : {
-            username:items.mt_nickname,
-            room_idx:items.room_idx,
-            ctt_push:route.params.items.ctt_push,
-            rt_idx:items.rt_idx,
-            pt_idx:items.data[0]==undefined? null:items.data[0].pt_idx,
-            pt_sale_now:items.data[0]==undefined? null:items.data[0].pt_sale_now,
-            tradeImg:items.data[0] ==undefined? null:items.data[0].pt_image1,
-            producttitle:items.data[0] ==undefined? null:items.data[0].pt_title,
-            price:items.data[0] ==undefined? null : NumberComma(items.data[0].pt_selling_price),
-            salestate:items.data[0] ==undefined? null:items.data[0].pt_sale_now,
-            mt_seller_idx:items.data[0] ==undefined? null:items.data[0].mt_seller_idx,
-          }} 
-          Action={()=>{getRoomData(room_idx)}}
-          />
-          }
-          {isLoading? 
-          <LoadingIndicator/>
-          :
-          <>
-          <View style={{flex:1,backgroundColor:colors.BLUE_COLOR_2}}>
+  const tradeDoneSend = (room_idx) => {
+
+    ws.emit('tradeDone', { room_idx: room_idx });
+  }
+
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      {items == undefined ?
+        null
+        :
+        <MessageRoomHeader item={items == undefined ? null : {
+          username: items.mt_nickname,
+          room_idx: items.room_idx,
+          mt_idx: items.mt_idx,
+          ctt_push: items.ctt_push,
+          pt_idx: items.data[0]?.pt_idx,
+          rt_idx: items.rt_idx,
+          tradeImg: items.data[0] == undefined ? null : items.data[0].pt_image1,
+          producttitle: items.data[0] == undefined ? null : items.data[0].pt_title,
+          price: items.data[0] == undefined ? null : NumberComma(items.data[0].pt_selling_price),
+          salestate: items.data[0] == undefined ? null : items.data[0].pt_sale_now,
+          mt_seller_idx: items.data[0] == undefined ? null : items.data[0].mt_seller_idx,
+        }}
+          tradeDoneSend={tradeDoneSend}
+          getRoomData={getRoomData}
+        />
+      }
+      {isLoading ?
+        <LoadingIndicator />
+        :
+        <>
+          <View style={{ flex: 1, backgroundColor: colors.BLUE_COLOR_2 }}>
             <FlatList
               data={tempChatList}
               renderItem={ChatRender}
@@ -332,7 +348,10 @@ const MessageRoom = ({ route }: Props) => {
                 onChangeText={(text) => { setInputChat(text) }}
                 editable={selectImg.uri == ''}
               />
-              <TouchableOpacity onPress={() => { sendChat(route.params.type) }}>
+              <TouchableOpacity onPress={() => {
+                // sendChat(route.params.type) 
+                sendChat()
+              }}>
                 <Image source={require('../../../assets/img/ico_send.png')} style={{ width: 38, height: 38 }} />
               </TouchableOpacity>
             </View>
