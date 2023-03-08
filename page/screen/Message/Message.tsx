@@ -14,7 +14,7 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import style from '../../../assets/style/style';
 import { colors } from '../../../assets/color';
-import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { useNavigation, useIsFocused, useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../../components/types/routerTypes';
 import { MessageHeader } from '../../../components/header/MessageHeader'
@@ -29,7 +29,7 @@ import cusToast from '../../../components/navigation/CusToast';
 import { useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
 import Api, { NodataView } from '../../../api/Api';
-
+import messaging from '@react-native-firebase/messaging';
 
 
 const Message = () => {
@@ -132,24 +132,40 @@ const Message = () => {
     }
   };
 
-  React.useEffect(() => {
-    getChatListData()
-  }, [])
+  // React.useEffect(() => {
+  //   getChatListData()
+  // }, [])
 
-  React.useEffect(() => {
-    ws.on('connect', () => {
-      ws.emit('joinList', { mt_idx: userInfo.idx });
-      console.log('Connected Server List');
+  useFocusEffect(React.useCallback(() => {
+
+
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log('방 목록 리프레시', remoteMessage)
+      getChatListData();
     });
 
-    ws.on('ListUpdate', e => {
-      getChatListData()
-    });
+    return unsubscribe;
 
-    return () => {
-      ws.disconnect()
-      console.log('disconnect Server List');
-    }
+  }, []))
+
+  React.useEffect(() => {
+    // ws.on('connect', () => {
+    //   ws.emit('joinList', { mt_idx: userInfo.idx });
+    //   console.log('Connected Server List');
+    // });
+
+    // ws.on('ListUpdate', e => {
+    //   getChatListData()
+    // });
+
+    // return () => {
+    //   ws.disconnect()
+    //   console.log('disconnect Server List');
+    // }
+
+
+
+
   }, []);
 
   React.useEffect(() => {

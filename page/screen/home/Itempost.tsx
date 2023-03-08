@@ -102,14 +102,16 @@ const Itempost = ({ route }: Props) => {
       // } else {
       //   shopUrl = 'https://apps.apple.com/kr/app/id1572757670';
       // }
-      let fullcodeUrl = Api.state.siteUrl + '/bridge?code=' + items.data[0].pt_idx;
+      let fullcodeUrl = Api.state.siteUrl + '/bridge?type=product&code=' + items.data[0].pt_idx;
+      // let fullcodeUrl = 'https://buzyrun.com/bridge.php?type=product&code=' + items.data[0].pt_idx;
 
       // let fullcodeUrl = await buildLink();
       // console.log('urls', fullcodeUrl);
       // return;
 
       const result = await Share.share({
-        message: `[Getgo] ${items.data[0].pt_title} / ￦ ${NumberComma(items.data[0].pt_selling_price)} `,
+        message: `[Getgo] ${items.data[0].pt_title} / ￦ ${NumberComma(items.data[0].pt_selling_price)} ${fullcodeUrl}`,
+        // message: fullcodeUrl,
         url: fullcodeUrl,
       });
 
