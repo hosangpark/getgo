@@ -15,7 +15,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import style from '../../../assets/style/style';
 import { colors } from '../../../assets/color';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation,useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../../components/types/routerTypes';
 import { BackHeader } from '../../../components/header/BackHeader'
@@ -129,6 +129,7 @@ const MypageSetting = () => {
       }
     }
   },[])
+
   
 
 
@@ -173,11 +174,15 @@ const MypageSetting = () => {
         err=>console.log(err)
       )
     };
-    React.useEffect(()=>{
-      console.log(profileData.mt_pushing1)
-      setIsLoading(true)
-      getProfileDetailData()
-    },[])
+    
+    useFocusEffect(
+      React.useCallback(() => {
+        setIsLoading(true)
+        getProfileDetailData()
+        return () => { };
+      }, []),
+    );
+  
 
     return (
         <SafeAreaView style={{flex:1,backgroundColor:'#fff'}}>

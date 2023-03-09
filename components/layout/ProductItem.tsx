@@ -51,7 +51,7 @@ const ProductItem = ({
     navigation.navigate('Itempost', { pt_idx: pt_idx });
   };
 
-  const { t } = useTranslation()
+  const { t,i18n } = useTranslation()
 
 
   const AddHeart = async (target: number) => {
@@ -189,6 +189,7 @@ const ProductItem = ({
                     paddingHorizontal: 5,
                     paddingVertical: 3,
                     marginRight: 5,
+                    flexShrink:i18n.language==='Id'? 2:0
                   }}>
                   <Image
                     style={{ width: 10, height: 10 }}

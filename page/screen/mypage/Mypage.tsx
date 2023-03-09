@@ -299,8 +299,8 @@ const Mypage = () => {
           <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
             <Image style={{ width: 22, height: 22, marginRight: 10 }}
               source={require('../../../assets/img/ico_qna.png')} />
-            <Text style={[style.text_b, { fontSize: 17, color: colors.BLACK_COLOR_2 }]}>
-              {t('Q&A')}
+            <Text style={[style.text_b, { fontSize: 17, color: colors.BLACK_COLOR_2,flexShrink:1 }]}>
+            {t('Q&A')}
             </Text>
           </View>
           <View style={{}}>

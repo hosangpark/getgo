@@ -52,19 +52,11 @@ const ReportChat = ({ route }: Props) => {
 
   const Complete = async () => {
 
-    let dct_reason = '';
-    ReportList.forEach(({ reportlist, report }) => {
-      if (report) {
-        dct_reason = reportlist;
-        return false;
-      }
-    })
-
-    if (dct_reason == '') {
+    if (Report == '') {
       cusToast(t('신고 사유를 선택해주세요.'));
       return;
     }
-    if (dct_reason == '기타' && !text) {
+    if (Report == '기타' && !text) {
       cusToast(t('기타 사유를 입력해주세요.'));
       return;
     }
@@ -75,8 +67,9 @@ const ReportChat = ({ route }: Props) => {
       data: {
         room_idx: route.params.room_idx,
         mt_idx: userInfo.idx,
+        rt_idx: "",
         mt_declaration_idx: route.params.mt_declaration_idx,
-        dct_reason: dct_reason,
+        dct_reason: Report,
         dct_type: "1",
         dct_reason_etc: text
       }

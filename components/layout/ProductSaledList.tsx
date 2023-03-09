@@ -53,20 +53,20 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
   }
 
   const SendReview = () => {
-    navigation.navigate('SendReview', item)
+    navigation.navigate('SendReview', {item})
   }
-  const ReviewDetail = (rt_idx) => {
+  const ReviewDetail = (rt_idx:number) => {
     navigation.navigate('ReviewDetail', { rt_idx: rt_idx })
   }
   const Action1 = () => {
     console.log('판매중')
 
-    ReserveSelect(item.pt_idx, '1');
+    ReserveSelect(item.pt_idx, 1);
 
   }
   const Action2 = () => {
     console.log('예약중')
-    ReserveSelect(item.pt_idx, '2');
+    ReserveSelect(item.pt_idx, 2);
 
   }
   const Action3 = () => {
@@ -86,7 +86,7 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
   }
 
   /** 상품 판매상태변경 */
-  const ReserveSelect = async (pt_idx, pt_sale_now) => {
+  const ReserveSelect = async (pt_idx:number, pt_sale_now:number) => {
     if (!pt_idx || !pt_sale_now) return;
 
 
@@ -106,7 +106,7 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
       .catch(err => console.log(err));
   };
 
-  const ToggleAction = (target: any) => {
+  const ToggleAction = (target:{type:string,idx:number}) => {
 
     if (target.type == "modify") {
       Modify(target.idx)
@@ -147,7 +147,7 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
                 position: 'absolute', width: 110, backgroundColor: 'white', zIndex: 2, top: -5,
                 right: 30, elevation: 10, borderRadius: 5, justifyContent: 'center'
               }}>
-                {item.pt_sale_now !== 3 && item.mt_seller_id == userInfo.idx ?
+                {item.pt_sale_now !== "3" && item.mt_seller_id == userInfo.idx ?
                   <TouchableOpacity style={{ paddingHorizontal: 20, flex: 1, justifyContent: 'center', height: 51 }}
                     onPress={() => ToggleAction({ idx: item.pt_idx, type: 'modify' })}>
                     <Text style={[style.text_me, { color: colors.BLACK_COLOR_1, fontSize: 14 }]}>
@@ -184,7 +184,7 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
                   <Text style={[style.text_me, {
                     backgroundColor: colors.BLUE_COLOR_1,
                     borderRadius: 5, fontSize: 12, marginRight: 8, color: colors.WHITE_COLOR,
-                    paddingVertical: 3, paddingHorizontal: 5
+                    paddingVertical: 3, paddingHorizontal: 5,flexShrink:1 
                   }]}>
                     <Image style={{ width: 13, height: 13, }}
                       source={require('../../assets/img/ico_sale.png')} />
@@ -195,7 +195,7 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
                     <Text style={[style.text_me, {
                       backgroundColor: colors.GREEN_COLOR_2,
                       borderRadius: 5, fontSize: 12, marginRight: 8, color: colors.WHITE_COLOR,
-                      paddingVertical: 3, paddingHorizontal: 5
+                      paddingVertical: 3, paddingHorizontal: 5,flexShrink:1 
                     }]}>
                       <Image style={{ width: 13, height: 13, }}
                         source={require('../../assets/img/ico_time.png')} />
@@ -205,14 +205,14 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
                     <Text style={[style.text_me, {
                       backgroundColor: colors.GRAY_COLOR_4,
                       borderRadius: 5, fontSize: 12, marginRight: 8, color: colors.WHITE_COLOR,
-                      paddingVertical: 3, paddingHorizontal: 5
+                      paddingVertical: 3, paddingHorizontal: 5,flexShrink:1 
                     }]}>
                       <Image style={{ width: 13, height: 13, }}
                         source={require('../../assets/img/ico_time.png')} />
                       {t('거래완료')}
                     </Text>
                 }
-                <Text style={[style.text_b, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
+                <Text style={[style.text_b, { fontSize: 15, color: colors.BLACK_COLOR_2,flexShrink:1 }]}>
                   ￦ {NumberComma(item.pt_selling_price)}
                 </Text>
               </View>

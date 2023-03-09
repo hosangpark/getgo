@@ -40,7 +40,7 @@ interface MessageRoomItemType {
 export const MessageRoomHeader = ({ item, getRoomData }:
     MessageRoomItemType) => {
 
-    const { t } = useTranslation()
+    const { t, i18n } = useTranslation()
     const userInfo = useSelector((state: any) => state.userInfo)
     const [toggle, setToggle] = useState(false)
     const [topboxopen, setTopboxopen] = useState(true)
@@ -277,7 +277,8 @@ export const MessageRoomHeader = ({ item, getRoomData }:
                             <Text style={[style.text_me, { fontSize: 15, color: colors.BLACK_COLOR_2, paddingRight: 85 }]}
                                 numberOfLines={2}
                             >{item.producttitle}</Text>
-                            <Text style={[style.text_b, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>{item.price} 원</Text>
+                            <Text style={[style.text_b, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
+                            ￦ {item.price} {t('원')}</Text>
                         </View>
                     </View>
                     <View>

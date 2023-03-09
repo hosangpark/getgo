@@ -1,6 +1,7 @@
 
 //router type 지정하기
 
+import { ProductItemType } from "./componentType";
 import { reduxStateType } from "./reduxTypes";
 
 export type MainNavigatorParams = { //props가 없으면 undefined 있으면 {props명 : type}
@@ -70,13 +71,15 @@ export type MainNavigatorParams = { //props가 없으면 undefined 있으면 {pr
             id:number,
             image:string,
             title:string
-        }
+        },
+        type:string
     };
     ReportUser : {
         mt_declaration_idx:number
     }
     ReportPost : {
         mt_declaration_idx:number
+        pt_idx:number
     }
     ReportChat : {
         room_idx:number,
@@ -145,7 +148,7 @@ export type MainNavigatorParams = { //props가 없으면 undefined 있으면 {pr
     /**MYpage - Transaction */
     SaledList : {target:number};
     SendReview : {
-        room_idx:number
+        item: ProductItemType
     };
     PurchaseList : undefined;
     InterestsList : undefined;

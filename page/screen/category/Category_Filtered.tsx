@@ -88,7 +88,7 @@ const Category_Filter = ({ route }: any) => {
                 <Image 
                 style={{width:50, height:50,}}
                 source={require('../../../assets/img/ico_write.png')} />
-            </TouchableOpacity> */}
+          </TouchableOpacity> */}
       <BackHandlerCom />
     </SafeAreaView>
   );

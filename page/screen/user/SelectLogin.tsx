@@ -101,6 +101,7 @@ const SelectLogin = () => {
     /** 라인 로그인 */
     const lineLogin = async () => {
         console.log('2')
+        navigation.navigate('Main')
     }
 
     const backAction = () => {
@@ -262,7 +263,7 @@ const SelectLogin = () => {
             </View>
             <View style={[{ flex: 9, alignItems: 'center', justifyContent: 'center' }]}>
                 <Image source={require('../../../assets/img/logo.png')} style={loginStyle.logo} />
-                <Text style={[style.text_re, { marginTop: 40, color: colors.GRAY_COLOR_2, fontSize: 14 }]}>
+                <Text style={[style.text_re, { marginTop: 40, color: colors.GRAY_COLOR_2, fontSize: 14,textAlign:'center',height:35 }]}>
                     {t('내주변 안전한 중고거래는 GETGO와 함께 시작하세요')}
                 </Text>
 

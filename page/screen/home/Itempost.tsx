@@ -53,7 +53,7 @@ const Itempost = ({ route }: Props) => {
   const userInfo = useSelector((state: any) => state.userInfo);
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
 
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
 
   const [selectReserve, setSelReserve] = React.useState<OptionType>({
     label: t('상태변경'),
@@ -132,7 +132,11 @@ const Itempost = ({ route }: Props) => {
   };
 
 
-  const ReportPost = (target: number, pt_idx: any) => {
+  const ReportPost = (target: number, pt_idx: number) => {
+    if (target == userInfo.idx) {
+      Alert.alert(t('자신을 신고 할 수는 없습니다.'))
+      return false;
+    }
     navigation.navigate('ReportPost', { mt_declaration_idx: target, pt_idx: pt_idx });
   };
   const gofullscreen = () => {
@@ -275,7 +279,7 @@ const Itempost = ({ route }: Props) => {
   /** 상품 판매상태변경 */
   const ReserveSelect = async (item: OptionType) => {
 
-    if (item.sel_id == '3') {
+    if (item.sel_id == 3) {
       navigation.navigate('Reserve_choice', {
         target: {
           id: items.data[0].pt_idx,
@@ -553,7 +557,7 @@ const Itempost = ({ route }: Props) => {
                   style.text_me,
                   { fontSize: 13, color: colors.GRAY_COLOR_2 },
                 ]}>
-                {t('글 신고')}
+                {t('게시글 신고')}
               </Text>
             </TouchableOpacity>
           </View>

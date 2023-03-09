@@ -12,7 +12,7 @@ export const CustomButton = ({buttonType,title,action,disable}:CustomButtonType)
                 style={disable ? btnStyle.gray_btn : buttonType == 'green'? btnStyle.green_btn : btnStyle.white_btn}
                 disabled={disable}
             >
-                <Text style={disable ? btnStyle.gray_font : buttonType == 'green' ? btnStyle.green_font : btnStyle.white_font}>{title}</Text>
+                <Text style={[disable ? btnStyle.gray_font : buttonType == 'green' ? btnStyle.green_font : btnStyle.white_font,{textAlign:'center'}]}>{title}</Text>
             </TouchableOpacity>
         </View>
     )

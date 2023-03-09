@@ -47,17 +47,19 @@ const KeywordNoti = ({KeywordNotiitem,MaxTextCount}) => {
           <LoadingIndicator/>
           :
             <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'center',marginTop:18,marginBottom:11,paddingHorizontal:20}}>
-              <View style={{flexDirection:'row'}}>
+              <View style={{flexDirection:'row',flexShrink:1,alignItems:'center'}}>
               <Image style={{width:24,height:24,marginRight:7}} source={require('../../../assets/img/top_alim.png')}/>
-              <Text style={[style.text_b,{color:colors.BLACK_COLOR_1,fontSize:17,}]}>
+              <Text style={[style.text_b,{color:colors.BLACK_COLOR_1,fontSize:17,flexShrink:1}]}>
                 {t('알림받는 키워드')}
               <Text style={[style.text_b,{color:colors.GREEN_COLOR_2,fontSize:17}]}> 
                 {MaxTextCount}
-              </Text></Text></View>
-              <TouchableOpacity style={{borderColor:colors.GRAY_COLOR_2,borderWidth:1,width:52,height:27
+              </Text>
+              </Text>
+              </View>
+              <TouchableOpacity style={{borderColor:colors.GRAY_COLOR_2,borderWidth:1,width:52,minHeight:27
               ,justifyContent:'center',alignItems:'center',borderRadius:15}}
               onPress={()=>{navigation.navigate('KeywordSetting')}}>
-                <Text style={[style.text_me,{color:colors.GRAY_COLOR_2,fontSize:13,}]}>
+                <Text style={[style.text_me,{color:colors.GRAY_COLOR_2,fontSize:13,textAlign:'center'}]}>
                 {t('설정')}
                 </Text>
               </TouchableOpacity>

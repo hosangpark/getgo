@@ -191,8 +191,8 @@ const getLocationData = async () => {
                                     </View>
                                 </TouchableOpacity>
                                 <View style={{backgroundColor:colors.GRAY_COLOR_1,alignItems:'center',justifyContent:'center'}}>
-                                    <TouchableOpacity onPress={()=>{setPlaceListToggle(false);navigation.navigate('SetMyLocation')}} style={{backgroundColor:'#fff',margin:10,width:175, height:36,borderWidth:1,borderColor:colors.GRAY_LINE,alignItems:'center',justifyContent:'center',borderRadius:5}}>
-                                        <Text style={[style.text_me,{fontSize:13, color:colors.GRAY_COLOR_2}]}>{t("내 동네 설정하기")}</Text>
+                                    <TouchableOpacity onPress={()=>{setPlaceListToggle(false);navigation.navigate('SetMyLocation')}} style={{backgroundColor:'#fff',margin:10,minWidth:175, height:36,borderWidth:1,borderColor:colors.GRAY_LINE,alignItems:'center',justifyContent:'center',borderRadius:5}}>
+                                        <Text style={[style.text_me,{fontSize:13, color:colors.GRAY_COLOR_2,paddingHorizontal:10}]}>{t("내 동네 설정하기")}</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>

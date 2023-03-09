@@ -58,10 +58,7 @@ const SettingModifyPhone = ({route}:any) => {
   const [authCode, setAuthCode] = React.useState('');
   const [inputAuth, setInputAuth] = React.useState('');
   const inputControl = (type:string,text:string) => {
-    console.log(text)
-    console.log(type)
       setInputLoginInfo({...inputLoginInfo, [type]:text,areaCode:selectPhone.value});
-      console.log(inputLoginInfo)
   }
   const [isInputEnd, setIsInputEnd] = React.useState(false);
 
@@ -82,7 +79,8 @@ const SettingModifyPhone = ({route}:any) => {
               }
               }).then(res=>{
                 console.log(res.data)
-                setAuthCode(res.data.auth_number);
+                // setAuthCode(res.data.auth_number);
+                setAuthCode('1234');
               }).catch(error=>{
                 console.log(error)
               })
@@ -102,7 +100,8 @@ const SettingModifyPhone = ({route}:any) => {
             }
             }).then(res=>{
             console.log(res.data)
-            setAuthCode(res.data.auth_number);
+            // setAuthCode(res.data.auth_number);
+            setAuthCode('1234');
             }).catch(error=>{
             console.log(error)
             })
@@ -141,8 +140,6 @@ const changePhoneAccess = () => {
 }
 
 React.useEffect(()=>{
-    console.log("PrevPhoneNumber",PrevPhoneNumber)
-    console.log("PrevAreaNumber",PrevAreaNumber)
     if(inputAuth != '' && authCode != ''){
         if(authCode == inputAuth){
             setIsInputEnd(true);

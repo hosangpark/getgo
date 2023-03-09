@@ -48,7 +48,7 @@ const ReportUser = ({ route }: Props) => {
   ])
   const [Report, setReport] = useState('')
 
-  const selectReport = (e: string) => {
+  const selectReport = (e: number) => {
     const nextitem = ReportList.map(item =>
       item.reportlist === e ? { ...item, report: !item.report } : item,
     );
@@ -57,19 +57,11 @@ const ReportUser = ({ route }: Props) => {
 
   const Complete = async () => {
 
-    let dct_reason = '';
-    ReportList.forEach(({ reportlist, report }) => {
-      if (report) {
-        dct_reason = reportlist;
-        return false;
-      }
-    })
-
-    if (dct_reason == '') {
+    if (Report == '') {
       cusToast(t('신고 사유를 선택해주세요.'));
       return;
     }
-    if (dct_reason == '기타' && !text) {
+    if (Report == '기타' && !text) {
       cusToast(t('기타 사유를 입력해주세요.'));
       return;
     }
@@ -80,8 +72,9 @@ const ReportUser = ({ route }: Props) => {
       data: {
         room_idx: "",
         mt_idx: userInfo.idx,
+        rt_idx:"",
         mt_declaration_idx: route.params.mt_declaration_idx,
-        dct_reason: dct_reason,
+        dct_reason: Report,
         dct_type: "2",
         dct_reason_etc: text
       }
@@ -104,7 +97,7 @@ const ReportUser = ({ route }: Props) => {
 
         {ReportList.map((e, index) => {
           return (
-            <TouchableOpacity key={index} style={{ flexDirection: 'row', marginBottom: 15, paddingRight: 40 }} onPress={() => setReport(e.reportlist)}>
+            <TouchableOpacity key={index} style={{ flexDirection: 'row', marginBottom: 15, paddingRight: 40 }} onPress={() => {setReport(e.reportlist),selectReport(index)}}>
               {e.reportlist === Report ?
                 <Image style={{ width: 22, height: 22 }} source={require('../../../assets/img/check_on.png')} /> :
                 <Image style={{ width: 22, height: 22, }} source={require('../../../assets/img/check_off.png')} />
@@ -114,17 +107,6 @@ const ReportUser = ({ route }: Props) => {
           )
         })}
 
-        {ReportList.map((e, index) => {
-          return (
-            <TouchableOpacity key={index} style={{ flexDirection: 'row', marginBottom: 15 }} onPress={() => selectReport(index)}>
-              {!e.report ?
-                <Image style={{ width: 22, height: 22, }} source={require('../../../assets/img/check_off.png')} /> :
-                <Image style={{ width: 22, height: 22 }} source={require('../../../assets/img/check_on.png')} />
-              }
-              <Text style={[style.text_me, { fontSize: 15, marginLeft: 10, color: colors.BLACK_COLOR_1 }]}>{t(e.reportlist)}</Text>
-            </TouchableOpacity>
-          )
-        })}
 
         <TextInput placeholder={t('입력하세요')} style={{ minHeight: 95, borderRadius: 5, borderWidth: 1, borderColor: colors.GRAY_COLOR_3, padding: 15, textAlignVertical: 'top' }} multiline={true} value={text} onChangeText={setText}
           onSubmitEditing={Complete}

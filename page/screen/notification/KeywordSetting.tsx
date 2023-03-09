@@ -120,7 +120,7 @@ const keywordDelete = async(item:number) =>{
             <View style={{flexDirection:'row', justifyContent:'space-between',marginBottom:31,marginTop:6}}> 
               <View style={{flex:7}}>
                 <TextInput 
-                    style={style.input_container} 
+                    style={[style.input_container]} 
                     value={text} 
                     onChangeText={text =>{setText(text)}}
                     placeholder={t('예) 자전거')}

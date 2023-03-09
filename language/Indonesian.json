@@ -59,7 +59,7 @@
     "회원가입": "Registrasi Member",
     "인증번호": "kode verifikasi",
     "휴대폰번호": "Nomor Telepon",
-    "번호를 입력해주세요.": "Masukkan angka tanpa tanda hubung (-)",
+    "번호를 입력해주세요.": "Masukkan Nomor",
     "인증번호 입력": "Masukkan kode verifikasi",
     "서비스 약관동의": "Setuju dengan Ketentuan Layanan",
     "자세히 보기": "Periksa detail",
@@ -260,6 +260,14 @@
     "채팅방 나가기": "Tinggalkan chat room",
     "상품상세 숨기기": "Sembunyikan rincian produk",
     "상품상세 보이기": "Tampilkan rincian produk",
-    "정말 삭제하시겠습니까?": "Are you sure you want to delete it?"
+    "정말 삭제하시겠습니까?": "Are you sure you want to delete it?",
+    "현재위치와의 거리":"Distance from current location",
+    "km":"km",
+    "25km이상 거리는 동네설정불가":"Tidak dapat mendirikan sebuah lingkungan yang berjarak lebih dari 25 km",
+    "선택한 지역을 삭제하시겠습니까?":"Anda yakin ingin menghapus daerah yang dipilih?",
+    "알림 키워드 설정":"Atur Kata Kunci Notifikasi",
+    "사용자를 신고하고자하는 이유를 선택하세요":"Pilih alasan untuk melaporkan pengguna",
+    "상품상태가 변경되었습니다.":"Status produk telah diubah.",
+    "원":""
   }
 }

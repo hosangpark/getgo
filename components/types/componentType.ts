@@ -112,6 +112,7 @@ export type ProductItemType = {
     rt_idx:number
     ot_idx:number
     wp_idx:number
+    mt_seller_id:number
 }
 export type ChatItemType = {
     chr_id:number,

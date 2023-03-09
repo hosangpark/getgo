@@ -229,9 +229,15 @@ const Itemupload = ({ route }: Props) => {
       form.append(`pt_title`, title);
       form.append(`pt_content`, bodyText);
       form.append(`pt_selling_price`, price);
-      form.append(`pt_area`, myLocation.location1.mt_area);
-      form.append(`pt_lat`, myLocation.location1.mt_lat);
-      form.append(`pt_lon`, myLocation.location1.mt_log);
+      if(myLocation.select_location == 1){
+        form.append(`pt_area`, myLocation.location1.mt_area);
+        form.append(`pt_lat`, myLocation.location1.mt_lat);
+        form.append(`pt_lon`, myLocation.location1.mt_log);
+      } else{
+        form.append(`pt_area`, myLocation.location2.mt_area);
+        form.append(`pt_lat`, myLocation.location2.mt_lat);
+        form.append(`pt_lon`, myLocation.location2.mt_log);
+      }
       let image_list = [];
       // const idxs = Object.keys(uploadpictures);
       for (let i = 0, cnt = uploadpictures.length; i < cnt; i++) {
