@@ -49,7 +49,7 @@ const MAX_RETRY_COUNT = 2
 client.interceptors.response.use(
   (config) => {
     //성공시 진입
-    // console.log('Request: Success', config.config.method, config.config.url, config.data)
+    console.log('Request: Success', config.config.method, config.config.url, config.data)
     return config
   },
   (error: AxiosError) => {

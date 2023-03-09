@@ -41,7 +41,7 @@ const Main = () => {
   const navigation = useNavigation();
   // const navigationRoute = useRoute();
   const routes = useNavigationState(state => state.routes);
-  const navigationRouteName = routes[routes.length - 1].name;
+  const navigationRouteName = routes.length ? routes[routes.length - 1].name : '';
   const navigationRoute = routes[routes.length - 1];
 
   const getFcmToken = useCallback(async () => {
@@ -343,8 +343,12 @@ const Main = () => {
   }, [])
 
   React.useEffect(() => {
-    fcmSetting();
-  }, [navigationRouteName, navigationRoute])
+    if (navigationRouteName == 'MessageRoom') {
+      fcmSetting();
+    } else if (navigationRouteName == 'Main') {
+      fcmSetting();
+    }
+  }, [navigationRouteName])
 
 
 

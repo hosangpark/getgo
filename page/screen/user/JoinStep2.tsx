@@ -44,7 +44,7 @@ import Api from '../../../api/Api';
 
 type Props = StackScreenProps<MainNavigatorParams, 'JoinStep2'>
 const JoinStep2 = ({ route }: any) => {
-
+    const { area, mt_lat, mt_log, mt_type, sns_key } = route?.params;
 
     const userInfo = useSelector((state: any) => state.userInfo);
     const myLocation = useSelector((state: any) => state.myLocation);
@@ -158,9 +158,11 @@ const JoinStep2 = ({ route }: any) => {
                 mt_na: inputLoginInfo.areaCode,
                 mt_hp: inputLoginInfo.mt_hp,
                 auth_number: authCode,
-                mt_area: route.params.area,
-                mt_lat: route.params.mt_lat,
-                mt_log: route.params.mt_log,
+                mt_area: area,
+                mt_lat: mt_lat,
+                mt_log: mt_log,
+                mt_type: mt_type,
+                sns_key: sns_key,
                 mat_status: 'N',
                 mt_app_token: Api.state.mb_fcm
             }
@@ -171,13 +173,16 @@ const JoinStep2 = ({ route }: any) => {
                     idx: res.data.user_idx,
                     mt_na: inputLoginInfo.areaCode,
                     mt_hp: inputLoginInfo.mt_hp,
-                    mt_area: route.params.area,
-                    mt_lat: route.params.mt_lat,
-                    mt_log: route.params.mt_log,
+                    mt_area: area,
+                    mt_lat: mt_lat,
+                    mt_log: mt_log,
+                    mt_type: mt_type,
+                    sns_key: sns_key,
+                    mt_app_token: Api.state.mb_fcm
                 }
                 dispatch(UserInfoAction.updateUserInfo(JSON.stringify(params)));
 
-                setAutoUserData({ idx: res.data.user_idx, mt_na: inputLoginInfo.areaCode, mt_hp: inputLoginInfo.mt_hp, auth_number: authCode, mt_app_token: Api.state.mb_fcm })
+                setAutoUserData({ idx: res.data.user_idx, mt_app_token: Api.state.mb_fcm })
                 cusToast(res.data.message)
                 navigation.navigate('JoinStep3');
             }
