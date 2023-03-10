@@ -1,7 +1,12 @@
-package com.getgo.newarchitecture;
+package com.dmonster.getgo.newarchitecture;
 
 import android.app.Application;
+
 import androidx.annotation.NonNull;
+
+import com.dmonster.getgo.BuildConfig;
+import com.dmonster.getgo.newarchitecture.components.MainComponentsRegistry;
+import com.dmonster.getgo.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
@@ -19,9 +24,7 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.getgo.BuildConfig;
-import com.getgo.newarchitecture.components.MainComponentsRegistry;
-import com.getgo.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+
 import java.util.ArrayList;
 import java.util.List;
 

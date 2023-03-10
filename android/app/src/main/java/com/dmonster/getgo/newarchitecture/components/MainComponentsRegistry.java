@@ -1,4 +1,4 @@
-package com.getgo.newarchitecture.components;
+package com.dmonster.getgo.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

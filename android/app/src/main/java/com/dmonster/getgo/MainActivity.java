@@ -1,11 +1,11 @@
-package com.getgo;
-import android.content.ContentResolver;
-import android.net.Uri;
+package com.dmonster.getgo;
 import android.os.Build;
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
+import com.dmonster.getgo.BuildConfig;
+
 import org.devio.rn.splashscreen.SplashScreen; // here
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
