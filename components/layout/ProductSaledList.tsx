@@ -53,9 +53,9 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
   }
 
   const SendReview = () => {
-    navigation.navigate('SendReview', {item})
+    navigation.navigate('SendReview', { item: item })
   }
-  const ReviewDetail = (rt_idx:number) => {
+  const ReviewDetail = (rt_idx: number) => {
     navigation.navigate('ReviewDetail', { rt_idx: rt_idx })
   }
   const Action1 = () => {
@@ -86,7 +86,7 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
   }
 
   /** 상품 판매상태변경 */
-  const ReserveSelect = async (pt_idx:number, pt_sale_now:number) => {
+  const ReserveSelect = async (pt_idx: number, pt_sale_now: number) => {
     if (!pt_idx || !pt_sale_now) return;
 
 
@@ -106,7 +106,7 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
       .catch(err => console.log(err));
   };
 
-  const ToggleAction = (target:{type:string,idx:number}) => {
+  const ToggleAction = (target: { type: string, idx: number }) => {
 
     if (target.type == "modify") {
       Modify(target.idx)
@@ -184,7 +184,7 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
                   <Text style={[style.text_me, {
                     backgroundColor: colors.BLUE_COLOR_1,
                     borderRadius: 5, fontSize: 12, marginRight: 8, color: colors.WHITE_COLOR,
-                    paddingVertical: 3, paddingHorizontal: 5,flexShrink:1 
+                    paddingVertical: 3, paddingHorizontal: 5, flexShrink: 1
                   }]}>
                     <Image style={{ width: 13, height: 13, }}
                       source={require('../../assets/img/ico_sale.png')} />
@@ -195,7 +195,7 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
                     <Text style={[style.text_me, {
                       backgroundColor: colors.GREEN_COLOR_2,
                       borderRadius: 5, fontSize: 12, marginRight: 8, color: colors.WHITE_COLOR,
-                      paddingVertical: 3, paddingHorizontal: 5,flexShrink:1 
+                      paddingVertical: 3, paddingHorizontal: 5, flexShrink: 1
                     }]}>
                       <Image style={{ width: 13, height: 13, }}
                         source={require('../../assets/img/ico_time.png')} />
@@ -205,14 +205,14 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
                     <Text style={[style.text_me, {
                       backgroundColor: colors.GRAY_COLOR_4,
                       borderRadius: 5, fontSize: 12, marginRight: 8, color: colors.WHITE_COLOR,
-                      paddingVertical: 3, paddingHorizontal: 5,flexShrink:1 
+                      paddingVertical: 3, paddingHorizontal: 5, flexShrink: 1
                     }]}>
                       <Image style={{ width: 13, height: 13, }}
                         source={require('../../assets/img/ico_time.png')} />
                       {t('거래완료')}
                     </Text>
                 }
-                <Text style={[style.text_b, { fontSize: 15, color: colors.BLACK_COLOR_2,flexShrink:1 }]}>
+                <Text style={[style.text_b, { fontSize: 15, color: colors.BLACK_COLOR_2, flexShrink: 1 }]}>
                   ￦ {NumberComma(item.pt_selling_price)}
                 </Text>
               </View>

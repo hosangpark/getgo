@@ -37,7 +37,7 @@ interface MessageRoomItemType {
     tradeDoneSend: () => void
 }
 
-export const MessageRoomHeader = ({ item, getRoomData }:
+export const MessageRoomHeader = ({ item, getRoomData, tradeDoneSend }:
     MessageRoomItemType) => {
 
     const { t, i18n } = useTranslation()
@@ -56,8 +56,11 @@ export const MessageRoomHeader = ({ item, getRoomData }:
     }
     const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
 
-    const navigatieSendReview = () => {
-        navigation.navigate('SendReview', { room_idx: item.room_idx })
+    const SendReview = (room_idx: number) => {
+        navigation.navigate('SendReview', { item: { room_idx: room_idx } })
+    }
+    const ReviewDetail = (rt_idx: number) => {
+        navigation.navigate('ReviewDetail', { rt_idx: rt_idx })
     }
 
 
@@ -195,7 +198,7 @@ export const MessageRoomHeader = ({ item, getRoomData }:
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Image style={{ width: 70, height: 70, borderRadius: 6 }} source={{ uri: 'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000/uploads/' + item.tradeImg }} />
                         <View style={{ marginLeft: 15 }}>
-                            {item.mt_seller_idx === userInfo.idx ?
+                            {item.mt_seller_idx === userInfo.idx && item.salestate != 3 ?
                                 <View style={{ width: 100, height: 15, marginBottom: 18 }}>
                                     <SelectBox
                                         selOption={selectReserve}
@@ -278,15 +281,15 @@ export const MessageRoomHeader = ({ item, getRoomData }:
                                 numberOfLines={2}
                             >{item.producttitle}</Text>
                             <Text style={[style.text_b, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>
-                            ￦ {item.price} {t('원')}</Text>
+                                ￦ {item.price} {t('원')}</Text>
                         </View>
                     </View>
                     <View>
-                        {item.salestate == 3 &&
+                        {item.salestate == 3 ?
                             <>
-                                {item.rt_idx == 1 ?
+                                {item.rt_idx ?
                                     <TouchableOpacity
-                                        onPress={navigatieSendReview}
+                                        onPress={() => ReviewDetail(item.rt_idx)}
                                         style={[{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 40, backgroundColor: colors.WHITE_COLOR, borderRadius: 5, marginTop: 10, borderWidth: 1, borderColor: colors.GRAY_COLOR_3 }]}>
                                         <Image style={{ width: 20, height: 20, marginRight: 5 }} source={require('../../assets/img/ico_note.png')} />
                                         <Text style={[style.text_sb, { color: colors.BLACK_COLOR_1, fontSize: 15 }]}>
@@ -294,27 +297,17 @@ export const MessageRoomHeader = ({ item, getRoomData }:
                                         </Text>
                                     </TouchableOpacity>
                                     :
-                                    item.mt_seller_idx == userInfo.idx ?
-                                        <TouchableOpacity
-                                            onPress={navigatieSendReview}
-                                            style={[{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 40, backgroundColor: colors.WHITE_COLOR, borderRadius: 5, marginTop: 10, borderWidth: 1, borderColor: colors.GRAY_COLOR_3 }]}>
-                                            <Image style={{ width: 20, height: 20, marginRight: 5 }} source={require('../../assets/img/ico_note.png')} />
-                                            <Text style={[style.text_sb, { color: colors.BLACK_COLOR_1, fontSize: 15 }]}>
-                                                {t('후기 보내기')}
-                                            </Text>
-                                        </TouchableOpacity>
-                                        :
-                                        <TouchableOpacity
-                                            onPress={navigatieSendReview}
-                                            style={[{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 40, backgroundColor: colors.WHITE_COLOR, borderRadius: 5, marginTop: 10, borderWidth: 1, borderColor: colors.GRAY_COLOR_3 }]}>
-                                            <Image style={{ width: 20, height: 20, marginRight: 5 }} source={require('../../assets/img/ico_note.png')} />
-                                            <Text style={[style.text_sb, { color: colors.BLACK_COLOR_1, fontSize: 15 }]}>
-                                                {t('후기 보기')}
-                                            </Text>
-                                        </TouchableOpacity>
+                                    <TouchableOpacity
+                                        onPress={() => SendReview(item.room_idx)}
+                                        style={[{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 40, backgroundColor: colors.WHITE_COLOR, borderRadius: 5, marginTop: 10, borderWidth: 1, borderColor: colors.GRAY_COLOR_3 }]}>
+                                        <Image style={{ width: 20, height: 20, marginRight: 5 }} source={require('../../assets/img/ico_note.png')} />
+                                        <Text style={[style.text_sb, { color: colors.BLACK_COLOR_1, fontSize: 15 }]}>
+                                            {t('후기 보내기')}
+                                        </Text>
+                                    </TouchableOpacity>
                                 }
                             </>
-                        }
+                            : null}
                     </View>
                 </View> : null}
         </View>

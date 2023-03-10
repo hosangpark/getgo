@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.getgo",
+  "applicationId": "com.dmonster.getgo",
   "variantName": "release",
   "elements": [
     {

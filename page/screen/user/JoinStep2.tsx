@@ -293,6 +293,34 @@ const JoinStep2 = ({ route }: any) => {
                     </View>
                 }
 
+                <View style={[style.gray_box, { borderRadius: 6, marginTop: 20 }]}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Text style={[style.text_me, { fontSize: 13 }]}>
+                            {t('서비스 약관동의')}
+                        </Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('SettingTerms')}>
+                            <Text style={[style.text_re, { fontSize: 13, textDecorationLine: 'underline', color: colors.GRAY_COLOR_2 }]}>
+                                {t('자세히 보기')}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
+                        <Text style={[style.text_me, { fontSize: 13 }]}>{t('개인정보 처리방침')}</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('SettingPolicy')}>
+                            <Text style={[style.text_re, { fontSize: 13, textDecorationLine: 'underline', color: colors.GRAY_COLOR_2 }]}>
+                                {t('자세히 보기')}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
+                        <Text style={[style.text_me, { fontSize: 13 }]}>{t('위치기반서비스')}</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('SettingServiceLocation')}>
+                            <Text style={[style.text_re, { fontSize: 13, textDecorationLine: 'underline', color: colors.GRAY_COLOR_2 }]}>
+                                {t('자세히 보기')}</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
                 {/* <View style={{flexDirection:'row',marginTop:20,justifyContent:'center'}}>
                     <Text style={[style.text_re,{fontSize:13,color:colors.GRAY_COLOR_2}]}>{t('휴대폰 번호가 변경되었나요?')}</Text>
                     <TouchableOpacity onPress={()=>{navigation.navigate('ChangePhoneAuth')}}>

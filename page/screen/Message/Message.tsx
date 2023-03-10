@@ -104,7 +104,7 @@ const Message = () => {
       method: 'get',
       url: `/product/chat-list?mt_idx=${userInfo.idx}`
     }).then(res => {
-      setitem(res.data.reverse())
+      setitem(res.data)
       setIsLoading(false)
     }).catch(err => {
       console.log('getChatListData')

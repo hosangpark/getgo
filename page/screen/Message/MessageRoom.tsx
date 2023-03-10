@@ -15,7 +15,7 @@ import {
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import style from '../../../assets/style/style';
 import { colors } from '../../../assets/color';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../../components/types/routerTypes';
 import { BackHandlerCom } from '../../../components/BackHandlerCom';
@@ -126,7 +126,7 @@ const MessageRoom = ({ route }: Props) => {
                 </View>
                 <View style={{ marginLeft: 20, marginTop: 5, flex: 8 }}>
                   {item.ctt_file1 ? <View style={{ maxWidth: '50%' }}>
-                    <Image source={{ uri: Api.state.imageUrl + item.ctt_file1 }} style={{ width: 42, height: 42 }} borderRadius={6} />
+                    <Image source={{ uri: Api.state.imageUrl + item.ctt_file1 }} style={{ width: 135, height: 135, borderRadius: 6 }} />
                   </View> : null}
                   <Text style={[style.text_re, { marginTop: 5, fontSize: 12, color: colors.GRAY_COLOR_2 }]}>{t('오후')} {item.ctt_sdate}</Text>
                 </View>
@@ -231,13 +231,29 @@ const MessageRoom = ({ route }: Props) => {
     }
   }, [selectImg.uri])
 
-  React.useEffect(() => {
-    if (selectImg.uri != '') {
-      setInputChat('');
-    }
-  }, [selectImg.uri])
+
 
   React.useEffect(() => {
+    if (route.params.items.room_id || route.params.items.chr_id) {
+      let temp_room_id = route.params.items.room_id ? parseInt(route.params.items.room_id) : parseInt(route.params.items.chr_id)
+      setRoom_idx(temp_room_id)
+    }
+  }, [route.params.items.room_id, route.params.items.chr_id])
+
+  React.useEffect(() => {
+    return () => {
+      ws.disconnect();
+      console.log('room disconnect')
+    };
+  }, []);
+
+  const tradeDoneSend = (room_idx) => {
+    console.log('tradeDoneSend', room_idx);
+
+    ws.emit('tradeDone', { room_idx: room_idx });
+  }
+
+  useFocusEffect(React.useCallback(() => {
     if (room_idx) {
       setIsLoading(true)
       getRoomData(room_idx);
@@ -267,27 +283,7 @@ const MessageRoom = ({ route }: Props) => {
 
     }
 
-
-  }, [room_idx]);
-
-  React.useEffect(() => {
-    if (route.params.items.room_id || route.params.items.chr_id) {
-      let temp_room_id = route.params.items.room_id ? parseInt(route.params.items.room_id) : parseInt(route.params.items.chr_id)
-      setRoom_idx(temp_room_id)
-    }
-  }, [route.params.items.room_id, route.params.items.chr_id])
-
-  React.useEffect(() => {
-    return () => {
-      ws.disconnect();
-      console.log('room disconnect')
-    };
-  }, []);
-
-  const tradeDoneSend = (room_idx) => {
-
-    ws.emit('tradeDone', { room_idx: room_idx });
-  }
+  }, [room_idx]))
 
 
   return (

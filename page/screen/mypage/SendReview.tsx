@@ -76,7 +76,7 @@ export default function SendReview({ route }: Props) {
     console.log('route.params', route.params);
     await client({
       method: 'get',
-      url: `/product/review_basic?room_idx=${route.params.room_idx}`
+      url: `/product/review_basic?room_idx=${route.params?.item?.room_idx}`
     }).then(res => {
       setitem(res.data)
     }).catch(err => {

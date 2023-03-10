@@ -142,7 +142,7 @@ const Login = () => {
 
 
     React.useEffect(() => {
-        if (inputAuth == authCode) {
+        if (inputAuth && inputAuth == authCode) {
             setIsInputEnd(true);
         }
         else {
@@ -260,7 +260,7 @@ const Login = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-                {/* <View style={{ flexDirection: 'row', marginVertical: 20, justifyContent: 'center' }}>
+                <View style={{ flexDirection: 'row', marginVertical: 20, justifyContent: 'center' }}>
                     <Text style={[style.text_re, { fontSize: 13, color: colors.GRAY_COLOR_2 }]}>
                         {t('휴대폰 번호가 변경되었나요?')}
                     </Text>
@@ -268,7 +268,7 @@ const Login = () => {
                         <Text style={[style.text_b, { marginLeft: 10, color: colors.GREEN_COLOR_2, textDecorationLine: 'underline', fontSize: 13 }]}>
                             {t('번호변경하기')}</Text>
                     </TouchableOpacity>
-                </View> */}
+                </View>
             </ScrollView>
             <View style={style.bottom_wrapper}>
                 <TouchableOpacity onPress={LoginComplete} disabled={!isInputEnd} style={[style.bottom_btn, isInputEnd ? style.bottom_btn_green : style.bottom_btn_gray]}>

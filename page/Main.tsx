@@ -235,10 +235,9 @@ const Main = () => {
                 navigationRoute.params.items.room_id == notification.data.room_idx)) {
 
             } else {
+              //내부 노티를 써서 일부러 푸시를 띄움
               sendLocalNotificationWithSound(notification);
             }
-            //내부 노티를 써서 일부러 푸시를 띄움
-
 
             // process the notification
 
@@ -286,14 +285,6 @@ const Main = () => {
       // Should the initial notification be popped automatically
       // default: true
       popInitialNotification: true,
-
-      /**
-       * (optional) default: true
-       * - Specified if permissions (ios) and token (android and ios) will requested or not,
-       * - if not, you must call PushNotificationsHandler.requestPermissions() later
-       * - if you are not using remote notification or do not have Firebase installed, use this:
-       *     requestPermissions: Platform.OS === 'ios'
-       */
       requestPermissions: true,
     });
 
@@ -343,12 +334,10 @@ const Main = () => {
   }, [])
 
   React.useEffect(() => {
-    if (navigationRouteName == 'MessageRoom') {
-      fcmSetting();
-    } else if (navigationRouteName == 'Main') {
-      fcmSetting();
-    }
-  }, [navigationRouteName])
+
+    fcmSetting();
+
+  }, [navigationRouteName, navigationRoute])
 
 
 
