@@ -68,7 +68,6 @@ export type MainNavigatorParams = { //props가 없으면 undefined 있으면 {pr
         gofullscreen: () => void,
         SlideImage: any
     };
-<<<<<<< HEAD
     
     Search : undefined;
     Reserve_choice : {
@@ -78,28 +77,13 @@ export type MainNavigatorParams = { //props가 없으면 undefined 있으면 {pr
             title:string
         },
         type:string
-=======
-
-    Search: undefined;
-    Reserve_choice: {
-        target: {
-            id: number,
-            image: string,
-            title: string
-        }
->>>>>>> 5353be2db96268e29bb6699d81473c57fd34a473
     };
     ReportUser: {
         mt_declaration_idx: number
     }
-<<<<<<< HEAD
     ReportPost : {
         mt_declaration_idx:number
         pt_idx:number
-=======
-    ReportPost: {
-        mt_declaration_idx: number
->>>>>>> 5353be2db96268e29bb6699d81473c57fd34a473
     }
     ReportChat: {
         room_idx: number,

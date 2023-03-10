@@ -45,30 +45,6 @@ const KeywordNoti = ({ KeywordNotiitem, MaxTextCount }: any) => {
 
 
 
-<<<<<<< HEAD
-
-
-    return (
-        <SafeAreaView style={[style.default_background,{flex:1, position:'relative'}]}>
-          {isLoading?
-          <LoadingIndicator/>
-          :
-            <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'center',marginTop:18,marginBottom:11,paddingHorizontal:20}}>
-              <View style={{flexDirection:'row',flexShrink:1,alignItems:'center'}}>
-              <Image style={{width:24,height:24,marginRight:7}} source={require('../../../assets/img/top_alim.png')}/>
-              <Text style={[style.text_b,{color:colors.BLACK_COLOR_1,fontSize:17,flexShrink:1}]}>
-                {t('알림받는 키워드')}
-              <Text style={[style.text_b,{color:colors.GREEN_COLOR_2,fontSize:17}]}> 
-                {MaxTextCount}
-              </Text>
-              </Text>
-              </View>
-              <TouchableOpacity style={{borderColor:colors.GRAY_COLOR_2,borderWidth:1,width:52,minHeight:27
-              ,justifyContent:'center',alignItems:'center',borderRadius:15}}
-              onPress={()=>{navigation.navigate('KeywordSetting')}}>
-                <Text style={[style.text_me,{color:colors.GRAY_COLOR_2,fontSize:13,textAlign:'center'}]}>
-                {t('설정')}
-=======
   return (
     <SafeAreaView style={[style.default_background, { flex: 1, position: 'relative' }]}>
       {isLoading ?
@@ -110,7 +86,6 @@ const KeywordNoti = ({ KeywordNotiitem, MaxTextCount }: any) => {
               <View style={{ flexDirection: 'row', marginBottom: 5 }}>
                 <Text style={[style.text_me, { color: colors.GREEN_COLOR_2, fontSize: 12, backgroundColor: colors.GREEN_COLOR_4, paddingHorizontal: 7, paddingVertical: 3, borderRadius: 3 }]}>
                   {t(item.ct_name)}
->>>>>>> 5353be2db96268e29bb6699d81473c57fd34a473
                 </Text>
               </View>
               <Text style={[style.text_me, { color: colors.BLACK_COLOR_2, fontSize: 15, paddingRight: 100 }]} numberOfLines={1} >

@@ -52,12 +52,8 @@ type Props = StackScreenProps<MainNavigatorParams, 'Itempost'>;
 const Itempost = ({ route }: Props) => {
   const userInfo = useSelector((state: any) => state.userInfo);
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
-<<<<<<< HEAD
 
   const { t,i18n } = useTranslation();
-=======
-  const { t } = useTranslation();
->>>>>>> 5353be2db96268e29bb6699d81473c57fd34a473
 
   if (!route?.params?.pt_idx) {
     cusToast(t('잘못된 방법입니다'));
