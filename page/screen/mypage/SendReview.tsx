@@ -18,6 +18,7 @@ import client from '../../../api/client';
 import LoadingIndicator from '../../../components/layout/Loading';
 import cusToast from '../../../components/navigation/CusToast';
 import { useSelector } from 'react-redux';
+import Api from '../../../api/Api';
 
 
 
@@ -98,7 +99,7 @@ export default function SendReview({ route }: Props) {
             flexDirection: 'row', backgroundColor: colors.GRAY_COLOR_1, padding: 20,
             borderRadius: 10, marginBottom: 35
           }}>
-            <Image source={{ uri: "http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000/uploads/" + items.data[0].pt_image1 }} style={{ width: 65, height: 65, marginRight: 11, borderRadius: 5, }} />
+            {items?.data[0].pt_image1 ? <Image source={{ uri: Api.state.imageUrl + items.data[0].pt_image1 }} style={{ width: 65, height: 65, marginRight: 11, borderRadius: 5, }} /> : null}
             <View style={{ flex: 1, justifyContent: 'center' }}>
               <Text style={[style.text_b, { fontSize: 15, color: colors.BLACK_COLOR_1, marginBottom: 5 }]} numberOfLines={2}>
                 {items.data[0].pt_title}

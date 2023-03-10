@@ -75,10 +75,10 @@ const Login = () => {
             }).then(res => {
                 console.log(res.data)
                 setAuthCode("1234")
-                //   setAuthCode(res.data.auth_number);
+                setAuthCode(res.data.auth_number);
                 /**자동 인증번호 입력 (임시) */
-                //   setInputAuth(res.data.auth_number)
-                setInputAuth("1234")
+                setInputAuth(res.data.auth_number)
+                // setInputAuth("1234")
             }).catch(error => {
                 console.log(error)
             })
@@ -98,11 +98,11 @@ const Login = () => {
                 }
             }).then(res => {
                 console.log(res.data)
-                setAuthCode("1234")
-                // setAuthCode(res.data.auth_number);
+                // setAuthCode("1234")
+                setAuthCode(res.data.auth_number);
                 /**자동 인증번호 입력 (임시완) */
-                // setInputAuth(res.data.auth_number)
-                setInputAuth("1234")
+                setInputAuth(res.data.auth_number)
+                // setInputAuth("1234")
             }).catch(error => {
                 console.log(error)
             })
@@ -111,7 +111,7 @@ const Login = () => {
         // setTimer(false);
     }
     /**자동로그인 */
-    const setAutoUserData = async (userdata: {[key:string]:string}) => {
+    const setAutoUserData = async (userdata: { [key: string]: string }) => {
         await AsyncStorage.setItem('userIdx', JSON.stringify(userdata))
     }
 
@@ -128,7 +128,7 @@ const Login = () => {
                 mt_app_token: Api.state.mb_fcm
             }
         }).then(res => {
-            setAutoUserData({ idx: res.data.user_idx, mt_na: inputLoginInfo.areaCode, mt_hp: inputLoginInfo.mt_hp, auth_number: authCode })
+            setAutoUserData({ idx: res.data.user_idx, mt_app_token: Api.state.mb_fcm })
             navigation.navigate('SelectLogin')
             cusToast(t(res.data.message))
         }).catch(error => {
@@ -238,7 +238,7 @@ const Login = () => {
                         <Text style={[style.text_me, { fontSize: 13 }]}>
                             {t('서비스 약관동의')}
                         </Text>
-                        <TouchableOpacity onPress={()=>navigation.navigate('SettingTerms')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('SettingTerms')}>
                             <Text style={[style.text_re, { fontSize: 13, textDecorationLine: 'underline', color: colors.GRAY_COLOR_2 }]}>
                                 {t('자세히 보기')}
                             </Text>
@@ -246,7 +246,7 @@ const Login = () => {
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
                         <Text style={[style.text_me, { fontSize: 13 }]}>{t('개인정보 처리방침')}</Text>
-                        <TouchableOpacity onPress={()=>navigation.navigate('SettingPolicy')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('SettingPolicy')}>
                             <Text style={[style.text_re, { fontSize: 13, textDecorationLine: 'underline', color: colors.GRAY_COLOR_2 }]}>
                                 {t('자세히 보기')}
                             </Text>
@@ -254,7 +254,7 @@ const Login = () => {
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
                         <Text style={[style.text_me, { fontSize: 13 }]}>{t('위치기반서비스')}</Text>
-                        <TouchableOpacity onPress={()=>navigation.navigate('SettingServiceLocation')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('SettingServiceLocation')}>
                             <Text style={[style.text_re, { fontSize: 13, textDecorationLine: 'underline', color: colors.GRAY_COLOR_2 }]}>
                                 {t('자세히 보기')}</Text>
                         </TouchableOpacity>

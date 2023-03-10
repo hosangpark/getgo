@@ -32,13 +32,17 @@ import messaging from '@react-native-firebase/messaging';
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
 
+/*
+
+@mt_type: 1:일반, 2:구글, 3:애플, 4:라인, 5:왓츠앱
+
 GoogleSignin.configure({
-    webClientId: "447554062576-7glm9t0v5restn3b0kh0c8916vl7fa01.apps.googleusercontent.com",
-    offlineAccess: true,
-    forceCodeForRefreshToken: true,
+   webClientId: "447554062576-7glm9t0v5restn3b0kh0c8916vl7fa01.apps.googleusercontent.com",
+   offlineAccess: true,
+   forceCodeForRefreshToken: true,
 })
 
-
+*/
 
 
 
@@ -70,19 +74,58 @@ const SelectLogin = () => {
         setIsOpen(false);
     }
 
+    /** useridx값 저장 */
+    const setAutoUserData = async (userdata: string) => {
+        await AsyncStorage.setItem('userIdx', JSON.stringify(userdata))
+    }
+
     /** google 로그인 */
     const googleLogin = async () => {
+        let mt_type = 2;
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
-            setState({ userInfo });
-            Alert.alert(`${userInfo.user.name}`, `${userInfo.user.email},${userInfo.user.id},${userInfo.user.photo}`)
+            setState(userInfo);
+
+            let sns_key = userInfo.user.id;
+
+            if (!sns_key) {
+                cusToast(t('실패했습니다'));
+                return;
+            }
+
+            await client({
+                method: 'get',
+                url: `/user/sns_login?mt_type=${mt_type}&sns_key=${sns_key}&mt_app_token=${Api.state.mb_fcm}`,
+            }).then(res => {
+                console.log('resdata', res.data.user_data);
+                dispatch(UserInfoAction.userlogin(JSON.stringify(res.data.user_data)));
+                setAutoUserData({ idx: res.data.user_idx, mt_app_token: Api.state.mb_fcm })
+
+            }).catch(error => {
+                if (error.response) {
+                    console.log(error.response.message);
+                    if (error.response.status == '409') {
+                        //회원가입으로 이동
+                        navigation.navigate('SearchLocation', { type: 'join', mt_type, sns_key });
+                    }
+                    return;
+                }
+                cusToast(t('실패했습니다'));
+            });
+
+            // Alert.alert(`${userInfo.user.name}`, `${userInfo.user.email},${userInfo.user.id},${userInfo.user.photo}`)
             console.log("user:", userInfo)
+
+
+
         } catch (error: any) {
             console.log("error:", error)
             console.log("error:", error.code)
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 console.log(error.code)
+                Alert.alert(t('취소되었습니다'));
+                return;
                 // user cancelled the login flow
             } else if (error.code === statusCodes.IN_PROGRESS) {
                 console.log(error.code)
@@ -94,6 +137,8 @@ const SelectLogin = () => {
                 console.log(error.code)
                 // some other error happened
             }
+
+            Alert.alert(t('실패했습니다'));
         }
     }
 
@@ -159,38 +204,23 @@ const SelectLogin = () => {
                     const fcmToken = await messaging().getToken();
                     Api.state.mb_fcm = fcmToken;
 
-                    /*
-                    idx:args.idx,
-        mt_profile_img:args.mt_profile_img,
-        mt_na:args.mt_na,
-        mt_hp:args.mt_hp,
-        mt_nickname:args.mt_nickname,
-        mt_email:args.mt_email,
-        sell_count:args.sell_count,
-        trade_com_count:args.trade_com_count,
-        token:args.token,
-                    */
-                    //setAutoUserData({ idx: 59, mt_na: '82', mt_hp: '01029270185', auth_number: '1234' })
-
                     let autoUserData = JSON.parse(result);
 
                     console.log('userIdx', autoUserData);
 
                     await client({
-                        method: 'post',
-                        url: '/user/auth',
-                        data: {
-                            mt_na: autoUserData.mt_na,
-                            mt_hp: autoUserData.mt_hp,
-                            auth_number: autoUserData.auth_number,
-                            mt_app_token: Api.state.mb_fcm
-                        }
+                        method: 'get',
+                        url: '/user/auto-login?token=' + Api.state.mb_fcm,
                     }).then(res => {
                         console.log('resdata', res.data.user_data);
                         dispatch(UserInfoAction.userlogin(JSON.stringify(res.data.user_data)));
                     }).catch(error => {
                         cusToast(t('자동로그인에 실패했습니다.'))
-                        console.log(error)
+                        console.log(error);
+
+                        //실패시 자동로그인 삭제
+                        dispatch(UserInfoAction.logOut());
+
                         // cusToast(
                         //     t('기존 정보가 없습니다.')
                         // )
@@ -299,7 +329,7 @@ const SelectLogin = () => {
                 </View>
 
                 <View style={{ marginTop: 30, flexDirection: 'row' }}>
-                    <TouchableOpacity onPress={() => { navigation.navigate('SearchLocation', { type: 'join' }) }} style={[style.custom_button, { alignItems: 'center', justifyContent: 'center' }]} >
+                    <TouchableOpacity onPress={() => { navigation.navigate('SearchLocation', { type: 'join', mt_type: 1, sns_key: '' }) }} style={[style.custom_button, { alignItems: 'center', justifyContent: 'center' }]} >
                         <Text style={[style.text_b, { color: colors.WHITE_COLOR, fontSize: 18 }]}>
                             {t('시작하기')}
                         </Text>

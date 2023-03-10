@@ -500,10 +500,21 @@ class Api {
   //Url에서 코드를 추출
   urlGetCode = urls => {
     if (urls) {
-      let url_arr = urls.toString().split('?code=');
+      let url_arr = urls.toString().split('?');
 
       if (url_arr[1]) {
-        return url_arr[1];
+
+
+        let str = url_arr[1];
+
+        // const str = 'abc=foo&def=%5Basf%5D&xyz=5';
+        const params = Object.fromEntries(new URLSearchParams(str));
+        console.log(params);
+
+        let obj = {};
+        params.split('&');
+
+        return params;
       } else return false;
     }
   };

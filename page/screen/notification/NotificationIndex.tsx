@@ -2,14 +2,14 @@ import React from 'react';
 import { View, ViewStyle, Text, ScrollView, SafeAreaView, useWindowDimensions, BackHandler } from 'react-native';
 import { NotificationHeader } from '../../../components/header/NotificationHeader';
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import Notification from './Notification';
+import NotificationList from './NotificationList';
 import KeywordNoti from './KeywordNoti';
 import { colors } from '../../../assets/color';
 import style from '../../../assets/style/style';
 import { useTranslation } from 'react-i18next';
 import client from '../../../api/client';
 import { useSelector } from 'react-redux';
-import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { useNavigation, useIsFocused, useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../../components/types/routerTypes';
 import LoadingIndicator from '../../../components/layout/Loading';
@@ -42,7 +42,7 @@ export default function NotificationIndex() {
       isLoading ?
         <LoadingIndicator />
         :
-        <Notification Alert_datas={Alert_datas} />
+        <NotificationList Alert_datas={Alert_datas} />
 
     )
   }
@@ -85,6 +85,7 @@ export default function NotificationIndex() {
       }
     }).then(
       res => {
+        console.log('res.data.total_list', res.data.total_list);
         setMaxTextCount(res.data.total)
         setKeywordNotiitem(res.data.total_list)
       }
@@ -125,12 +126,15 @@ export default function NotificationIndex() {
       backHandler.remove();
     }
   }, [isFocused, exitApp]);
+
   React.useEffect(() => {
     NoticeList()
     KeywordList()
-    navigation.addListener('focus', () => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      NoticeList()
       KeywordList()
     })
+    return unsubscribe
   }, [])
 
   React.useEffect(() => {

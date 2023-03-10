@@ -52,8 +52,18 @@ type Props = StackScreenProps<MainNavigatorParams, 'Itempost'>;
 const Itempost = ({ route }: Props) => {
   const userInfo = useSelector((state: any) => state.userInfo);
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
+<<<<<<< HEAD
 
   const { t,i18n } = useTranslation();
+=======
+  const { t } = useTranslation();
+>>>>>>> 5353be2db96268e29bb6699d81473c57fd34a473
+
+  if (!route?.params?.pt_idx) {
+    cusToast(t('잘못된 방법입니다'));
+    navigation.goBack();
+    return false;
+  }
 
   const [selectReserve, setSelReserve] = React.useState<OptionType>({
     label: t('상태변경'),
@@ -102,14 +112,16 @@ const Itempost = ({ route }: Props) => {
       // } else {
       //   shopUrl = 'https://apps.apple.com/kr/app/id1572757670';
       // }
-      let fullcodeUrl = Api.state.siteUrl + '/bridge?code=' + items.data[0].pt_idx;
+      let fullcodeUrl = Api.state.siteUrl + '/bridge?type=product&code=' + items.data[0].pt_idx;
+      // let fullcodeUrl = 'https://buzyrun.com/bridge.php?type=product&code=' + items.data[0].pt_idx;
 
       // let fullcodeUrl = await buildLink();
       // console.log('urls', fullcodeUrl);
       // return;
 
       const result = await Share.share({
-        message: `[Getgo] ${items.data[0].pt_title} / ￦ ${NumberComma(items.data[0].pt_selling_price)} `,
+        message: `[Getgo] ${items.data[0].pt_title} / ￦ ${NumberComma(items.data[0].pt_selling_price)} ${fullcodeUrl}`,
+        // message: fullcodeUrl,
         url: fullcodeUrl,
       });
 
@@ -171,6 +183,14 @@ const Itempost = ({ route }: Props) => {
       },
     })
       .then(res => {
+        console.log('res.data', res.data);
+        if (!res.data?.data || !res.data?.data.length) {
+          cusToast(t('삭제된 상품입니다.'));
+          navigation.goBack();
+          return false;
+        }
+
+
         setitem(res.data);
         setWp_idx(res.data.wp_idx ?? null);
         setfilterslideImage(res.data.image_arr);
@@ -257,7 +277,7 @@ const Itempost = ({ route }: Props) => {
 
   /** 관심상품 등록 */
   const AddHeart = async (e: number) => {
-    await client<{ data: string; message: string,wt_idx:number }>({
+    await client<{ data: string; message: string, wt_idx: number }>({
       method: 'post',
       url: '/product/add_like',
       data: {

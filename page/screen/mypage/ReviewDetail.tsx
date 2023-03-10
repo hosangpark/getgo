@@ -33,6 +33,14 @@ export default function ReviewDetail({ route }: any) {
       url: `/user/review_detail?rt_idx=${route.params.rt_idx}&rt_type=S`,
     }).then(
       res => {
+
+        console.log('res.data', res.data);
+        if (!res.data?.data || !res.data?.data.length) {
+          cusToast(t('삭제된 리뷰입니다.'));
+          navigation.goBack();
+          return false;
+        }
+
         setReviewDetailData(res.data.data[0])
         setIsLoading(false)
       }
@@ -81,12 +89,7 @@ export default function ReviewDetail({ route }: any) {
       <BackHeader title={t('보낸 후기 보기')} />
       <ScrollView style={{ paddingHorizontal: 20 }}>
         <View style={{ backgroundColor: colors.GRAY_COLOR_1, flexDirection: 'row', padding: 20, borderRadius: 10, marginVertical: 20 }}>
-          <Image style={{ width: 60, height: 60, borderRadius: 5, marginRight: 10 }} source={
-            reviewDetailData.pt_image1 ? {
-              uri: Api.state.imageUrl + reviewDetailData.pt_image1
-            }
-              : require('../../../assets/img/ico_x.png')
-          } />
+          {reviewDetailData.pt_image1 ? <Image style={{ width: 60, height: 60, borderRadius: 5, marginRight: 10 }} source={{ uri: Api.state.imageUrl + reviewDetailData.pt_image1 }} /> : null}
           <View style={{ justifyContent: 'center' }}>
             <Text style={[style.text_b, { fontSize: 15, color: colors.BLACK_COLOR_1, marginBottom: 3, paddingRight: 65 }]} numberOfLines={2}>{reviewDetailData.pt_title}</Text>
             <Text style={[style.text_re, { fontSize: 13, color: colors.BLACK_COLOR_1 }]}>

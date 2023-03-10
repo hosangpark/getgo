@@ -5,65 +5,70 @@ import { ProductItemType } from "./componentType";
 import { reduxStateType } from "./reduxTypes";
 
 export type MainNavigatorParams = { //props가 없으면 undefined 있으면 {props명 : type}
-    Main : undefined;
-    NotificationIndex:undefined;
+    Main: undefined;
+    NotificationIndex: undefined;
     /** 로그인 ***/
-    SelectLogin : undefined;
-    Login : undefined;
+    SelectLogin: undefined;
+    Login: undefined;
 
 
     /** 회원가입 **/
-    
-    JoinStep2 : {
-        area : string;
+
+    JoinStep2: {
+        area: string;
         mt_lat: number,
         mt_log: number,
+        mt_type?: number;
+        sns_key?: string;
     };
-    JoinStep3 : undefined;
-    JoinStep4 : undefined;
+    JoinStep3: undefined;
+    JoinStep4: undefined;
 
     /** 정보변경 **/
-    ChangePhoneAuth : undefined;
-    ChangePhone : {
-        phone:string;
-        areaCode:String;
-        email:string;
-        areaCodeLabel:String;
+    ChangePhoneAuth: undefined;
+    ChangePhone: {
+        phone: string;
+        areaCode: String;
+        email: string;
+        areaCodeLabel: String;
     };
-    ChangePhoneResult : {
-        beforePhone : string;
-        beforeAreaCode : String;
-        afterPhone : string;
-        afterAreaCode : String;
+    ChangePhoneResult: {
+        beforePhone: string;
+        beforeAreaCode: String;
+        afterPhone: string;
+        afterAreaCode: String;
     }
 
     /** 내 동네 설정 */
-    SetMyLocation : undefined;
-    SearchLocation : {
-        type:string;
-        selectIdx?:string;
+    SetMyLocation: undefined;
+    SearchLocation: {
+        type: string;
+        selectIdx?: string;
+        mt_type?: number;
+        sns_key?: string;
     };
-    AuthMyLocation:{
-        setLocation:{
-            mt_lat:number;
-            mt_log:number;
+    AuthMyLocation: {
+        setLocation: {
+            mt_lat: number;
+            mt_log: number;
         },
-        selectIdx?:string;
+        selectIdx?: string;
     }
 
-    Itemlist : undefined;
-    Itemupload : {
-        type:string
-        pt_idx:number
+    Itemlist: undefined;
+    Itemupload: {
+        type: string
+        pt_idx: number
     };
-    Itempost : {
-        pt_idx:number
+    Itempost: {
+        pt_idx: number
     }
-    ItempostFullSlide : {
+    ItempostFullSlide: {
         imageheight: number,
-        gofullscreen:() => void,
+        gofullscreen: () => void,
         SlideImage: any
     };
+<<<<<<< HEAD
     
     Search : undefined;
     Reserve_choice : {
@@ -73,100 +78,121 @@ export type MainNavigatorParams = { //props가 없으면 undefined 있으면 {pr
             title:string
         },
         type:string
+=======
+
+    Search: undefined;
+    Reserve_choice: {
+        target: {
+            id: number,
+            image: string,
+            title: string
+        }
+>>>>>>> 5353be2db96268e29bb6699d81473c57fd34a473
     };
-    ReportUser : {
-        mt_declaration_idx:number
+    ReportUser: {
+        mt_declaration_idx: number
     }
+<<<<<<< HEAD
     ReportPost : {
         mt_declaration_idx:number
         pt_idx:number
+=======
+    ReportPost: {
+        mt_declaration_idx: number
+>>>>>>> 5353be2db96268e29bb6699d81473c57fd34a473
     }
-    ReportChat : {
-        room_idx:number,
-        mt_declaration_idx:number
+    ReportChat: {
+        room_idx: number,
+        mt_declaration_idx: number
     }
 
     /**Notification */
-    Notification : undefined;
-    KeywordSetting : undefined;
-    NotificationDetail : {
-        pst_idx:number,
+    Notification: undefined;
+    KeywordSetting: undefined;
+    NotificationDetail: {
+        pst_idx: number,
     };
 
     /**Category */
-    Category : undefined;
-    Category_Filter : {
-        ct_name:string
+    Category: undefined;
+    Category_Filter: {
+        ct_name: string
     };
 
     /**Message */
-    Message : undefined;
-    MessageRoom : {
-        items:{
+    Message: undefined;
+    MessageRoom: {
+        items: {
             chr_id: number,
-            room_id:number,
+            room_id: number,
             crt_last_date: string | null,
-            ctt_id: string, 
-            ctt_msg: string | null, 
-            ctt_push: string | null, 
-            mt_area: string, 
-            mt_idx: number, 
-            mt_image1: number | null, 
-            mt_nickname: string, 
+            ctt_id: string,
+            ctt_msg: string | null,
+            ctt_push: string | null,
+            mt_area: string,
+            mt_idx: number,
+            mt_image1: number | null,
+            mt_nickname: string,
         }
-        type:string
+        type: string
     }
     ;
 
     /**Mypage */
-    Mypage : undefined;
+    Mypage: undefined;
 
 
-    ProfileModify : undefined;
-    Allreview : undefined;
-    ReviewDetail : {
-        
+    ProfileModify: undefined;
+    Allreview: undefined;
+    ReviewDetail: {
+
     };
-    
+
     /**Mypage Setting */
-    SettingAnnounce : undefined;
-    SettingAnnounceDetail : {
-        id : number
+    SettingAnnounce: undefined;
+    SettingAnnounceDetail: {
+        id: number
     };
-    
-    MypageSetting : undefined;
-    SettingModifyEmail :undefined;
-    SettingModifyPhone :{
-        PhoneNumber:number
+
+    MypageSetting: undefined;
+    SettingModifyEmail: undefined;
+    SettingModifyPhone: {
+        PhoneNumber: number
     };
-    SettingTerms : undefined;
-    SettingServiceLocation : undefined;
-    SettingPolicy : undefined;
-    SettingLogout : undefined;
-    SettingWithdrawal : undefined;
+    SettingTerms: undefined;
+    SettingServiceLocation: undefined;
+    SettingPolicy: undefined;
+    SettingLogout: undefined;
+    SettingWithdrawal: undefined;
 
     /**MYpage - Transaction */
+<<<<<<< HEAD
     SaledList : {target:number};
     SendReview : {
         item: ProductItemType
+=======
+    SaledList: { target: number };
+    SendReview: {
+        room_idx: number
+>>>>>>> 5353be2db96268e29bb6699d81473c57fd34a473
     };
-    PurchaseList : undefined;
-    InterestsList : undefined;
+    PurchaseList: undefined;
+    InterestsList: undefined;
 
     /**MYpage - Q & A */
-    Question : undefined;
-    QuestionDetail : {
+    Question: undefined;
+    QuestionDetail: {
         id: number,
     };
-    Inquiry_1_1 : undefined;
-    Inquiry_1_1Detail : {
-        qt_idx:string,
-        qt_status:string,
-        qt_title:string,
-        qt_wdate:string,
+    Inquiry_1_1: undefined;
+    Inquiry_1_1Detail: {
+        qt_idx: string,
+        qt_status: string,
+        qt_title: string,
+        qt_wdate: string,
     };
-    Inquiry_1_1Upload : {
-        type:string,
+    Inquiry_1_1Upload: {
+        type: string,
     };
 
 

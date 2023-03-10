@@ -46,7 +46,7 @@ export const MessageRoomHeader = ({ item, getRoomData }:
     const [topboxopen, setTopboxopen] = useState(true)
     // const [salestate,setSalestate] = useState(true)
 
-    console.log('item', item, userInfo.idx);
+    // console.log('item', item, userInfo.idx);
 
 
 
@@ -124,7 +124,7 @@ export const MessageRoomHeader = ({ item, getRoomData }:
             .then(res => {
                 cusToast(t(res.data.message));
                 getRoomData(item.room_idx);
-                if (val.sel_id == 3) tradeDoneSend(item.mt_idx);
+                if (val.sel_id == 3) tradeDoneSend(item.room_idx);
             })
             .catch(err => console.log(err));
     };
