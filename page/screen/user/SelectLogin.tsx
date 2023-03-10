@@ -36,15 +36,12 @@ import messaging from '@react-native-firebase/messaging';
 
 @mt_type: 1:일반, 2:구글, 3:애플, 4:라인, 5:왓츠앱
 
-GoogleSignin.configure({
-   webClientId: "447554062576-7glm9t0v5restn3b0kh0c8916vl7fa01.apps.googleusercontent.com",
-   offlineAccess: true,
-   forceCodeForRefreshToken: true,
-})
-
 */
-
-
+GoogleSignin.configure({
+    webClientId: "447554062576-7glm9t0v5restn3b0kh0c8916vl7fa01.apps.googleusercontent.com",
+    offlineAccess: true,
+    forceCodeForRefreshToken: true,
+})
 
 const SelectLogin = () => {
 
@@ -293,7 +290,7 @@ const SelectLogin = () => {
             </View>
             <View style={[{ flex: 9, alignItems: 'center', justifyContent: 'center' }]}>
                 <Image source={require('../../../assets/img/logo.png')} style={loginStyle.logo} />
-                <Text style={[style.text_re, { marginTop: 40, color: colors.GRAY_COLOR_2, fontSize: 14,textAlign:'center',height:35 }]}>
+                <Text style={[style.text_re, { marginTop: 40, color: colors.GRAY_COLOR_2, fontSize: 14, textAlign: 'center', height: 35 }]}>
                     {t('내주변 안전한 중고거래는 GETGO와 함께 시작하세요')}
                 </Text>
 
