@@ -15,19 +15,19 @@ import { initReactI18next } from "react-i18next";
 
 i18next.use(initReactI18next).init({
   compatibilityJSON: 'v3',
-  lng:'Ko',
+  lng: 'Ko',
   fallbackLng: "Ko",
   // defaultNS,
-  resources:{
-    ko:Korean,
-    Id:Indonesian,
-    En:English
+  resources: {
+    ko: Korean,
+    Id: Indonesian,
+    En: English
   },
   interpolation: {
     escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
   },
-  React:{
-    useSuspense:false
+  React: {
+    useSuspense: false
   }
 })
 

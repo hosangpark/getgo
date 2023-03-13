@@ -31,6 +31,7 @@
     "axios": "^1.2.2",
     "date-fns": "^2.29.3",
     "i18next": "^22.4.7",
+    "install": "^0.13.0",
     "lottie-ios": "3.4.0",
     "lottie-react-native": "^5.1.4",
     "native-base": "^3.4.25",

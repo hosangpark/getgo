@@ -11,7 +11,7 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../../components/types/routerTypes';
 
-import { Alert, SafeAreaView, ScrollView, Text, View, Image, StyleSheet, Button, TouchableOpacity, BackHandler, Platform } from 'react-native';
+import { Alert, SafeAreaView, ScrollView, Text, View, Image, StyleSheet, Button, TouchableOpacity, BackHandler, Platform, NativeModules } from 'react-native';
 import { colors } from '../../../assets/color';
 import style from '../../../assets/style/style';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -28,6 +28,7 @@ import { liff } from '@line/liff';
 import PushNotification from "react-native-push-notification";
 import Api from '../../../api/Api';
 import messaging from '@react-native-firebase/messaging';
+import { cusGetLang } from '../../../language/i18n';
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
@@ -65,9 +66,10 @@ const SelectLogin = () => {
         img: langList[0].img,
         value: langList[0].value,
     });
-    const selectLang = (item: SelectLangType) => {
+    const selectLang = async (item: SelectLangType) => {
         setSelLang({ ...item });
         i18n.changeLanguage(item.value)
+        await AsyncStorage.setItem('@lang', item.value)
         setIsOpen(false);
     }
 
@@ -254,8 +256,57 @@ const SelectLogin = () => {
             });
     };
 
+    const setDefaultLang = (v: String) => {
+        langList.forEach((item) => {
+            if (item.value == v) {
+                selectLang(item);
+                return false;
+            }
+        })
+    }
+
+    //기계 기본 언어로 설정
+    const CheckLanguage = async () => {
+        let newLang = '';
+
+        try {
+            await AsyncStorage.getItem('@lang').then(result => {
+                console.log('AsyncStorage lang', result)
+                if (result) {
+                    newLang = result;
+                    setDefaultLang(result);
+
+                    AsyncStorage.setItem('@lang', newLang)
+                    return;
+                }
+            });
+        } catch (error) {
+
+            return false;
+        }
+
+        if (!newLang) {
+            let deviceLanguage =
+                Platform.OS === 'ios'
+                    ? NativeModules.SettingsManager.settings.AppleLocale ||
+                    NativeModules.SettingsManager.settings.AppleLanguages[0] // iOS 13
+                    : NativeModules.I18nManager.localeIdentifier;
+
+            newLang = deviceLanguage == 'ko_KR' ? 'Ko' : deviceLanguage.indexOf('in') > -1 ? 'Id' : 'En'
+            console.log('default Lang', deviceLanguage, newLang);
+
+            await AsyncStorage.setItem('@lang', newLang)
+
+            setDefaultLang(newLang);
+        }
+    }
+
+
     React.useEffect(() => {
         Visitapi()
+
+        CheckLanguage()
+
     }, [])
 
     return (

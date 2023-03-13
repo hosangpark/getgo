@@ -66,6 +66,17 @@ const MessageRoom = ({ route }: Props) => {
     { type: 'date', value: '2022년 11월 23일' },
   ])
 
+  const reportChatMsg = (item) => {
+    navigation.navigate('ReportChat', {
+      room_idx: room_idx,
+      mt_declaration_idx: item.ctt_send_idx,
+      chat_idx: item.chat_idx,
+    });
+  }
+
+  const gofullscreen = (uri: any) => {
+    navigation.navigate('ItempostFullSlide', [{ uri: uri }]);
+  };
 
 
   const ChatRender = ({ item, index }: any) => {
@@ -87,7 +98,9 @@ const MessageRoom = ({ route }: Props) => {
               <Text style={[style.text_re, { marginTop: 5, fontSize: 12, color: colors.GRAY_COLOR_2 }]}>{t('오후')} {item.ctt_sdate}</Text>
             </View>
             :
-            <View style={{ alignItems: 'flex-start', marginBottom: 20, flex: 1 }}>
+            <TouchableOpacity style={{ alignItems: 'flex-start', marginBottom: 20, flex: 1 }}
+              onPress={() => item.ctt_file1 ? gofullscreen(Api.state.imageUrl + item.mt_image1) : null}
+              onLongPress={() => reportChatMsg(item)} activeOpacity={1}>
               <View style={{ flexDirection: 'row', flex: 1 }}>
                 <View style={{ flex: 1 }}>
                   <Image source={
@@ -101,7 +114,7 @@ const MessageRoom = ({ route }: Props) => {
                   <Text style={[style.text_re, { marginTop: 5, fontSize: 12, color: colors.GRAY_COLOR_2 }]}>{t('오후')} {item.ctt_sdate}</Text>
                 </View>
               </View>
-            </View>
+            </TouchableOpacity>
           }
         </>
       )
@@ -117,7 +130,9 @@ const MessageRoom = ({ route }: Props) => {
               <Text style={[style.text_re, { marginTop: 5, fontSize: 12, color: colors.GRAY_COLOR_2 }]}>{t('오후')} {item.ctt_sdate}</Text>
             </View>
             :
-            <View style={{ alignItems: 'flex-start', marginBottom: 20, flex: 1, }}>
+            <TouchableOpacity style={{ alignItems: 'flex-start', marginBottom: 20, flex: 1, }}
+              onPress={() => item.ctt_file1 ? gofullscreen(Api.state.imageUrl + item.ctt_file1) : null}
+              onLongPress={() => reportChatMsg(item)} activeOpacity={1}>
               <View style={{ flexDirection: 'row', flex: 1 }}>
                 <View style={{ flex: 1 }}>
                   <Image source={
@@ -131,7 +146,7 @@ const MessageRoom = ({ route }: Props) => {
                   <Text style={[style.text_re, { marginTop: 5, fontSize: 12, color: colors.GRAY_COLOR_2 }]}>{t('오후')} {item.ctt_sdate}</Text>
                 </View>
               </View>
-            </View>
+            </TouchableOpacity>
           }
         </>
       )

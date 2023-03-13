@@ -26,7 +26,7 @@ import {
 import style from '../../../assets/style/style';
 import { colors } from '../../../assets/color';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../../components/types/routerTypes';
 import { ItemPostHeader } from '../../../components/header/ItemPostHeader';
@@ -53,13 +53,15 @@ const Itempost = ({ route }: Props) => {
   const userInfo = useSelector((state: any) => state.userInfo);
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
 
-  const { t,i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   if (!route?.params?.pt_idx) {
     cusToast(t('잘못된 방법입니다'));
     navigation.goBack();
     return false;
   }
+
+  const pt_idx = route?.params?.pt_idx ?? ''
 
   const [selectReserve, setSelReserve] = React.useState<OptionType>({
     label: t('상태변경'),
@@ -174,18 +176,18 @@ const Itempost = ({ route }: Props) => {
       method: 'get',
       url: `/product/procudt-detail`,
       params: {
-        pt_idx: route.params.pt_idx,
+        pt_idx: pt_idx,
         mt_idx: userInfo.idx,
       },
     })
       .then(res => {
         console.log('res.data', res.data);
+
         if (!res.data?.data || !res.data?.data.length) {
           cusToast(t('삭제된 상품입니다.'));
           navigation.goBack();
           return false;
         }
-
 
         setitem(res.data);
         setWp_idx(res.data.wp_idx ?? null);
@@ -215,7 +217,7 @@ const Itempost = ({ route }: Props) => {
         url: '/product/chat_add',
         data: {
           mt_idx: userInfo.idx,
-          pt_idx: items.data[0].pt_idx,
+          pt_idx: pt_idx,
         },
       })
         .then(res => {
@@ -231,14 +233,12 @@ const Itempost = ({ route }: Props) => {
     }
   };
 
-  /** 상품 정보 가져오기 ${route.params.pt_idx}*/
-  React.useEffect(() => {
-    const subscribe = navigation.addListener('focus', () => {
-      getPostData();
-    });
+  /** 상품 정보 가져오기 ${route.params.pt_idx} 상품상세에서 인텐트를 받아도 이동하게 수정 */
+  useFocusEffect(React.useCallback(() => {
+    getPostData();
 
+  }, [pt_idx]))
 
-  }, []);
 
   /** 관심상품 등록&제거 */
   const heartOnOff = async (pt_idx: any) => {

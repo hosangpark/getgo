@@ -39,6 +39,13 @@ const ReportChat = ({ route }: Props) => {
 
   const [Report, setReport] = useState('')
 
+  const selectReport = (e: number) => {
+    let nextitem = ReportList.map((item, index) =>
+      index === e ? { reportlist: item.reportlist, report: true } : { reportlist: item.reportlist, report: false }
+    );
+    setReportList(nextitem);
+  }
+
   const [ReportList, setReportList] = useState([
     { reportlist: t('욕설을 해요'), report: false },
     { reportlist: t('성희롱을 해요'), report: false },
@@ -69,6 +76,8 @@ const ReportChat = ({ route }: Props) => {
       return;
     }
 
+    const chat_idx = route?.params?.chat_idx ?? ''
+
     await client({
       method: 'post',
       url: '/product/declaration_chat',
@@ -77,8 +86,9 @@ const ReportChat = ({ route }: Props) => {
         mt_idx: userInfo.idx,
         mt_declaration_idx: route.params.mt_declaration_idx,
         dct_reason: dct_reason,
-        dct_type: "1",
-        dct_reason_etc: text
+        dct_type: (chat_idx) ? '5' : "1",
+        dct_reason_etc: text,
+        chat_idx: chat_idx,
       }
     }).then(res => {
       navigation.goBack()
@@ -103,12 +113,14 @@ const ReportChat = ({ route }: Props) => {
 
         {ReportList.map((e, index) => {
           return (
-            <TouchableOpacity key={index} style={{ flexDirection: 'row', marginBottom: 15, paddingRight: 40 }} onPress={() => setReport(e.reportlist)}>
-              {e.reportlist === Report ?
-                <Image style={{ width: 22, height: 22 }} source={require('../../../assets/img/check_on.png')} /> :
-                <Image style={{ width: 22, height: 22, }} source={require('../../../assets/img/check_off.png')} />
+            <TouchableOpacity key={index} style={{ flexDirection: 'row', marginBottom: 15, paddingRight: 40 }} onPress={() => { setReport(e.reportlist); selectReport(index) }
+            }>
+              {
+                e.reportlist === Report ?
+                  <Image style={{ width: 22, height: 22 }} source={require('../../../assets/img/check_on.png')} /> :
+                  <Image style={{ width: 22, height: 22, }} source={require('../../../assets/img/check_off.png')} />
               }
-              <Text style={[style.text_me, { fontSize: 15, marginLeft: 10, color: colors.BLACK_COLOR_1 }]}>{t(e.reportlist)}</Text>
+              < Text style={[style.text_me, { fontSize: 15, marginLeft: 10, color: colors.BLACK_COLOR_1 }]} > {t(e.reportlist)}</Text>
             </TouchableOpacity>
           )
         })}
@@ -119,7 +131,7 @@ const ReportChat = ({ route }: Props) => {
         <Text style={[style.text_re, { fontSize: 13, color: colors.BLUE_COLOR_1, marginTop: 10, marginBottom: 100 }]}>* {t('허위 신고시 서비스 사용이 제한될 수 있습니다.')}</Text>
 
 
-      </ScrollView>
+      </ScrollView >
 
       <TouchableOpacity
         onPress={Complete}
@@ -130,7 +142,7 @@ const ReportChat = ({ route }: Props) => {
       </TouchableOpacity>
 
       <BackHandlerCom />
-    </SafeAreaView>
+    </SafeAreaView >
   );
 };
 
