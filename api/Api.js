@@ -503,21 +503,29 @@ class Api {
       let url_arr = urls.toString().split('?');
 
       if (url_arr[1]) {
+        const str = url_arr[1];
+        console.log('str=', str);
 
+        let params = {};
+        let pairs = str.split('&');
 
-        let str = url_arr[1];
-
-        // const str = 'abc=foo&def=%5Basf%5D&xyz=5';
-        const params = Object.fromEntries(new URLSearchParams(str));
-        console.log(params);
-
-        let obj = {};
-        params.split('&');
+        for (i in pairs) {
+          let split = pairs[i].split('=');
+          params[decodeURIComponent(split[0])] = decodeURIComponent(split[1]);
+        }
 
         return params;
       } else return false;
     }
   };
+
+  paramsToObject = (entries) => {
+    const result = {}
+    for (const [key, value] of entries) { // each 'entry' is a [key, value] tupple
+      result[key] = value;
+    }
+    return result;
+  }
 
   isValidHttpUrl = string => {
     try {

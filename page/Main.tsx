@@ -97,18 +97,37 @@ const Main = () => {
   //앱이 꺼져있다가 실행됬을떄 intent 처리
   const links = async () => {
 
-    const initialUrl = await Linking.getInitialURL();
-    console.log('initialUrl', initialUrl);
+    Linking.addEventListener('url', e => {
+      // const route = e.url.replace(/.*?\/\//g, '');
+      // console.log('Linking route', route);
+      const url = e.url;
+      const params: any = Api.urlGetCode(url);
+      const { code, type } = params;
 
+      console.log('Linking', url, params, code);
+
+      if (code && type == 'product') {
+
+        navigation.navigate('Itempost', { pt_idx: code });
+
+        return true;
+      } else return false;
+    })
+
+    const initialUrl = await Linking.getInitialURL();
+    // console.log('initialUrl', initialUrl);
     if (initialUrl) {
       const params: any = Api.urlGetCode(initialUrl);
-      let pt_idx = params.pt_idx ?? false;
+      // let pt_idx = params.pt_idx ?? false;
+      const { code, type } = params;
 
-      if (pt_idx) {
+      console.log('initialUrl', initialUrl, params);
+
+      if (code && type == 'product') {
         console.log('앱이 꺼져있다가 실행됬을떄 intent 처리', initialUrl);
 
         // navigation.replace('post', {family_code: fitCode});
-        navigation.navigate('Itempost', { pt_idx: pt_idx });
+        navigation.navigate('Itempost', { pt_idx: code });
 
         return true;
       } else return false;
