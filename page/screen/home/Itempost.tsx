@@ -257,7 +257,7 @@ const Itempost = ({ route }: Props) => {
   useFocusEffect(React.useCallback(() => {
     getPostData();
 
-  }, [pt_idx])
+  }, [pt_idx]))
 
 
   /** 관심상품 등록&제거 */
