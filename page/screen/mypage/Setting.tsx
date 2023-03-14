@@ -146,7 +146,7 @@ const MypageSetting = () => {
   const Change = async () => {
     i18n.changeLanguage(lange)
 
-    await AsyncStorage.setItem('@lang', item.value)
+    await AsyncStorage.setItem('@lang', i18n.language)
 
     setModalVisual(false);
   }
