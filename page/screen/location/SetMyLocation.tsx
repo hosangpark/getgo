@@ -167,11 +167,11 @@ const SetMyLocation = () => {
                                 mt_log:JSON.parse(myLocation.location1.mt_log),
                             },selectIdx:'1'})
                         
-                    }} style={[myLocation.select_location == myLocation.location1.mt_address ? style.green_button : style.white_button_gb,{flexDirection:'row',justifyContent:'space-between',}]}>
-                        <Text style={[style.text_b,{fontSize:15,color:myLocation.isLocAuth1 ? colors.GREEN_COLOR_2 : colors.GRAY_COLOR_2}]}>{myLocation.location1.mt_address}</Text>
+                    }} style={[myLocation.location1.mat_status == "Y" ? style.green_button : style.white_button_gb,{flexDirection:'row',justifyContent:'space-between',}]}>
+                        <Text style={[style.text_b,{fontSize:15,color:myLocation.location1.mat_status == "Y" ? colors.WHITE_COLOR : colors.GREEN_COLOR_2}]}>{myLocation.location1.mt_address}</Text>
                         <TouchableOpacity onPress={()=>{DeleteLocation(myLocation.location1.mat_idx)}}
                         style={{zIndex:10,width:30,height:30, alignItems:'flex-end',justifyContent:'center'}}>
-                            <Image source={myLocation.select_location == myLocation.location1.mt_address ? require('../../../assets/img/ico_close2_w.png') : require('../../../assets/img/ico_close2_g.png')} style={{width:25,height:25}}/>
+                            <Image source={myLocation.location1.mat_status == "Y" ? require('../../../assets/img/ico_close2_w.png'):require('../../../assets/img/ico_close2_g.png')} style={{width:25,height:25}}/>
                         </TouchableOpacity>
                     </TouchableOpacity>
                 :
@@ -194,11 +194,11 @@ const SetMyLocation = () => {
                             },selectIdx:'2'})
 
                     }}
-                    style={[myLocation.select_location == myLocation.location2.mt_address ? style.green_button : style.white_button_gb,{flexDirection:'row',justifyContent:'space-between',}]}>
-                        <Text style={[style.text_b,{fontSize:15,color:myLocation.isLocAuth2 ? colors.GREEN_COLOR_2 : colors.GRAY_COLOR_2}]}>{myLocation.location2.mt_address}</Text>
+                    style={[myLocation.location2.mat_status == "Y"? style.green_button : style.white_button_gb,{flexDirection:'row',justifyContent:'space-between',}]}>
+                        <Text style={[style.text_b,{fontSize:15,color:myLocation.location2.mat_status == "Y"? colors.WHITE_COLOR : colors.GREEN_COLOR_2}]}>{myLocation.location2.mt_address}</Text>
                         <TouchableOpacity onPress={()=>{DeleteLocation(myLocation.location2.mat_idx)}}
                         style={{zIndex:10,width:30,height:30, alignItems:'flex-end',justifyContent:'center'}}>
-                            <Image source={myLocation.select_location == myLocation.location2.mt_address ? require('../../../assets/img/ico_close2_w.png') : require('../../../assets/img/ico_close2_g.png')} style={{width:25,height:25}}/>
+                            <Image source={myLocation.location2.mat_status == "Y"? require('../../../assets/img/ico_close2_w.png') : require('../../../assets/img/ico_close2_g.png')} style={{width:25,height:25}}/>
                         </TouchableOpacity>
                     </TouchableOpacity>
                 :

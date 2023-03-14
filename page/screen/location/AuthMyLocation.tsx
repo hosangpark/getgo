@@ -43,7 +43,7 @@ const AuthMyLocation = ({route}:Props) => {
 
     const {selectIdx, setLocation} = route.params;
     const {mt_lat:nowLat,mt_log:nowLng} = setLocation;
-    const {t} = useTranslation()
+    const {t,i18n} = useTranslation()
 
     const myLocation = useSelector((state:any) => state.myLocation)
     const userInfo = useSelector((state:any) => state.userInfo);
@@ -65,7 +65,7 @@ const AuthMyLocation = ({route}:Props) => {
     const [distance , setDistance] = React.useState(0);
     const [selLongName, setSelLongName] = React.useState('');
     const [fulladdress, setFulladdress] = React.useState('');
-
+    const YorN = distance<25? "Y":"N"
     const onRegionChange = (region:RegionType) => {
         setSelLocation({
             mt_lat:region.latitude,
@@ -94,58 +94,33 @@ const AuthMyLocation = ({route}:Props) => {
             mat_area:selLongName,
             mat_lat:selLocation.mt_lat,
             mat_lon:selLocation.mt_log,
-            mat_status:"Y",
+            mat_status:YorN,
             }
             }).then(res=>{
-                if(selectIdx == "1"){
-                    let params={
-                        ...myLocation,
-                        isLocAuth1:true,
-                        select_location:1,
-                        location1:{
-                            ...myLocation.location1,
-                            mt_address:fulladdress,
-                            mt_area:selLongName,
-                            mt_lat:setLocation.mt_lat,
-                            mt_log:setLocation.mt_log,
-                            mat_idx:res.data.mat_idx
-                        }
-                    }
-                    dispatch(MyLocationAction.updateMyLocation(JSON.stringify(params)));
-                } else {
-                    let params={
-                        ...myLocation,
-                        isLocAuth2:true,
-                        select_location:2,
-                        location2:{
-                            ...myLocation.location2,
-                            mt_address:fulladdress,
-                            mt_area:selLongName,
-                            mt_lat:setLocation.mt_lat,
-                            mt_log:setLocation.mt_log,
-                            mat_status:'Y',
-                            mat_idx:res.data.mat_idx
-                        }
-                    }
-                    dispatch(MyLocationAction.updateMyLocation(JSON.stringify(params)));
-                }
+                SetLocationUpdate()
                 navigation.navigate('Main')
             }).catch(error=>{
             console.log(error)
             })
         }
 
-    /** server에 내지역삭제 */
-    const DeleteLocation = async(target:number) => {
+    /** server에 내지역수정 */
+    const ModifyLocation = async(target:number) => {
         await client({
           method: 'post',
-          url: '/user/area_delete',
+          url: '/user/area_edit',
           data:{
-            mat_idx:target,
+            mat_idx : target,
+            mat_area:selLongName,
+            mat_lat:selLocation.mt_lat,
+            mat_lon:selLocation.mt_log,
+            mat_status:YorN
           }}).then(
             res=>{
+                SetLocationUpdate()
+                cusToast(t(res.data.message))
+                navigation.navigate('Main')
                 setIsLoading(false)
-                setMyLocation()
             }
           ).catch(err=>console.log(err))
           setIsLoading(false)
@@ -167,16 +142,65 @@ const AuthMyLocation = ({route}:Props) => {
     }
 
     const ChangeComplete = () => {
-        if(distance > 25){
-            cusToast(t('25km이상 거리는 동네설정불가'))
+        if(selectIdx == '1' && myLocation.location1.mat_idx !== ''){
+            CheckChange(1)
+        } else if(selectIdx == '2' && myLocation.location2.mat_idx !== '') {
+            CheckChange(2)
         } else{
-            if(selectIdx == '1' && myLocation.location1.mat_idx !== ''){
-                DeleteLocation(myLocation.location1.mat_idx)
-            } else if(selectIdx == '2' && myLocation.location2.mat_idx !== '') {
-                DeleteLocation(myLocation.location2.mat_idx)
-            } else{
-                setMyLocation()
+            setMyLocation()
+        }
+    }
+
+    const CheckChange = (targetindex:number) =>{
+        let target = targetindex==1? myLocation.location1 : myLocation.location2
+        if(target.mat_status == 'Y'){
+            Alert.alert(`${target.mt_area}`+' '+t('인증이 삭제됩니다.'),t('해당지역으로 변경하시겠습니까?'),
+            [
+                {
+                    text:t('변경하기'),onPress:()=>{
+                        ModifyLocation(target.mat_idx)
+                    }
+                },
+                {
+                    text:t('취소'),onPress:()=>{
+
+                    }
+                }
+            ]
+            )
+        }
+    }
+
+    const SetLocationUpdate = ()=>{
+        if(selectIdx == "1"){
+            let params={
+                ...myLocation,
+                isLocAuth1:true,
+                select_location:1,
+                location1:{
+                    ...myLocation.location1,
+                    mt_address:fulladdress,
+                    mt_area:selLongName,
+                    mt_lat:selLocation.mt_lat,
+                    mt_log:selLocation.mt_log,
+                }
             }
+            dispatch(MyLocationAction.updateMyLocation(JSON.stringify(params)));
+        } else {
+            let params={
+                ...myLocation,
+                isLocAuth2:true,
+                select_location:2,
+                location2:{
+                    ...myLocation.location2,
+                    mt_address:fulladdress,
+                    mt_area:selLongName,
+                    mt_lat:selLocation.mt_lat,
+                    mt_log:selLocation.mt_log,
+                    mat_status:YorN,
+                }
+            }
+            dispatch(MyLocationAction.updateMyLocation(JSON.stringify(params)));
         }
     }
     
@@ -195,7 +219,8 @@ const AuthMyLocation = ({route}:Props) => {
     /** 드래그시 위치 */
     React.useEffect(()=>{
         checkAuth();
-    },[selLocation])
+        console.log(selLocation)
+    },[distance])
 
     /** 거리계산 */
     React.useEffect(()=>{
@@ -224,36 +249,40 @@ const AuthMyLocation = ({route}:Props) => {
                         latitudeDelta: 0.1,
                         longitudeDelta: 0.1,
                     }}
+                    showsUserLocation={true}
+                    showsMyLocationButton={true}
                     rotateEnabled={false}
                     toolbarEnabled={false}
                     onPress={(e)=>{onRegionChange(e.nativeEvent.coordinate)}}
                     onRegionChangeComplete={onRegionChange}
                 >
-                <Marker
+                {/* <Marker
                     coordinate={{latitude: Number(initialLocation.mt_lat), longitude: Number(initialLocation.mt_log)}}
                 >
                     <Image style={{width:30,height:30}} resizeMode={'contain'} source={require('../../../assets/img/marker_my.png')}/>
-                </Marker>
+                </Marker> */}
                 <Marker
                     coordinate={{latitude: selLocation.mt_lat, longitude: selLocation.mt_log}}
                 >
                     <Image style={{width:30,height:50}} resizeMode={'contain'} source={require('../../../assets/img/marker_town.png')}/>
                 </Marker>
-                <View style={{marginTop:10,marginLeft:10}}>
+                <View style={{}}>
                     <Text style={{color:'blue'}}>{t('현재위치와의 거리')} {distance} {t('km')}</Text>
                 </View>
                 </MapView>
-                {selLongName == myLocation.location1.mt_area || selLongName == myLocation.location2.mt_area?
+                {distance < 25 ?
                 <>
                 <View style={{alignItems:'center',marginTop:20,width:'100%'}}>
                     <Text style={[style.text_sb,{fontSize:18,color:colors.BLACK_COLOR_2}]}>{t('현재 위치가')}</Text>
-                    <Text style={[style.text_sb,{fontSize:18,color:colors.BLACK_COLOR_2}]}>{t('내동네로 설정한')}<Text style={{color:colors.GREEN_COLOR_2}}>`{selLongName}`</Text>{t('에 있습니다.')}</Text>
+                    <Text style={[style.text_sb,{fontSize:18,color:colors.BLACK_COLOR_2}]}>
+                        {/* {t('내동네로 설정한')} */}
+                        <Text style={{color:colors.GREEN_COLOR_2}}>`{selLongName}`</Text>{t('에 있습니다.')}</Text>
                 </View>
                 <View style={{padding:20}}>
                     <CustomButton 
                         buttonType='green'
                         title={t('동네인증완료')}
-                        action={()=>navigation.navigate('Main')}
+                        action={ChangeComplete}
                         disable={false}
                     />
                 </View>

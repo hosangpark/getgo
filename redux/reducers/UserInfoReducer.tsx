@@ -12,6 +12,7 @@ const defaultState:userInfoType = {
     mt_email:'',
     sell_count:0,
     trade_com_count:0,
+    language:'',
     token:'',
     islogin:false,
 }
@@ -30,6 +31,7 @@ export const UserInfo = (state = defaultState, action:any) => {
                 mt_email:action.mt_email,
                 sell_count:action.sell_count,
                 trade_com_count:action.trade_com_count,
+                language:action.language,
                 token:action.token,
                 islogin:true,
             };
@@ -44,6 +46,7 @@ export const UserInfo = (state = defaultState, action:any) => {
                 mt_email:action.mt_email,
                 sell_count:action.sell_count,
                 trade_com_count:action.trade_com_count,
+                language:action.language,
                 token:action.token,
                 islogin:action.islogin,
             };
