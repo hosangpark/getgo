@@ -32,7 +32,7 @@ import Api from '../../../api/Api';
  * LTI update could not be added via codemod */
 
 const Login = () => {
-    const { t,i18n } = useTranslation()
+    const { t } = useTranslation()
     const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
 
     const [phoneOptions] = React.useState([
@@ -128,7 +128,7 @@ const Login = () => {
                 mt_app_token: Api.state.mb_fcm
             }
         }).then(res => {
-            setAutoUserData({ idx: res.data.user_idx, mt_app_token: Api.state.mb_fcm,language:i18n.language })
+            setAutoUserData({ idx: res.data.user_idx, mt_app_token: Api.state.mb_fcm })
             navigation.navigate('SelectLogin')
             cusToast(t(res.data.message))
         }).catch(error => {
