@@ -181,8 +181,8 @@ const SearchLocation = ({ route }: Props) => {
             if (type == 'join') {
                 navigation.navigate('JoinStep2', {
                     area: item.zone,
-                    mt_lat: nowLocation.mt_lat,
-                    mt_log: nowLocation.mt_log,
+                    mt_lat: res.data.mt_lat,
+                    mt_log: res.data.mt_log,
                     mt_type: mt_type ?? 1,
                     sns_key: sns_key ?? '',
                 })
@@ -243,9 +243,6 @@ const SearchLocation = ({ route }: Props) => {
                         </TouchableOpacity>
                     }
                 </View>
-                {isLoading &&
-                    <LoadingIndicator />
-                }
                 {searchType &&
                     <View style={{ marginTop: 40, flex: 1 }}>
                         {searchType == 'location' ?

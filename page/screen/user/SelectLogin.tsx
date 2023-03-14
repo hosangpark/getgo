@@ -97,7 +97,7 @@ const SelectLogin = () => {
             }).then(res => {
                 console.log('resdata', res.data.user_data);
                 dispatch(UserInfoAction.userlogin(JSON.stringify(res.data.user_data)));
-                setAutoUserData({ idx: res.data.user_idx, mt_app_token: Api.state.mb_fcm })
+                setAutoUserData({ idx: res.data.user_idx, mt_app_token: Api.state.mb_fcm, language:selLang.value })
 
             }).catch(error => {
                 if (error.response) {

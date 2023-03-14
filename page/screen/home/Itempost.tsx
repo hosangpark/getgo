@@ -52,7 +52,7 @@ type Props = StackScreenProps<MainNavigatorParams, 'Itempost'>;
 const Itempost = ({ route }: Props) => {
   const userInfo = useSelector((state: any) => state.userInfo);
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
-
+  const myLocation = useSelector((state: any) => state.myLocation);
   const { t,i18n } = useTranslation();
 
   if (!route?.params?.pt_idx) {
@@ -205,11 +205,15 @@ const Itempost = ({ route }: Props) => {
     //   cusToast(t('이미 거래가 완료된 상품입니다.'));
     //   return false;
     // }
-
-    if (userInfo.idx == items.data[0].mt_seller_idx) {
-      //채팅응답
-      navigation.navigate('Reserve_choice', { target, type: 'reserveChat' });
+    if(myLocation.select_location == 1 && myLocation.location1.mat_status !== "Y" ){
+      Certified()
+    } else if(myLocation.select_location == 2 && myLocation.location2.mat_status !== "Y"){
+      Certified()
     } else {
+      if (userInfo.idx == items.data[0].mt_seller_idx) {
+        //채팅응답
+        navigation.navigate('Reserve_choice', { target, type: 'reserveChat' });
+      } else {
       await client({
         method: 'post',
         url: '/product/chat_add',
@@ -228,8 +232,20 @@ const Itempost = ({ route }: Props) => {
         .catch(error => {
           console.log(error);
         });
-    }
+    }}
   };
+
+  const Certified = () =>{
+    Alert.alert(t('현재동네 인증이 되어있지않습니다'),'',
+      [
+        {text:t('인증하기'), onPress:()=>{
+          navigation.navigate('SetMyLocation')
+        }},
+        {
+          text:t('취소'),onPress:()=>{}
+        }
+      ])
+  }
 
   /** 상품 정보 가져오기 ${route.params.pt_idx}*/
   React.useEffect(() => {

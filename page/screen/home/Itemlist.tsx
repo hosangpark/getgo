@@ -66,8 +66,27 @@ const ItemList = ({ setTabIndex }: itemListType) => {
 
 
   const Itemupload = () => {
-    navigation.navigate('Itemupload', { type: 'ProductUpload', pt_idx: 0 });
+    if(myLocation.select_location == 1 && myLocation.location1.mat_status !== "Y" ){
+      Certified()
+    } else if(myLocation.select_location == 2 && myLocation.location2.mat_status !== "Y"){
+      Certified()
+    } else {
+      navigation.navigate('Itemupload', { type: 'ProductUpload', pt_idx: 0 });
+    }
   };
+
+  const Certified = () =>{
+    Alert.alert(t('현재동네 인증이 되어있지않습니다'),'',
+      [
+        {text:t('인증하기'), onPress:()=>{
+          navigation.navigate('SetMyLocation')
+        }},
+        {
+          text:'취소',onPress:()=>{
+          }
+        }
+      ])
+  }
 
   const backAction = () => {
     var timeout;
@@ -176,7 +195,7 @@ const ItemList = ({ setTabIndex }: itemListType) => {
     React.useCallback(() => {
 
       rerendering();
-
+      
       return () => { };
     }, [myLocation.location1.mt_area, myLocation.location2.mt_area, myLocation.select_location]),
   );

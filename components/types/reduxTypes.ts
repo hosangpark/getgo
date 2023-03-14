@@ -10,6 +10,7 @@ export type userInfoType = {
     mt_email:string;
     sell_count:number;
     trade_com_count:number;
+    language:string,
     token:string,
     islogin:boolean,
 }
