@@ -76,7 +76,7 @@ const AuthMyLocation = ({route}:Props) => {
 
     const checkAuth = () => {
         fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + (selLocation.mt_lat) + ',' + (selLocation.mt_log)
-        + '&key=' + 'AIzaSyC-iZoncRIA4y1xF8zFRkTT2Kp8A3CPC0o' + '&language=ko')
+        + '&key=' + 'AIzaSyC-iZoncRIA4y1xF8zFRkTT2Kp8A3CPC0o' + `&language=${i18n.language}`)
         .then((response) => response.json())
         .then((responseJson) => {
             setSelLongName(responseJson.results[0].address_components[1].long_name);
@@ -168,6 +168,8 @@ const AuthMyLocation = ({route}:Props) => {
                 }
             ]
             )
+        } else {
+            ModifyLocation(target.mat_idx)
         }
     }
 

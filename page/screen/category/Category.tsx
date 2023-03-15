@@ -112,9 +112,9 @@ const Category = ({ setTabIndex }: MainHeaderType) => {
           renderItem={({ item }) =>
             <View style={{ width: '25%', justifyContent: 'center', alignItems: 'center' }} key={item.ct_idx}>
               <TouchableOpacity onPress={() => Category_Filter(item)}
-                style={{ justifyContent: 'flex-start', alignItems: 'center', height: i18n.language==='Ko'? 120:140 }}
+                style={{ justifyContent: 'flex-start', alignItems: 'center', height: i18n.language==='Ko'? 120:145 }}
               >
-                {item.ct_file1 ? <Image style={{ width: 68, height: 68, marginBottom: 10 }} source={{ uri: Api.state.imageUrl + item.ct_file1 }} /> : null}
+                {item.ct_file1 ? <Image style={{ width: 68, height: 68, marginBottom: i18n.language==='Ko'? 10:0 }} source={{ uri: Api.state.imageUrl + item.ct_file1 }} /> : null}
 
                 <Text style={[style.text_sb, { fontSize: 14, color: colors.BLACK_COLOR_1, paddingHorizontal:5,textAlign:'center' }]}>{t(item.ct_name)}</Text>
               </TouchableOpacity>

@@ -81,6 +81,7 @@ const SettingModifyPhone = ({route}:any) => {
                 console.log(res.data)
                 // setAuthCode(res.data.auth_number);
                 setAuthCode('1234');
+                setInputAuth('1234')
               }).catch(error=>{
                 console.log(error)
               })
@@ -122,6 +123,12 @@ const getAuthPhoneChange = async () => {
             auth_number:authCode,
         }
         }).then(res=>{
+            navigation.navigate('ChangePhoneResult',{
+                beforePhone:PrevPhoneNumber,
+                beforeAreaCode:PrevAreaNumber,
+                afterPhone:inputLoginInfo.mt_hp,
+                afterAreaCode:inputLoginInfo.areaCode,
+            })
         console.log(res.data)
         }).catch(error=>{
         console.log(error)
@@ -131,12 +138,6 @@ const getAuthPhoneChange = async () => {
 /** 번호변경 성공&확인 화면이동 */
 const changePhoneAccess = () => {
         getAuthPhoneChange();
-    navigation.navigate('ChangePhoneResult',{
-        beforePhone:PrevPhoneNumber,
-        beforeAreaCode:PrevAreaNumber,
-        afterPhone:inputLoginInfo.mt_hp,
-        afterAreaCode:inputLoginInfo.areaCode,
-    })
 }
 
 React.useEffect(()=>{
@@ -195,7 +196,7 @@ React.useEffect(()=>{
                                <Text style={btnStyle.green_font}>
                                 {t('인증번호 다시받기')}
                                 </Text>
-                                <View style={{ width: 45, marginLeft: 5 }}>
+                                <View style={{ width: 55, marginLeft: 5 }}>
                                     <Timer
                                         mm={5}
                                         ss={0}

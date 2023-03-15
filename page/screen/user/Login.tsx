@@ -209,7 +209,7 @@ const Login = () => {
                             >
                                 <Text style={btnStyle.green_font}>{t('인증번호 다시받기')}
                                 </Text>
-                                <View style={{ width: 50, marginLeft: 5 }}>
+                                <View style={{ width: 55, marginLeft: 5 }}>
                                     <Timer
                                         mm={5}
                                         ss={0}

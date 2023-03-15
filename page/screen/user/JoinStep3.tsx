@@ -27,6 +27,7 @@ import * as UserInfoAction from '../../../redux/actions/UserInfoAction';
 import client from '../../../api/client';
 import logsStorage from '../../../components/utils/logStorage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Textreplace } from '../../../components/utils/funcKt';
 
 // import { RootState } from '../../../redux/reducers';
 // import { useAuthActions } from '../../../redux/actions/UserInfoAction';
@@ -44,7 +45,7 @@ const JoinStep3 = () => {
 
     const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
     const { t } = useTranslation()
-    const [inputName, setInputName] = React.useState();
+    const [inputName, setInputName] = React.useState('');
     const [isOverName, setIsOverName] = React.useState(false);
     const userInfo = useSelector((state: any) => state.userInfo);
     const dispatch = useDispatch()
@@ -74,40 +75,42 @@ const JoinStep3 = () => {
             }).catch(error => {
                 console.log("getUserNickName")
             })
-
-
-
         }
     }
 
     /** 닉네임 중복체크 */
     const IdCheck = async () => {
         console.log(userInfo)
-        await client({
-            method: 'post',
-            url: '/user/nickname-check',
-            data: {
-                mt_idx: userInfo.idx,
-                mt_nickname: inputName,
+        if(Textreplace(inputName)){
+            await client({
+                method: 'post',
+                url: '/user/nickname-check',
+                data: {
+                    mt_idx: userInfo.idx,
+                    mt_nickname: inputName,
+                }
+            }).then(res =>
+                Alert.alert(
+                    t(res.data.message), '', [
+                    {
+                        text: t('계속하기'),
+                        onPress: () => { NextPage() },
+                    },
+                    {
+                        text: t('취소'),
+                        onPress: () => { },
+                        style: 'cancel',
+                    }
+                ])
+            ).catch(error => {
+                console.log(error)
+                setIsOverName(true)
             }
-        }).then(res =>
-            Alert.alert(
-                res.data.message, '', [
-                {
-                    text: t('취소'),
-                    onPress: () => { },
-                    style: 'cancel',
-                },
-                {
-                    text: t('계속하기'),
-                    onPress: () => { NextPage() },
-                },
-            ])
-        ).catch(error => {
-            console.log(error)
-            setIsOverName(true)
-        }
-        )
+            )
+          } else {
+            Alert.alert(t('특수문자,단일자음,빈칸은 입력불가합니다.'))
+          }
+        
     }
     const Cancel = () => {
         navigation.navigate('SelectLogin');

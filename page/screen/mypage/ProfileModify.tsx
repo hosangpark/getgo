@@ -30,6 +30,7 @@ import client from '../../../api/client';
 import logsStorage from '../../../components/utils/logStorage';
 import cusToast from '../../../components/navigation/CusToast';
 import Api, { NodataView } from '../../../api/Api';
+import { Textreplace } from '../../../components/utils/funcKt';
 
 
 
@@ -51,8 +52,6 @@ const MypageSetting = () => {
   const userInfo = useSelector((state: any) => state.userInfo);
   const myLocation = useSelector((state: any) => state.myLocation);
   const dispatch = useDispatch()
-
-  console.log('userInfo', userInfo)
 
   const getProfileDetailData = async () => {
     await client({
@@ -164,37 +163,32 @@ const MypageSetting = () => {
       } else if (profileimg == undefined) {
         /** 닉네임만 변경 */
         /** 닉네임 중복체크 */
-
-        await client({
-          method: 'post',
-          url: '/user/nickname-check',
-          data: {
-            mt_idx: userInfo.idx,
-            mt_nickname: modifyName,
-          }
-        }).then(res => {
-          getUserNickName("onlynickname")
-        }).catch(error => {
-
-          console.log('err', error);
-        });
+        if(Textreplace(modifyName)){
+          NicknameCheck("onlynickname")
+        } else {
+          Alert.alert(t('특수문자,단일자음,빈칸은 입력불가합니다.'))
+        }
       } else {
         /** 닉네임 & 사진 둘다 변경 */
-
-        await client({
-          method: 'post',
-          url: '/user/nickname-check',
-          data: {
-            mt_idx: userInfo.idx,
-            mt_nickname: modifyName,
-          }
-        }).then(res => {
-          getUserNickName("both");
-        }).catch(
-          err => console.log(err)
-        );
+        NicknameCheck("both")
       }
     }
+  }
+
+  const NicknameCheck = async(type:string)  =>{
+    await client({
+      method: 'post',
+      url: '/user/nickname-check',
+      data: {
+        mt_idx: userInfo.idx,
+        mt_nickname: modifyName,
+      }
+    }).then(res => {
+      getUserNickName(type)
+    }).catch(error => {
+
+      console.log('err', error);
+    });
   }
 
   const enterReview = (item: ReviewItemType) => {

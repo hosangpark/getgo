@@ -207,3 +207,23 @@ export const validateEmail = (email: any) => {
     const regex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
     return regex.test(email);
 }
+
+export const Textreplace = (text:string) =>{
+        // 특수문자 정규식 변수(공백 미포함)
+        var replaceChar = /[~!@\#$%^&*\()\-=+_'\;<>0-9\/.\`:\"\\,\[\]?|{}]/gi;
+ 
+        // 완성형 아닌 한글 정규식
+        var replaceNotFullKorean = /[ㄱ-ㅎㅏ-ㅣ]/gi;
+        
+        // 허용할 특수문자는 여기서 삭제하면 됨
+        var regExp = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/gi; 
+        // 지금은 띄어쓰기도 특수문자 처리됨 참고하셈
+        if( regExp.test(text) || replaceNotFullKorean.test(text) ){
+
+            return false
+            // text = text.substring( 0 , text.length - 1 ); // 입력한 특수문자 한자리 지움
+
+        } 
+
+        return true
+}
