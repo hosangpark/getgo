@@ -6,10 +6,10 @@
  * @flow strict-local
  */
 
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import {
-    Alert,
-  SafeAreaView, ScrollView, Text, View,StyleSheet, FlatList, Image
+  Alert,
+  SafeAreaView, ScrollView, Text, View, StyleSheet, FlatList, Image
 } from 'react-native';
 import style from '../../../assets/style/style';
 import { colors } from '../../../assets/color';
@@ -34,59 +34,60 @@ import cusToast from '../../../components/navigation/CusToast';
 
 
 
-const ReviewBuy = ({items,ReviewCount,Remove,rt_type}:{items:any,ReviewCount:number,Remove:(e:number)=>void,rt_type:string}) => {
+const ReviewBuy = ({ items, ReviewCount, Remove, rt_type, data_reload }: { items: any, ReviewCount: number, Remove: (e: number) => void, rt_type: string, data_reload: () => void }) => {
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
-  const {t} = useTranslation()
-  const userInfo = useSelector((state:any) => state.userInfo);
-  
-  const deleteReview = async(target:ReviewItemType) => {
+  const { t } = useTranslation()
+  const userInfo = useSelector((state: any) => state.userInfo);
+
+  const deleteReview = async (target: ReviewItemType) => {
     await client({
       method: 'get',
-      url: `/user/reviews-received?rt_idx=${target}`,
-      }).then(
-        res=>{
-          cusToast(t(res.data.message))
-        }
-      ).catch(
-        err=>console.log(err)
+      url: `/user/reviews-received-delete?rt_idx=${target}`,
+    }).then(
+      res => {
+        cusToast(t(res.data.message))
+        data_reload();
+      }
+    ).catch(
+      err => console.log(err)
     )
   };
-  
+
   const [listmodal, setListmodal] = useState({})
-  const Toggle = (e:number)=>{
+  const Toggle = (e: number) => {
     setListmodal(e)
-    if(e == listmodal){
+    if (e == listmodal) {
       setListmodal(false)
     }
   }
 
-    return (
-        <SafeAreaView style={{flex:1,backgroundColor:'#fff'}}>
-            <ScrollView style={{paddingHorizontal:20}}>
-                <View style={{flexDirection:'row',paddingVertical:20}}>
-                  <Image style={{width:22,height:22,marginRight:7}} source={require('../../../assets/img/ico_review.png')}/>
-                  <Text style={[style.text_b,{fontSize:17,color:colors.BLACK_COLOR_2,marginRight:5}]}>
-                  {t('구매자 후기')}
-                  </Text>
-                  <Text style={[style.text_b,{fontSize:17,color:colors.GREEN_COLOR_3}]}>
-                    {ReviewCount}
-                  </Text>
-                </View>
-                {items == undefined ?
-                  <LoadingIndicator/>
-                :
-                <View>
-                  {items.map((item:any)=>{
-                  return(
-                    <ReviewList key={item.rt_idx} item={item} deleteReview={deleteReview} Toggle={Toggle} 
-                    listmodal={listmodal} setListmodal={setListmodal} />
-                    )
-                  })}
-                  <View style={{height:80}}></View>
-                </View>
-                }
-            </ScrollView>
-            {/* <FlatList data={items}
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <ScrollView style={{ paddingHorizontal: 20 }}>
+        <View style={{ flexDirection: 'row', paddingVertical: 20 }}>
+          <Image style={{ width: 22, height: 22, marginRight: 7 }} source={require('../../../assets/img/ico_review.png')} />
+          <Text style={[style.text_b, { fontSize: 17, color: colors.BLACK_COLOR_2, marginRight: 5 }]}>
+            {t('구매자 후기')}
+          </Text>
+          <Text style={[style.text_b, { fontSize: 17, color: colors.GREEN_COLOR_3 }]}>
+            {ReviewCount}
+          </Text>
+        </View>
+        {items == undefined ?
+          <LoadingIndicator />
+          :
+          <View>
+            {items.map((item: any) => {
+              return (
+                <ReviewList key={item.rt_idx} item={item} deleteReview={deleteReview} Toggle={Toggle}
+                  listmodal={listmodal} setListmodal={setListmodal} />
+              )
+            })}
+            <View style={{ height: 80 }}></View>
+          </View>
+        }
+      </ScrollView>
+      {/* <FlatList data={items}
               style={{paddingHorizontal:20,}}
               ListHeaderComponent={
                 <View style={{flexDirection:'row',paddingVertical:20}}>
@@ -106,9 +107,9 @@ const ReviewBuy = ({items,ReviewCount,Remove,rt_type}:{items:any,ReviewCount:num
                 />
               )}
             /> */}
-            <BackHandlerCom />
-        </SafeAreaView>
-    );
+      <BackHandlerCom />
+    </SafeAreaView>
+  );
 };
 
 export default ReviewBuy;

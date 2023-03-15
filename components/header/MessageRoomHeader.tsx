@@ -35,9 +35,11 @@ interface MessageRoomItemType {
     },
     getRoomData: () => void
     tradeDoneSend: () => void
+    targetOutSend: () => void
+
 }
 
-export const MessageRoomHeader = ({ item, getRoomData, tradeDoneSend }:
+export const MessageRoomHeader = ({ item, getRoomData, tradeDoneSend, targetOutSend }:
     MessageRoomItemType) => {
 
     const { t, i18n } = useTranslation()
@@ -60,7 +62,7 @@ export const MessageRoomHeader = ({ item, getRoomData, tradeDoneSend }:
         navigation.navigate('SendReview', { item: { room_idx: room_idx } })
     }
     const ReviewDetail = (rt_idx: number) => {
-        navigation.navigate('ReviewDetail', { rt_idx: rt_idx })
+        navigation.navigate('ReviewDetail', { rt_idx: rt_idx, isMy: true })
     }
 
 
@@ -80,6 +82,8 @@ export const MessageRoomHeader = ({ item, getRoomData, tradeDoneSend }:
                             url: `/product/chat-list-delete?chr_idx=${item.room_idx}`
                         }).then(res => {
                             cusToast(t(res.data.message))
+                            //상대방 채팅방 아웃
+                            targetOutSend();
                             navigation.goBack()
                         }).catch(err => {
                             console.log(err)
@@ -127,7 +131,9 @@ export const MessageRoomHeader = ({ item, getRoomData, tradeDoneSend }:
             .then(res => {
                 cusToast(t(res.data.message));
                 getRoomData(item.room_idx);
-                if (val.sel_id == 3) tradeDoneSend(item.room_idx);
+
+                // console.log('eeeee', item.room_idx, val.sel_id == 3)
+                if (val.sel_id == 3) tradeDoneSend();
             })
             .catch(err => console.log(err));
     };
@@ -198,7 +204,7 @@ export const MessageRoomHeader = ({ item, getRoomData, tradeDoneSend }:
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Image style={{ width: 70, height: 70, borderRadius: 6 }} source={{ uri: 'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000/uploads/' + item.tradeImg }} />
                         <View style={{ marginLeft: 15 }}>
-                            {item.mt_seller_idx === userInfo.idx && item.salestate != 3 ?
+                            {item.mt_seller_idx === userInfo.idx /* && item.salestate != 3*/ ?
                                 <View style={{ width: 100, height: 15, marginBottom: 18 }}>
                                     <SelectBox
                                         selOption={selectReserve}

@@ -1,12 +1,12 @@
-package com.dmonster.getgo.newarchitecture;
+package com.daehands.getgo.newarchitecture;
 
 import android.app.Application;
 
 import androidx.annotation.NonNull;
 
-import com.dmonster.getgo.BuildConfig;
-import com.dmonster.getgo.newarchitecture.components.MainComponentsRegistry;
-import com.dmonster.getgo.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.daehands.getgo.BuildConfig;
+import com.daehands.getgo.newarchitecture.components.MainComponentsRegistry;
+import com.daehands.getgo.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;

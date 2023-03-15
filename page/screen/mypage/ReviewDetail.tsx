@@ -27,6 +27,10 @@ export default function ReviewDetail({ route }: any) {
   const [rt_type, setRt_type] = React.useState('');
   const [reviewDetailData, setReviewDetailData] = React.useState<ReviewItemDetailType>([])
 
+  const isMy = route?.params?.isMy ?? false;
+
+  console.log('route', isMy)
+
   const getReviewDetailData = async () => {
     await client({
       method: 'get',
@@ -56,17 +60,31 @@ export default function ReviewDetail({ route }: any) {
       [
         {
           text: t('삭제'), onPress: async () => {
-            await client({
-              method: 'get',
-              url: `/user/reviews-received?rt_idx=${route.params.rt_idx}`,
-            }).then(
-              res => {
-                cusToast(t(res.data.message))
-                navigation.goBack()
-              }
-            ).catch(
-              err => console.log(err)
-            )
+            if (isMy) {
+              await client({
+                method: 'get',
+                url: `/user/reviews-received?rt_idx=${route.params.rt_idx}`,
+              }).then(
+                res => {
+                  cusToast(t(res.data.message))
+                  navigation.goBack()
+                }
+              ).catch(
+                err => console.log(err)
+              )
+            } else {
+              await client({
+                method: 'get',
+                url: `/user/reviews-received-delete?rt_idx=${route.params.rt_idx}`,
+              }).then(
+                res => {
+                  cusToast(t(res.data.message))
+                  navigation.goBack()
+                }
+              ).catch(
+                err => console.log(err)
+              )
+            }
           }, style: 'cancel'
         },
         {
@@ -86,7 +104,7 @@ export default function ReviewDetail({ route }: any) {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-      <BackHeader title={t('보낸 후기 보기')} />
+      <BackHeader title={isMy ? t('보낸 후기 보기') : t('받은 후기 보기')} />
       <ScrollView style={{ paddingHorizontal: 20 }}>
         <View style={{ backgroundColor: colors.GRAY_COLOR_1, flexDirection: 'row', padding: 20, borderRadius: 10, marginVertical: 20 }}>
           {reviewDetailData.pt_image1 ? <Image style={{ width: 60, height: 60, borderRadius: 5, marginRight: 10 }} source={{ uri: Api.state.imageUrl + reviewDetailData.pt_image1 }} /> : null}

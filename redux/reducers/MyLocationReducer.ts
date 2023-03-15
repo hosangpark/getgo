@@ -22,7 +22,7 @@ const defaultState: any = {
         mat_idx: ''
     },
     isLocAuth2: false,
-    select_location: 1,
+    select_location: 0,
 }
 
 export const MyLocation = (prevState: any, action: any) => {

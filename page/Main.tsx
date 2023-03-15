@@ -66,9 +66,12 @@ const Main = () => {
       if (remoteMessage.data?.type == 'chat-rev' || remoteMessage.data?.type == 'chat-send') {
         //채팅수락알림, 메시지도착알림
         navigation.navigate('MessageRoom', { items: { room_id: remoteMessage.data.room_idx }, type: 'messageChat' });
-      } else if (remoteMessage.data?.type == 'chat_add' || remoteMessage.data?.type == 'product_edit') {
+      } else if (remoteMessage.data?.type == 'chat_add' || remoteMessage.data?.type == 'product_edit' || remoteMessage.data?.type == 'product_add') {
         //채팅요청알림, 상품금액변경알림
         navigation.navigate('Itempost', { pt_idx: remoteMessage.data.pt_idx });
+      } else if (remoteMessage.data?.type == 'review_add') {
+        //후기수신
+        navigation.navigate('Allreview');
       }
     } else {
       console.log('alert');
