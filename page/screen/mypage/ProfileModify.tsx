@@ -9,7 +9,7 @@
 import React, { useState } from 'react';
 import {
   Alert, Keyboard,
-  SafeAreaView, Image, Text, View, FlatList, ScrollView, ActivityIndicator, Platform
+  SafeAreaView, Image, Text, View, FlatList, ScrollView, ActivityIndicator, Platform,PermissionsAndroid
 } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import style from '../../../assets/style/style';
@@ -22,7 +22,7 @@ import { CustomButton } from '../../../components/layout/CustomButton';
 import { ReviewList } from '../../../components/layout/ReviewList';
 import { ReviewItemType } from '../../../components/types/componentType';
 import { BackHandlerCom } from '../../../components/BackHandlerCom';
-import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
+import { ImagePickerResponse, launchImageLibrary,launchCamera } from 'react-native-image-picker';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import * as UserInfoAction from '../../../redux/actions/UserInfoAction';
@@ -84,20 +84,48 @@ const MypageSetting = () => {
   };
 
   const ModifyImage = () => {
-    launchImageLibrary(
-      {
-        mediaType: 'photo',
-        maxWidth: 512,
-        maxHeight: 512,
-        selectionLimit: 1,
-      },
-      (res: any) => {
-        if (res.didCancel != true) {
-          setProfileimg(res.assets)
-          console.log('ModifyImage')
-        }
+    PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,{
+        title:"App Camera Permission",
+        message:"App needs",
+        buttonPositive:'OK',
+        buttonNegative:'Cancel',
       }
     )
+    Alert.alert('사진?','사진첩?',[
+      {text:'사진',onPress:()=>{
+        launchCamera({
+          mediaType : 'photo', 
+          cameraType : 'back', 
+        },(res) =>{
+          (res: any) => {
+            console.log(res)
+          if (res.didCancel != true) {
+            setProfileimg(res.assets)
+            console.log('ModifyImage')
+          }
+        }
+        }
+        );
+      }},
+      {text:'사진첩',onPress:()=>{
+        launchImageLibrary(
+          {
+            mediaType: 'photo',
+            maxWidth: 512,
+            maxHeight: 512,
+            selectionLimit: 1,
+          },
+          (res: any) => {
+            console.log(res)
+            if (res.didCancel != true) {
+              setProfileimg(res.assets)
+              console.log('ModifyImage')
+            }
+          }
+        )
+      }}
+    ])
   }
 
 
