@@ -32,6 +32,8 @@ export default function SendReview({ route }: Props) {
 
   const userInfo = useSelector(state => state.userInfo)
 
+  const [targetNickName, setTargetNickName] = useState('')
+
   const [choose, setChoose] = useState(0)
 
   const bad_choice = () => {
@@ -78,6 +80,11 @@ export default function SendReview({ route }: Props) {
       method: 'get',
       url: `/product/review_basic?room_idx=${route.params?.item?.room_idx}&mt_idx=${userInfo.idx}`
     }).then(res => {
+
+      console.log('res.data', res.data);
+
+      setTargetNickName(res.data.mt_idx == userInfo.idx ? res.data?.data[0]?.mt_seller_nickname : res.data?.data[0]?.mt_nickname)
+
       setitem(res.data)
     }).catch(err => {
       console.log(err)
@@ -105,7 +112,7 @@ export default function SendReview({ route }: Props) {
                 {items.data[0].pt_title}
               </Text>
               <Text style={[style.text_re, { fontSize: 13, color: colors.BLACK_COLOR_1 }]}>
-                {t('거래한 이웃')} : {items.data[0].mt_nickname}
+                {t('거래한 이웃')} : {targetNickName}
               </Text>
             </View>
           </View>
@@ -113,7 +120,7 @@ export default function SendReview({ route }: Props) {
             <View style={{ alignItems: 'center' }}>
               <Text style={[style.text_b, { fontSize: 22, color: colors.BLACK_COLOR_1 }]}>
                 {/* User.Name{t('님')}  */}
-              "{items.data[0].mt_nickname}" {t('님과')} </Text>
+              "{targetNickName}" {t('님과')} </Text>
               <Text style={[style.text_b, { fontSize: 22, color: colors.GREEN_COLOR_3 }]}>
                 {t('거래가 어떠셨나요?')}</Text>
               <Text style={[style.text_re, { fontSize: 13, color: colors.GRAY_COLOR_2 }]}>
