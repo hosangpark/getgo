@@ -38,7 +38,7 @@ interface MainHeaderType {
 
 const Category = ({ setTabIndex }: MainHeaderType) => {
 
-  const { t,i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
   const isFocused = useIsFocused();
   const [exitApp, setExitApp] = React.useState(false);
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
@@ -92,7 +92,7 @@ const Category = ({ setTabIndex }: MainHeaderType) => {
   React.useEffect(() => {
     setIsLoading(true)
     getData();
-    console.log("i18n",i18n.language)
+    console.log("i18n", i18n.language)
   }, []);
 
 
@@ -105,23 +105,26 @@ const Category = ({ setTabIndex }: MainHeaderType) => {
       {isLoading ?
         <LoadingIndicator />
         :
-        <FlatList data={category_data}
-          numColumns={4}
-          showsVerticalScrollIndicator={false}
-          style={{ paddingHorizontal: 13, paddingVertical: 20}}
-          renderItem={({ item }) =>
-            <View style={{ width: '25%', justifyContent: 'center', alignItems: 'center' }} key={item.ct_idx}>
-              <TouchableOpacity onPress={() => Category_Filter(item)}
-                style={{ justifyContent: 'flex-start', alignItems: 'center', height: i18n.language==='Ko'? 120:145 }}
-              >
-                {item.ct_file1 ? <Image style={{ width: 68, height: 68, marginBottom: i18n.language==='Ko'? 10:0 }} source={{ uri: Api.state.imageUrl + item.ct_file1 }} /> : null}
-
-                <Text style={[style.text_sb, { fontSize: 14, color: colors.BLACK_COLOR_1, paddingHorizontal:5,textAlign:'center' }]}>{t(item.ct_name)}</Text>
-              </TouchableOpacity>
-            </View>
-          }
-        />
+        <View style={{ flex: 1, marginVertical: 20 }}>
+          <FlatList data={category_data}
+            numColumns={4}
+            showsVerticalScrollIndicator={false}
+            style={{ paddingHorizontal: 13, }}
+            renderItem={({ item }) =>
+              <View style={{ width: '25%', justifyContent: 'flex-start', alignItems: 'center', marginBottom: 10 }} key={item.ct_idx}>
+                <TouchableOpacity onPress={() => Category_Filter(item)}
+                  style={{ justifyContent: 'center', alignItems: 'center', overflow: 'hidden', }}
+                >
+                  {item.ct_file1 ? <View style={{ borderRadius: 20, overflow: 'hidden', marginBottom: 5, }}><Image style={{ width: 68, height: 68, resizeMode: 'cover' }} source={{ uri: Api.state.imageUrl + item.ct_file1 }} /></View> : null}
+                  <Text style={[style.text_sb, { fontSize: 14, color: colors.BLACK_COLOR_1, paddingHorizontal: 5, textAlign: 'center', }]}>
+                    {i18n.language == 'in' ? item.ct_in_name : i18n.language == 'en' ? item.ct_en_name : item.ct_name}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            }
+          /></View>
       }
+
     </SafeAreaView>
   );
 };

@@ -169,7 +169,7 @@ export const MessageRoomHeader = ({ item, getRoomData, tradeDoneSend, targetOutS
             </View>
             {toggle ?
                 <View style={{
-                    position: 'absolute', zIndex: 3, right: 50, top: 20, backgroundColor: 'white', borderWidth: 1, borderColor: colors.GRAY_COLOR_2, borderRadius: 10, paddingHorizontal: 15, paddingVertical: 10,
+                    position: 'absolute', zIndex: 70, right: 50, top: 20, backgroundColor: 'white', borderWidth: 1, borderColor: colors.GRAY_COLOR_2, borderRadius: 10, paddingHorizontal: 15, paddingVertical: 10,
                 }}>
                     <TouchableOpacity style={{ paddingVertical: 10 }} onPress={() => ChatReport()}>
                         <Text style={[style.text_me, { fontSize: 14, color: colors.BLACK_COLOR_1 }]}>
@@ -204,7 +204,7 @@ export const MessageRoomHeader = ({ item, getRoomData, tradeDoneSend, targetOutS
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Image style={{ width: 70, height: 70, borderRadius: 6 }} source={{ uri: 'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000/uploads/' + item.tradeImg }} />
                         <View style={{ marginLeft: 15 }}>
-                            {item.mt_seller_idx === userInfo.idx /* && item.salestate != 3*/ ?
+                            {item.mt_seller_idx === userInfo.idx && item.salestate != 3 ?
                                 <View style={{ width: 100, height: 15, marginBottom: 18 }}>
                                     <SelectBox
                                         selOption={selectReserve}
