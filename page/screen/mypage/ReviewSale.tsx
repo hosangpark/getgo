@@ -6,10 +6,10 @@
  * @flow strict-local
  */
 
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import {
-    Alert,
-  SafeAreaView, ScrollView, Text, View,StyleSheet, FlatList, Image,TouchableOpacity
+  Alert,
+  SafeAreaView, ScrollView, Text, View, StyleSheet, FlatList, Image, TouchableOpacity
 } from 'react-native';
 import style from '../../../assets/style/style';
 import { colors } from '../../../assets/color';
@@ -33,34 +33,37 @@ import cusToast from '../../../components/navigation/CusToast';
 
 
 
-const ReviewSale = ({items,ReviewCount,Remove,rt_type}:{items:any,ReviewCount:number,Remove:(e:number)=>void,rt_type:string}) => {
+const ReviewSale = ({ items, ReviewCount, Remove, rt_type, data_reload }: { items: any, ReviewCount: number, Remove: (e: number) => void, rt_type: string, data_reload: () => void }) => {
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
-  const {t} = useTranslation()
-  
-  const userInfo = useSelector((state:any) => state.userInfo);
-  
-  const [reviewData,setReviewData] = useState<ReviewItemType[]>([])
+  const { t } = useTranslation()
 
-  const deleteReview = async(target:ReviewItemType) => {
+  const userInfo = useSelector((state: any) => state.userInfo);
+
+  const [reviewData, setReviewData] = useState<ReviewItemType[]>([])
+
+  const deleteReview = async (target: ReviewItemType) => {
     Alert.alert(
       t('후기를 삭제하시겠습니까?'),
       '',
       [
-        {text: t('삭제'), onPress: async() => {
-          await client({
-            method: 'get',
-            url: `/user/reviews-received?rt_idx=${target}`,
+        {
+          text: t('삭제'), onPress: async () => {
+            await client({
+              method: 'get',
+              url: `/user/reviews-received-delete?rt_idx=${target}`,
             }).then(
-              res=>{
-                const remove = reviewData.filter((item:ReviewItemType) => item.rt_idx !== target.rt_idx)
-                setReviewData(remove)
+              res => {
+                // const remove = reviewData.filter((item: ReviewItemType) => item.rt_idx !== target.rt_idx)
+                // setReviewData(remove)
+                data_reload();
                 cusToast(t(res.data.message))
-                navigation.goBack()
+                // navigation.goBack()
               }
             ).catch(
-              err=>console.log(err)
-          )
-        }, style:'cancel'},
+              err => console.log(err)
+            )
+          }, style: 'cancel'
+        },
         {
           text: t('취소'),
           onPress: () => {
@@ -70,45 +73,45 @@ const ReviewSale = ({items,ReviewCount,Remove,rt_type}:{items:any,ReviewCount:nu
         },
       ]
     )
-    
+
   };
 
   const [listmodal, setListmodal] = useState({})
-  const Toggle = (e:number)=>{
+  const Toggle = (e: number) => {
     setListmodal(e)
-    if(e == listmodal){
+    if (e == listmodal) {
       setListmodal(false)
     }
   }
-  
-    return (
-        <SafeAreaView style={{flex:1,backgroundColor:'#fff'}}>
-            <ScrollView style={{paddingHorizontal:20}}>
-                <View style={{flexDirection:'row',paddingVertical:20}}>
-                  <Image style={{width:22,height:22,marginRight:7}} source={require('../../../assets/img/ico_review.png')}/>
-                  <Text style={[style.text_b,{fontSize:17,color:colors.BLACK_COLOR_2,marginRight:5}]}>
-                  {t('판매자 후기')}
-                  </Text>
-                  <Text style={[style.text_b,{fontSize:17,color:colors.GREEN_COLOR_3}]}>
-                    {ReviewCount}
-                  </Text>
-                </View>
-                {items == undefined ?
-                  <LoadingIndicator/>
-                :
-                <View>
-                  {items.map((item:any)=>{
-                  return(
-                    <ReviewList key={item.rt_idx} item={item} deleteReview={deleteReview} Toggle={Toggle} 
-                    listmodal={listmodal} setListmodal={setListmodal}/>
-                    )
-                  })}
-                  <View style={{height:80}}></View>
-                </View>
-                }
-            </ScrollView>
-        </SafeAreaView>
-    );
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <ScrollView style={{ paddingHorizontal: 20 }}>
+        <View style={{ flexDirection: 'row', paddingVertical: 20 }}>
+          <Image style={{ width: 22, height: 22, marginRight: 7 }} source={require('../../../assets/img/ico_review.png')} />
+          <Text style={[style.text_b, { fontSize: 17, color: colors.BLACK_COLOR_2, marginRight: 5 }]}>
+            {t('판매자 후기')}
+          </Text>
+          <Text style={[style.text_b, { fontSize: 17, color: colors.GREEN_COLOR_3 }]}>
+            {ReviewCount}
+          </Text>
+        </View>
+        {items == undefined ?
+          <LoadingIndicator />
+          :
+          <View>
+            {items.map((item: any) => {
+              return (
+                <ReviewList key={item.rt_idx} item={item} deleteReview={deleteReview} Toggle={Toggle}
+                  listmodal={listmodal} setListmodal={setListmodal} />
+              )
+            })}
+            <View style={{ height: 80 }}></View>
+          </View>
+        }
+      </ScrollView>
+    </SafeAreaView>
+  );
 };
 
 export default ReviewSale;

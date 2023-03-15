@@ -140,7 +140,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.dmonster.getgo"
+        applicationId "com.daehands.getgo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

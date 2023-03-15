@@ -86,20 +86,21 @@ const Itempost = ({ route }: Props) => {
   //   console.log(profileToggle);
   // };
 
-  // const buildLink = async () => {
-  //   const link = await dynamicLinks().buildLink({
-  //     link: Api.state.siteUrl + '/bridge?type=product&code=' + items.data[0].pt_idx,
-  //     domainUriPrefix: 'https://getgo.page.link',
-  //     social: {
-  //       descriptionText: items?.data[0]?.pt_selling_price ? '￦' + items.data[0].pt_selling_price : '',
-  //       imageUrl: filterslideImage.length ? filterslideImage[0].uri : null,
-  //       title: items?.data[0]?.pt_title
-  //     },
-  //   });
+  const buildLink = async () => {
+    const link = await dynamicLinks().buildLink({
+      link: Api.state.siteUrl + '/bridge?type=product&code=' + items.data[0].pt_idx,
+      // link: 'getgoid://?type=product&code=' + items.data[0].pt_idx,
+      domainUriPrefix: 'https://getgo.page.link',
+      social: {
+        descriptionText: items?.data[0]?.pt_selling_price ? '￦' + items.data[0].pt_selling_price : '',
+        imageUrl: filterslideImage.length ? filterslideImage[0].uri : null,
+        title: items?.data[0]?.pt_title
+      },
+    });
 
 
-  //   return link;
-  // }
+    return link;
+  }
 
 
   const SHOWLOG = async () => {
@@ -110,11 +111,11 @@ const Itempost = ({ route }: Props) => {
       // } else {
       //   shopUrl = 'https://apps.apple.com/kr/app/id1572757670';
       // }
-      let fullcodeUrl = Api.state.siteUrl + '/bridge?type=product&code=' + items.data[0].pt_idx;
+      let fullcodeUrl = 'http://getgo.id:3000/download-app?type=product&code=' + items.data[0].pt_idx;
       // let fullcodeUrl = 'https://buzyrun.com/bridge.php?type=product&code=' + items.data[0].pt_idx;
 
       // let fullcodeUrl = await buildLink();
-      // console.log('urls', fullcodeUrl);
+      console.log('urls', fullcodeUrl);
       // return;
 
       const result = await Share.share({
@@ -226,8 +227,14 @@ const Itempost = ({ route }: Props) => {
         })
           .then(res => {
             //{"crt_idx": 52, "ctt_room_id": "CzAuaGg4fxlXg"}
+            console.log('res', res.data);
             if (res.data.crt_idx) {
               cusToast(t('판매자에게 채팅요청을 보냈습니다.'))
+            } else {
+              if (res.data.ctt_room_id) {
+                navigation.navigate('MessageRoom', { items: { room_id: res.data.ctt_room_id }, type: 'messageChat' });
+
+              }
             }
             //console.log(res.data);
           })
@@ -565,7 +572,7 @@ const Itempost = ({ route }: Props) => {
                 style={{ flexDirection: 'row' }}>
                 <Image
                   style={{ width: 44, height: 44, marginRight: 20 }}
-                  source={require('../../../assets/img/img_profile.png')}
+                  source={items.data[0].mt_image1 ? { uri: Api.state.imageUrl + items.data[0].mt_image1 } : require('../../../assets/img/img_profile.png')}
                   resizeMode="cover"
                   borderRadius={100}
                 />

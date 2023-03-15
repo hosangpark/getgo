@@ -65,7 +65,7 @@ export default function SendReview({ route }: Props) {
     }).then(res => {
       cusToast(t(res.data.message))
 
-      if (res.data.rt_idx) navigation.replace('ReviewDetail', { rt_idx: res.data.rt_idx })
+      if (res.data.rt_idx) navigation.replace('ReviewDetail', { rt_idx: res.data.rt_idx, isMy: true })
       // navigation.goBack()
       // navigation.goBack()
     }).catch(err => {
@@ -76,7 +76,7 @@ export default function SendReview({ route }: Props) {
     console.log('route.params', route.params);
     await client({
       method: 'get',
-      url: `/product/review_basic?room_idx=${route.params?.item?.room_idx}`
+      url: `/product/review_basic?room_idx=${route.params?.item?.room_idx}&mt_idx=${userInfo.idx}`
     }).then(res => {
       setitem(res.data)
     }).catch(err => {

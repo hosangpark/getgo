@@ -1,4 +1,4 @@
-package com.dmonster.getgo.newarchitecture.modules;
+package com.daehands.getgo.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;

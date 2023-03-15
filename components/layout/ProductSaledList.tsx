@@ -56,7 +56,7 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
     navigation.navigate('SendReview', { item: item })
   }
   const ReviewDetail = (rt_idx: number) => {
-    navigation.navigate('ReviewDetail', { rt_idx: rt_idx })
+    navigation.navigate('ReviewDetail', { rt_idx: rt_idx, isMy: true })
   }
   const Action1 = () => {
     console.log('판매중')

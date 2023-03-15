@@ -66,23 +66,25 @@ const ItemList = ({ setTabIndex }: itemListType) => {
 
 
   const Itemupload = () => {
-    if(myLocation.select_location == 1 && myLocation.location1.mat_status !== "Y" ){
+    if (myLocation.select_location == 1 && myLocation.location1.mat_status !== "Y") {
       Certified()
-    } else if(myLocation.select_location == 2 && myLocation.location2.mat_status !== "Y"){
+    } else if (myLocation.select_location == 2 && myLocation.location2.mat_status !== "Y") {
       Certified()
     } else {
       navigation.navigate('Itemupload', { type: 'ProductUpload', pt_idx: 0 });
     }
   };
 
-  const Certified = () =>{
-    Alert.alert(t('현재동네 인증이 되어있지않습니다'),'',
+  const Certified = () => {
+    Alert.alert(t('현재동네 인증이 되어있지않습니다'), '',
       [
-        {text:t('인증하기'), onPress:()=>{
-          navigation.navigate('SetMyLocation')
-        }},
         {
-          text:'취소',onPress:()=>{
+          text: t('인증하기'), onPress: () => {
+            navigation.navigate('SetMyLocation')
+          }
+        },
+        {
+          text: '취소', onPress: () => {
           }
         }
       ])
@@ -119,10 +121,18 @@ const ItemList = ({ setTabIndex }: itemListType) => {
     }
   };
 
+  const getSelect_location = async () => {
+    let locTarget = await AsyncStorage.getItem('@locTarget');
+    if (!locTarget) locTarget = '1';
+    dispatch(MyLocationAction.select_loaction(locTarget));
+  }
+
   /** 데이터 리렌더링 */
   const rerendering = () => {
-    console.log('myLocation', myLocation.select_location, myLocation.location1.mt_area, myLocation.location2.mt_area);
-    if (myLocation.select_location == 1) {
+    console.log('myLocation ItemList', myLocation.select_location, myLocation.location1.mt_area, myLocation.location2.mt_area);
+    if (!myLocation.select_location) {
+      getSelect_location();
+    } else if (myLocation.select_location == 1) {
       setListChanege(1);
     } else if (myLocation.select_location == 2) {
       setListChanege(2);
@@ -161,9 +171,11 @@ const ItemList = ({ setTabIndex }: itemListType) => {
     if (target == 1) {
       getProductListData(myLocation.location1.mt_area);
       dispatch(MyLocationAction.select_loaction(JSON.stringify(1)));
+      AsyncStorage.setItem('@locTarget', '1');
     } else if (target == 2) {
       getProductListData(myLocation.location2.mt_area);
       dispatch(MyLocationAction.select_loaction(JSON.stringify(2)));
+      AsyncStorage.setItem('@locTarget', '2');
     } else {
       console.log('getProduct');
       return;
@@ -176,10 +188,10 @@ const ItemList = ({ setTabIndex }: itemListType) => {
   // }, [myLocation.location1.mt_area, myLocation.location2.mt_area, myLocation.select_location]);
 
 
-  React.useEffect(() => {
-    setIsLoading(true);
-    rerendering();
-  }, [myLocation.location2.mt_area]);
+  // React.useEffect(() => {
+  //   setIsLoading(true);
+  //   rerendering();
+  // }, [myLocation.location2.mt_area]);
 
   React.useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -195,7 +207,7 @@ const ItemList = ({ setTabIndex }: itemListType) => {
     React.useCallback(() => {
 
       rerendering();
-      
+
       return () => { };
     }, [myLocation.location1.mt_area, myLocation.location2.mt_area, myLocation.select_location]),
   );

@@ -14,7 +14,7 @@ import {
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import style from '../../../assets/style/style';
 import { colors } from '../../../assets/color';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation, useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../../components/types/routerTypes';
 import { BackHeader } from '../../../components/header/BackHeader'
@@ -52,14 +52,13 @@ const MypageSetting = () => {
   const myLocation = useSelector((state: any) => state.myLocation);
   const dispatch = useDispatch()
 
-  console.log('userInfo', userInfo)
-
   const getProfileDetailData = async () => {
     await client({
       method: 'get',
       url: `/user/myprofile?mt_idx=${userInfo.idx}`
     }).then(
       (res) => {
+        console.log('res.data.list', res.data.list);
         setProfileData(res.data.data[0])
         setReviewData(res.data.list)
         setIsLoading(false)
@@ -72,12 +71,13 @@ const MypageSetting = () => {
   const deleteReview = async (target: ReviewItemType) => {
     await client({
       method: 'get',
-      url: `/user/reviews-received?rt_idx=${target}`
+      url: `/user/reviews-received-delete?rt_idx=${target}`
     }).then(
       res => {
         // const remove = reviewData.filter((item:ReviewItemType) => item.rt_idx !== target.rt_idx)
         // setReviewData(remove)
         cusToast(t(res.data.message))
+        getProfileDetailData();
       }
     );
   };
@@ -210,10 +210,11 @@ const MypageSetting = () => {
       setListmodal(false)
     }
   }
-  React.useEffect(() => {
+
+  useFocusEffect(React.useCallback(() => {
     setIsLoading(true)
     getProfileDetailData()
-  }, [])
+  }, []))
 
   React.useEffect(() => {
     console.log('profileimg', profileimg)
@@ -223,6 +224,8 @@ const MypageSetting = () => {
       setIsLoading(false)
     }
   }, [])
+
+
 
 
   return (
@@ -288,7 +291,7 @@ const MypageSetting = () => {
         </View>
         :
 
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <FlatList
             style={{ flex: 1 }}
             data={reviewData.slice(0, 5)}

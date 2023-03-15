@@ -264,8 +264,12 @@ const MessageRoom = ({ route }: Props) => {
 
   const tradeDoneSend = (room_idx) => {
     console.log('tradeDoneSend', room_idx);
-
     ws.emit('tradeDone', { room_idx: room_idx });
+  }
+
+  const targetOutSend = (room_idx, out_mt_idx) => {
+    console.log('targetOutSend', room_idx, out_mt_idx);
+    ws.emit('targetOut', { room_idx: room_idx, out_mt_idx: out_mt_idx });
   }
 
   useFocusEffect(React.useCallback(() => {
@@ -291,6 +295,15 @@ const MessageRoom = ({ route }: Props) => {
         //거래완료나 진행중을 받을경우 상단을 새로고침
         getRoomData(room_idx);
       })
+
+      ws.on('targetOut', e => {
+        console.log('targetOut', e);
+        if (e.out_mt_idx != userInfo.idx) {
+          Alert.alert(t('상대방이 채팅방을 나갔습니다.'), '', [{
+            text: t('확인'), onPress: () => navigation.goBack()
+          }])
+        }
+      });
 
       console.log('join', room_idx);
       ws.emit('join', { room_idx: room_idx });
@@ -319,8 +332,9 @@ const MessageRoom = ({ route }: Props) => {
           salestate: items.data[0] == undefined ? null : items.data[0].pt_sale_now,
           mt_seller_idx: items.data[0] == undefined ? null : items.data[0].mt_seller_idx,
         }}
-          tradeDoneSend={tradeDoneSend}
+          tradeDoneSend={() => tradeDoneSend(items.room_idx)}
           getRoomData={getRoomData}
+          targetOutSend={() => targetOutSend(items.room_idx, userInfo.idx)}
         />
       }
       {isLoading ?

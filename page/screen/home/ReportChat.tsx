@@ -91,7 +91,8 @@ const ReportChat = ({ route }: Props) => {
         chat_idx: chat_idx,
       }
     }).then(res => {
-      navigation.goBack()
+      // navigation.goBack()
+      navigation.pop(2)
       cusToast(t(res.data.message))
     }
     ).catch(error => {

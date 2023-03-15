@@ -87,7 +87,8 @@ const ReportUser = ({ route }: Props) => {
         dct_reason_etc: text
       }
     }).then(res => {
-      navigation.goBack()
+      navigation.pop(2)
+      // navigation.goBack()
       cusToast(t(res.data.message))
     }
     ).catch(error => {

@@ -44,7 +44,7 @@ const NotificationList = ({ Alert_datas }: any) => {
     } else if (item.push_type == 2) {
       navigation.navigate('Itempost', { pt_idx: item.pt_idx })
     } else if (item.push_type == 3) {
-      navigation.navigate('ReviewDetail', { rt_idx: item.rt_idx, })
+      navigation.navigate('ReviewDetail', { rt_idx: item.rt_idx, isMy: false })
     } else if (item.push_type == 4) {
       navigation.navigate('Itempost', { pt_idx: item.pt_idx })
     } else if (item.push_type == 5) {
