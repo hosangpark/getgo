@@ -37,7 +37,7 @@ interface ToggleType {
 
 const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData }:
   { item: ProductItemType, Remove: (e: number) => void, Modify: (e: number) => void, getOnsaleData: (e: any) => void, getCompleteData: (e: any) => void }) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
 
   const userInfo = useSelector((state: any) => state.userInfo);
@@ -66,7 +66,17 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
   }
   const Action2 = () => {
     console.log('예약중')
-    ReserveSelect(item.pt_idx, 2);
+    // ReserveSelect(item.pt_idx, 2);
+
+    navigation.navigate('Reserve_choice', {
+      target: {
+        id: item.pt_idx,
+        image: item.pt_image1,
+        title: item.pt_title,
+      }
+      , type: 'Complete'
+      , pt_sale_now: 2
+    });
 
   }
   const Action3 = () => {
@@ -74,15 +84,19 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
 
     // ReserveSelect(item.pt_idx, '3');
 
-    navigation.navigate('Reserve_choice', {
-      target: {
-        id: item.pt_idx,
-        image: item.pt_image1,
-        title: item.pt_title,
-      }, type: 'Complete'
-    });
-    return;
-
+    if (item.mt_buyer_idx) {
+      ReserveSelect(item.pt_idx, 3);
+    } else {
+      navigation.navigate('Reserve_choice', {
+        target: {
+          id: item.pt_idx,
+          image: item.pt_image1,
+          title: item.pt_title,
+        }
+        , type: 'Complete'
+        , pt_sale_now: 3
+      });
+    }
   }
 
   /** 상품 판매상태변경 */
@@ -96,6 +110,7 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
       data: {
         pt_idx: pt_idx,
         pt_sale_now: pt_sale_now,
+        mt_idx: item.mt_buyer_idx ?? ''
       },
     })
       .then(res => {
@@ -140,7 +155,7 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
             <Text style={[style.text_b, {
               color: colors.GREEN_COLOR_2, backgroundColor: colors.GREEN_COLOR_1, fontSize: 12, paddingHorizontal: 6, paddingVertical: 3, borderRadius: 5
             }]}>
-              {t(item.ct_name)}
+              {i18n.language == 'In' ? item.ct_in_name : i18n.language == 'En' ? item.ct_en_name : item.ct_name}
             </Text>
             {toggleOpen ? (
               <View style={{

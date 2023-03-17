@@ -79,6 +79,7 @@ const Itempost = ({ route }: Props) => {
 
   /** 내가올린 게시글이면 수정버튼 보이기 */
   const [myProduct, setmyProduct] = useState(false);
+  const [ChatAble, setChatAble] = useState(false);
 
 
   // const SHOWLOG = () => {
@@ -194,6 +195,16 @@ const Itempost = ({ route }: Props) => {
         setWp_idx(res.data.wp_idx ?? null);
         setfilterslideImage(res.data.image_arr);
         setIsLoading(false);
+
+        // items.data[0].mt_seller_idx
+        if (userInfo.idx == res.data.data[0].mt_seller_idx) {//판매자
+          setmyProduct(true);
+
+          setChatAble(res.data.data[0].pt_chat ? true : false)
+        } else {
+          setmyProduct(false);
+          setChatAble(true)
+        }
       })
       .catch(err => {
         console.log(err);
@@ -208,14 +219,15 @@ const Itempost = ({ route }: Props) => {
     //   cusToast(t('이미 거래가 완료된 상품입니다.'));
     //   return false;
     // }
+
     if (myLocation.select_location == 1 && myLocation.location1.mat_status !== "Y") {
       Certified()
     } else if (myLocation.select_location == 2 && myLocation.location2.mat_status !== "Y") {
       Certified()
     } else {
-      if (userInfo.idx == items.data[0].mt_seller_idx) {
+      if (myProduct) {
+        navigation.navigate('Message')
         //채팅응답
-        navigation.navigate('Reserve_choice', { target, type: 'reserveChat' });
       } else {
         await client({
           method: 'post',
@@ -228,15 +240,7 @@ const Itempost = ({ route }: Props) => {
           .then(res => {
             //{"crt_idx": 52, "ctt_room_id": "CzAuaGg4fxlXg"}
             console.log('res', res.data);
-            if (res.data.crt_idx) {
-              cusToast(t('판매자에게 채팅요청을 보냈습니다.'))
-            } else {
-              if (res.data.ctt_room_id) {
-                navigation.navigate('MessageRoom', { items: { room_id: res.data.ctt_room_id }, type: 'messageChat' });
-
-              }
-            }
-            //console.log(res.data);
+            if (res.data.crt_idx) navigation.navigate('MessageRoom', { items: { room_id: res.data.crt_idx }, type: 'messageChat' });
           })
           .catch(error => {
             console.log(error);
@@ -312,7 +316,6 @@ const Itempost = ({ route }: Props) => {
       .then(res => {
         cusToast(t(res.data.message))
         setWp_idx(res.data.wt_idx)
-
       })
       .catch(error => {
         console.log(error);
@@ -321,14 +324,16 @@ const Itempost = ({ route }: Props) => {
 
   /** 상품 판매상태변경 */
   const ReserveSelect = async (item: OptionType) => {
-
-    if (item.sel_id == 3) {
+    //예약중 이상이면서 바이어가 없으면 바이어 선택
+    if ((item.sel_id == 3 || item.sel_id == 2) && !items.data[0].mt_buyer_idx) {
       navigation.navigate('Reserve_choice', {
         target: {
           id: items.data[0].pt_idx,
           image: items.data[0].pt_image1,
           title: items.data[0].pt_title,
-        }, type: 'Complete'
+        },
+        type: 'Complete',
+        pt_sale_now: item.sel_id
       });
       return;
     }
@@ -339,6 +344,7 @@ const Itempost = ({ route }: Props) => {
       data: {
         pt_idx: items.data[0].pt_idx,
         pt_sale_now: item.sel_id,
+        mt_idx: items.data[0].mt_buyer_idx ?? ''
       },
     })
       .then(res => {
@@ -349,14 +355,6 @@ const Itempost = ({ route }: Props) => {
       .catch(err => console.log(err));
   };
 
-  // items.data[0].mt_seller_idx
-  React.useEffect(() => {
-    if (userInfo.idx == items.data[0].mt_seller_idx) {
-      setmyProduct(true);
-    } else {
-      setmyProduct(false);
-    }
-  }, [items]);
 
   return (
     <SafeAreaView style={[style.default_background, { flex: 1 }]}>
@@ -371,7 +369,7 @@ const Itempost = ({ route }: Props) => {
           />
         ) : <View style={{ height: 50, backgroundColor: colors.GRAY_COLOR_4 }}></View>}
         <View style={{ marginVertical: 24, marginHorizontal: 20 }}>
-          {myProduct && items.data[0].pt_sale_now != 3 ? (
+          {myProduct /* && items.data[0].pt_sale_now != 3*/ ? (
             <View style={{ width: 100, height: 20, marginBottom: 12 }}>
               <SelectBox
                 selOption={selectReserve}
@@ -466,7 +464,9 @@ const Itempost = ({ route }: Props) => {
                     fontSize: 12,
                   },
                 ]}>
-                {t(items.data[0].ct_name)}
+                {
+                  i18n.language == 'In' ? items.data[0].ct_in_name : i18n.language == 'En' ? items.data[0].ct_en_name : items.data[0].ct_name
+                }
               </Text>
             </View>
             <TouchableOpacity onPress={SHOWLOG}>
@@ -664,20 +664,28 @@ const Itempost = ({ route }: Props) => {
                 title: items.data[0].pt_title,
               })
             }
-            style={{
-              backgroundColor: colors.GREEN_COLOR_2,
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 100,
-              borderRadius: 5,
-              height: 45,
-            }}>
+            disabled={!ChatAble}
+            style={[
+              {
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 100,
+                borderRadius: 5,
+                height: 45,
+              },
+              ChatAble ? {
+                backgroundColor: colors.GREEN_COLOR_2,
+              } : {
+                  backgroundColor: colors.GREEN_COLOR_1,
+                }
+            ]
+            }>
             <Text style={{ color: 'white' }}>{t('채팅하기')}</Text>
           </TouchableOpacity>
         </View>
       </View>
       <BackHandlerCom />
-    </SafeAreaView>
+    </SafeAreaView >
   );
 };
 

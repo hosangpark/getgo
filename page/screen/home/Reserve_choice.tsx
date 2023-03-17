@@ -48,35 +48,35 @@ const Reserve_choice = ({ route }: Props) => {
   const [reserve_user_data, setreserve_user_data] = React.useState<any>([]);
 
   //기본값은 예약자 선택
-  const type = route?.params?.type ?? 'reserveChat'
+  const type = 'reserveChat'
   const pt_idx = route?.params?.target?.id ?? '';
+  const pt_sale_now = route?.params?.pt_sale_now ?? '3';
 
-  const Chat = async (item: any) => {
+  // const Chat = async (item: any) => {
 
-    await client({
-      method: 'get',
-      url: `/product/chat-rev?room_idx=${item.room_id}&mt_idx=${userInfo.idx}`,
-    }).then(res => {
+  //   await client({
+  //     method: 'get',
+  //     url: `/product/chat-rev?room_idx=${item.room_id}&mt_idx=${userInfo.idx}`,
+  //   }).then(res => {
 
-      setLoading(false);
+  //     setLoading(false);
 
-      console.log('Chat', res.data);
-      // cusToast(t('예약되었습니다.'))
-      navigation.replace('MessageRoom', { items: { room_id: res.data.room_idx }, type: 'reserveChat' })
-    })
-      .catch(err => console.log(err))
-  }
+  //     console.log('Chat', res.data);
+  //     // cusToast(t('예약되었습니다.'))
+  //     navigation.replace('MessageRoom', { items: { room_id: res.data.room_idx }, type: 'reserveChat' })
+  //   })
+  //     .catch(err => console.log(err))
+  // }
 
   /** 상품 판매상태변경 */
   const ReserveSelect = async (mt_idx: any) => {
-
     await client({
       method: 'post',
       url: '/product/product_status',
       data: {
         pt_idx: pt_idx,
         mt_idx: mt_idx,
-        pt_sale_now: '3',
+        pt_sale_now: pt_sale_now,
       },
     })
       .then(res => {
@@ -107,7 +107,7 @@ const Reserve_choice = ({ route }: Props) => {
 
   return (
     <SafeAreaView style={[style.default_background, { flex: 1 }]}>
-      <BackHeader title={type == 'reserveChat' ? t('예약자 선택') : t('예약자 선택')} />
+      <BackHeader title={t('예약자 선택')} />
       <View style={{ paddingHorizontal: 20 }}>
         <View style={{ backgroundColor: colors.GREEN_COLOR_4, padding: 20, flexDirection: 'row', marginBottom: 5, borderRadius: 10 }}>
           {route.params && route.params.target && route.params.target.image ? <Image
@@ -152,7 +152,7 @@ const Reserve_choice = ({ route }: Props) => {
                   width: 85, height: 36, justifyContent: 'center',
                   alignItems: 'center', backgroundColor: colors.BLUE_COLOR_1, borderRadius: 5
                 }}
-                  onPress={() => type == 'reserveChat' ? Chat(item) : ReserveSelect(item.mt_idx)}
+                  onPress={() => ReserveSelect(item.mt_idx)}
                 >
                   <Text style={[style.text_sb, { color: colors.WHITE_COLOR }]}>{t('예약자 선택')}</Text>
                 </TouchableOpacity>

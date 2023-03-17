@@ -9,9 +9,10 @@
 import React, { useState } from 'react';
 import {
   Alert, Keyboard,
-  SafeAreaView, Image, Text, View, FlatList, ScrollView, ActivityIndicator, Platform,PermissionsAndroid
+  SafeAreaView, Image, Text, View, FlatList, ScrollView, ActivityIndicator, Platform, PermissionsAndroid,
+  Modal, TouchableOpacity, TextInput, Dimensions
 } from 'react-native';
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+
 import style from '../../../assets/style/style';
 import { colors } from '../../../assets/color';
 import { useIsFocused, useNavigation, useFocusEffect } from '@react-navigation/native';
@@ -22,7 +23,7 @@ import { CustomButton } from '../../../components/layout/CustomButton';
 import { ReviewList } from '../../../components/layout/ReviewList';
 import { ReviewItemType } from '../../../components/types/componentType';
 import { BackHandlerCom } from '../../../components/BackHandlerCom';
-import { ImagePickerResponse, launchImageLibrary,launchCamera } from 'react-native-image-picker';
+import { ImagePickerResponse, launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import * as UserInfoAction from '../../../redux/actions/UserInfoAction';
@@ -52,6 +53,8 @@ const MypageSetting = () => {
   const userInfo = useSelector((state: any) => state.userInfo);
   const myLocation = useSelector((state: any) => state.myLocation);
   const dispatch = useDispatch()
+
+  const [photoModalVisible, setPhotoModalVisible] = useState(false)
 
   const getProfileDetailData = async () => {
     await client({
@@ -83,50 +86,58 @@ const MypageSetting = () => {
     );
   };
 
-  const ModifyImage = () => {
-    PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.CAMERA,{
-        title:"App Camera Permission",
-        message:"App needs",
-        buttonPositive:'OK',
-        buttonNegative:'Cancel',
-      }
-    )
-    Alert.alert('사진?','사진첩?',[
-      {text:'사진',onPress:()=>{
-        launchCamera({
-          mediaType : 'photo', 
-          cameraType : 'back', 
-        },(res) =>{
-          (res: any) => {
-            console.log(res)
+
+
+
+  const ModifyImage = (type: any) => {
+
+    if (type == 'camera') {
+      PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: "App Camera Permission",
+          message: "App needs",
+          buttonPositive: 'OK',
+          buttonNegative: 'Cancel',
+        },
+      )
+
+      launchCamera({
+        mediaType: 'photo',
+        cameraType: 'back',
+        maxWidth: 512,
+        maxHeight: 512,
+        // saveToPhotos: true
+      }, (res) => {
+        console.log(res)
+        if (res.didCancel != true) {
+          setProfileimg(res.assets)
+          console.log('ModifyImage')
+        }
+
+      });
+
+    } else {
+      launchImageLibrary(
+        {
+          mediaType: 'photo',
+          maxWidth: 512,
+          maxHeight: 512,
+          selectionLimit: 1,
+        },
+        (res: any) => {
+          console.log(res)
           if (res.didCancel != true) {
             setProfileimg(res.assets)
             console.log('ModifyImage')
           }
         }
-        }
-        );
-      }},
-      {text:'사진첩',onPress:()=>{
-        launchImageLibrary(
-          {
-            mediaType: 'photo',
-            maxWidth: 512,
-            maxHeight: 512,
-            selectionLimit: 1,
-          },
-          (res: any) => {
-            console.log(res)
-            if (res.didCancel != true) {
-              setProfileimg(res.assets)
-              console.log('ModifyImage')
-            }
-          }
-        )
-      }}
-    ])
+      )
+    }
+
   }
+
+
 
 
   /** 닉네임 변경 */
@@ -193,7 +204,7 @@ const MypageSetting = () => {
       } else if (profileimg == undefined) {
         /** 닉네임만 변경 */
         /** 닉네임 중복체크 */
-        if(Textreplace(modifyName)){
+        if (Textreplace(modifyName)) {
           NicknameCheck("onlynickname")
         } else {
           Alert.alert(t('특수문자,단일자음,빈칸은 입력불가합니다.'))
@@ -205,7 +216,7 @@ const MypageSetting = () => {
     }
   }
 
-  const NicknameCheck = async(type:string)  =>{
+  const NicknameCheck = async (type: string) => {
     await client({
       method: 'post',
       url: '/user/nickname-check',
@@ -258,7 +269,7 @@ const MypageSetting = () => {
       {/* <ScrollView> */}
       <View style={[{ padding: 20, borderBottomWidth: 1, borderColor: colors.GRAY_COLOR_1, }]}>
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-          <TouchableOpacity onPress={ModifyImage}>
+          <TouchableOpacity onPress={() => setPhotoModalVisible(true)}>
             <Image style={{ width: 85, height: 85, borderRadius: 50 }} source={
               profileimg ?
                 { uri: profileimg[0]?.uri }
@@ -267,7 +278,7 @@ const MypageSetting = () => {
             />
           </TouchableOpacity>
           <TouchableOpacity style={{ borderWidth: 1, borderColor: colors.GRAY_COLOR_3, borderRadius: 15, marginVertical: 7 }}
-            onPress={ModifyImage}>
+            onPress={() => setPhotoModalVisible(true)}>
             <Text style={[style.text_me, { fontSize: 13, color: colors.GRAY_COLOR_2, marginHorizontal: 15, marginVertical: 4 }]}>
               {t('프로필사진 변경')}
             </Text>
@@ -337,6 +348,47 @@ const MypageSetting = () => {
 
 
       }
+
+
+      <Modal visible={photoModalVisible} transparent={true} onRequestClose={() => setPhotoModalVisible(false)}>
+
+        <TouchableOpacity style={{
+          flex: 1, justifyContent: 'center', alignItems: 'center',
+          backgroundColor: '#000', flex: 1, opacity: 0.6,
+        }} onPress={() => setPhotoModalVisible(false)}>
+        </TouchableOpacity>
+        <View style={{
+          backgroundColor: colors.WHITE_COLOR,
+          width: Dimensions.get('screen').width - 100,
+          position: 'absolute',
+          zIndex: 10,
+          elevation: 1,
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          flexDirection: 'row',
+          borderRadius: 6,
+          left: 50,
+          height: 100,
+          paddingHorizontal: 10,
+          top: Dimensions.get('screen').height / 2 - 100
+        }}>
+          <TouchableOpacity style={{ padding: 20, borderColor: colors.GRAY_COLOR_5, borderWidth: 1, borderRadius: 6 }}>
+            <Text style={[style.text_sb, { color: colors.BLACK_COLOR_2, fontSize: 18 }]} onPress={() => {
+              ModifyImage('camera')
+              setPhotoModalVisible(false)
+            }}>
+              {t('카메라')}</Text></TouchableOpacity>
+
+          <TouchableOpacity style={{ padding: 20, borderColor: colors.GRAY_COLOR_5, borderWidth: 1, borderRadius: 6 }}>
+            <Text style={[style.text_sb, { color: colors.BLACK_COLOR_2, fontSize: 18 }]} onPress={() => {
+              ModifyImage('gallery')
+              setPhotoModalVisible(false)
+            }}>
+              {t('갤러리')}</Text></TouchableOpacity>
+        </View>
+
+      </Modal>
+
       <BackHandlerCom />
     </SafeAreaView>
   );

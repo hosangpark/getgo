@@ -143,19 +143,15 @@ const ItemList = ({ setTabIndex }: itemListType) => {
 
   /** 지역 상품목록 */
   const getProductListData = async (event: any) => {
-
+    console.log('getProductListData', event, userInfo.idx);
 
     if (!event) return;
-
-    console.log('getProductListData', event, userInfo.idx);
 
     await client({
       method: 'get',
       url: `/product/procudt-list?mt_idx=${userInfo.idx}&pt_area=${event}`,
     }).then(
       res => {
-        // console.log(res);
-        // console.log('getProductListData2', res.data);
         //if (items !== res.data) {
         setitem(res.data);
         //}

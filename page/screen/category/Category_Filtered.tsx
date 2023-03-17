@@ -26,6 +26,7 @@ import { BackHandlerCom } from '../../../components/BackHandlerCom';
 import { useTranslation } from 'react-i18next';
 import client from '../../../api/client';
 import { useSelector } from 'react-redux';
+import { NodataView } from '../../../api/Api';
 
 
 
@@ -79,6 +80,7 @@ const Category_Filter = ({ route }: any) => {
       <FlatList
         style={{ paddingHorizontal: 20 }}
         data={items}
+        ListEmptyComponent={<NodataView></NodataView>}
         renderItem={({ item }) => (
           <ProductItem item={item} action={rerendering} />
         )}

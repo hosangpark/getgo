@@ -51,6 +51,7 @@ import cusToast from '../../../components/navigation/CusToast';
 import axios from 'axios';
 import { launchImageLibrary } from 'react-native-image-picker';
 import SetMyLocation from '../location/SetMyLocation';
+import Api from '../../../api/Api';
 
 type Props = StackScreenProps<MainNavigatorParams, 'Itemupload'>;
 const Itemupload = ({ route }: Props) => {
@@ -63,7 +64,7 @@ const Itemupload = ({ route }: Props) => {
   const [bodyText, setBodyText] = useState('');
   const [price, setPrice] = React.useState('');
   const [loading, setLoading] = React.useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const bodyRef = useRef<TextInput | null>(null);
   const [uploadpictures, setUploadpictures] = useState<any>([]);
   const pt_idx = route?.params?.pt_idx;
@@ -131,8 +132,8 @@ const Itemupload = ({ route }: Props) => {
     sel_id: 1,
   });
 
-  const [CategoryOptions] = React.useState([
-    { label: t('디지털기기'), value: '디지털기기', sel_id: 1 },
+  /*
+  { label: t('디지털기기'), value: '디지털기기', sel_id: 1 },
     { label: t('생활가전'), value: '생활가전', sel_id: 2 },
     { label: t('가구/인테리어'), value: '가구/인테리어', sel_id: 3 },
     { label: t('생활/주방'), value: '생활/주방', sel_id: 4 },
@@ -152,8 +153,9 @@ const Itemupload = ({ route }: Props) => {
     { label: t('가공식품'), value: '가공식품', sel_id: 16 },
     { label: t('반려동물용품'), value: '반려동물용품', sel_id: 17 },
     { label: t('식품'), value: '식품', sel_id: 18 },
-    { label: t('기타'), value: '기타', sel_id: 19 },
-  ]);
+    { label: t('기타'), value: '기타', sel_id: 19 },*/
+
+  const [CategoryOptions, setCategoryOptions] = React.useState([]);
 
   const [overScroll, setOverScroll] = useState(true);
   const overScrollEnable = () => {
@@ -373,6 +375,18 @@ const Itemupload = ({ route }: Props) => {
       console.log('rotue', pt_idx, route);
       getPostData();
     }
+
+
+    console.log('cate', Api.state.baseCode.category);
+    if (Api.state.baseCode.category && Api.state.baseCode.category.length) {
+      // { label: t('디지털기기'), value: '디지털기기', sel_id: 1 }
+      const newCategory = Api.state.baseCode.category.map((item, index) => {
+        let label = i18n.language == 'In' ? item.ct_in_name : i18n.language == 'En' ? item.ct_en_name : item.ct_name;
+        return { label: label, value: label, sel_id: item.ct_idx };
+      });
+      setCategoryOptions(newCategory);
+    }
+
   }, [route]);
 
   return (

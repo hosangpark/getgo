@@ -38,12 +38,9 @@ const KeywordNoti = ({ KeywordNotiitem, MaxTextCount }: any) => {
 
   const userInfo = useSelector((state: any) => state.userInfo);
   const [isLoading, setIsLoading] = useState(false);
-  const { t } = useTranslation()
-
+  const { t, i18n } = useTranslation()
 
   console.log('KeywordNotiitem', KeywordNotiitem);
-
-
 
   return (
     <SafeAreaView style={[style.default_background, { flex: 1, position: 'relative' }]}>
@@ -85,7 +82,7 @@ const KeywordNoti = ({ KeywordNotiitem, MaxTextCount }: any) => {
             <View>
               <View style={{ flexDirection: 'row', marginBottom: 5 }}>
                 <Text style={[style.text_me, { color: colors.GREEN_COLOR_2, fontSize: 12, backgroundColor: colors.GREEN_COLOR_4, paddingHorizontal: 7, paddingVertical: 3, borderRadius: 3 }]}>
-                  {t(item.ct_name)}
+                  {i18n.language == 'In' ? item.ct_in_name : i18n.language == 'En' ? item.ct_en_name : item.ct_name}
                 </Text>
               </View>
               <Text style={[style.text_me, { color: colors.BLACK_COLOR_2, fontSize: 15, paddingRight: 100 }]} numberOfLines={1} >

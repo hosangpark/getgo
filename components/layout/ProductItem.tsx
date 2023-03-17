@@ -51,7 +51,7 @@ const ProductItem = ({
     navigation.navigate('Itempost', { pt_idx: pt_idx });
   };
 
-  const { t,i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
 
 
   const AddHeart = async (target: number) => {
@@ -148,7 +148,9 @@ const ProductItem = ({
                   borderRadius: 3,
                 },
               ]}>
-              {t(item.ct_name)}
+              {
+                i18n.language == 'In' ? item.ct_in_name : i18n.language == 'En' ? item.ct_en_name : item.ct_name
+              }
             </Text>
             <TouchableOpacity onPress={() => heartOnOff(item.pt_idx)}>
               <Image
@@ -189,7 +191,7 @@ const ProductItem = ({
                     paddingHorizontal: 5,
                     paddingVertical: 3,
                     marginRight: 5,
-                    flexShrink:i18n.language==='Id'? 2:0
+                    flexShrink: i18n.language === 'Id' ? 2 : 0
                   }}>
                   <Image
                     style={{ width: 10, height: 10 }}

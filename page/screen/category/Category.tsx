@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { useNavigation, useIsFocused, useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../../components/types/routerTypes';
 import { CategoryType } from '../../../components/types/componentType';
@@ -49,10 +49,11 @@ const Category = ({ setTabIndex }: MainHeaderType) => {
   const getData = async () => {
     await client<{ data: string }>({
       method: 'get',
-      url: '/product/category-list?ct_idx&ct_name&ct_en_name&ct_in_name&ct_file1',
+      url: '/product/category-list',
     }).then(
       res => {
         setCategory_data(res.data)
+        Api.state.baseCode.category = res.data;
         setIsLoading(false)
       }
     ).catch(
@@ -89,11 +90,15 @@ const Category = ({ setTabIndex }: MainHeaderType) => {
     }
   }, [isFocused, exitApp]);
 
-  React.useEffect(() => {
+  // React.useEffect(() => {
+
+  // }, []);
+
+  useFocusEffect(React.useCallback(() => {
     setIsLoading(true)
     getData();
     console.log("i18n", i18n.language)
-  }, []);
+  }, []))
 
 
   const Category_Filter = (categorytype: CategoryType) => {
@@ -107,6 +112,7 @@ const Category = ({ setTabIndex }: MainHeaderType) => {
         :
         <View style={{ flex: 1, marginVertical: 20 }}>
           <FlatList data={category_data}
+            extraData={category_data}
             numColumns={4}
             showsVerticalScrollIndicator={false}
             style={{ paddingHorizontal: 13, }}
@@ -117,7 +123,7 @@ const Category = ({ setTabIndex }: MainHeaderType) => {
                 >
                   {item.ct_file1 ? <View style={{ borderRadius: 20, overflow: 'hidden', marginBottom: 5, }}><Image style={{ width: 68, height: 68, resizeMode: 'cover' }} source={{ uri: Api.state.imageUrl + item.ct_file1 }} /></View> : null}
                   <Text style={[style.text_sb, { fontSize: 14, color: colors.BLACK_COLOR_1, paddingHorizontal: 5, textAlign: 'center', }]}>
-                    {i18n.language == 'in' ? item.ct_in_name : i18n.language == 'en' ? item.ct_en_name : item.ct_name}
+                    {i18n.language == 'In' ? item.ct_in_name : i18n.language == 'En' ? item.ct_en_name : item.ct_name}
                   </Text>
                 </TouchableOpacity>
               </View>

@@ -68,22 +68,23 @@ export type MainNavigatorParams = { //props가 없으면 undefined 있으면 {pr
         gofullscreen: () => void,
         SlideImage: any
     };
-    
-    Search : undefined;
-    Reserve_choice : {
-        target:{
-            id:number,
-            image:string,
-            title:string
+
+    Search: undefined;
+    Reserve_choice: {
+        target: {
+            id: number,
+            image: string,
+            title: string
         },
-        type:string
+        type: string,
+        pt_sale_now: string
     };
     ReportUser: {
         mt_declaration_idx: number
     }
-    ReportPost : {
-        mt_declaration_idx:number
-        pt_idx:number
+    ReportPost: {
+        mt_declaration_idx: number
+        pt_idx: number
     }
     ReportChat: {
         room_idx: number,
@@ -150,15 +151,9 @@ export type MainNavigatorParams = { //props가 없으면 undefined 있으면 {pr
     SettingWithdrawal: undefined;
 
     /**MYpage - Transaction */
-<<<<<<< HEAD
-    SaledList : {target:number};
-    SendReview : {
-        item: ProductItemType
-=======
     SaledList: { target: number };
     SendReview: {
-        room_idx: number
->>>>>>> 5353be2db96268e29bb6699d81473c57fd34a473
+        item: ProductItemType
     };
     PurchaseList: undefined;
     InterestsList: undefined;

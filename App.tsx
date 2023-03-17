@@ -29,6 +29,7 @@ import logsStorage from './components/utils/logStorage';
 
 import axios from 'axios';
 import Api from './api/Api';
+import client from './api/client';
 
 
 
@@ -50,7 +51,19 @@ const App = () => {
     getFcmToken()
   }, [])
 
-
+  const getDefaultData = async () => {
+    //카테고리 정보 가져옴
+    await client({
+      method: 'get',
+      url: '/product/category-list',
+    }).then(
+      res => {
+        Api.state.baseCode.category = res.data
+      }
+    ).catch(
+      err => console.log(err)
+    )
+  };
 
 
   const tracking = async () => {
@@ -68,6 +81,9 @@ const App = () => {
 
   React.useEffect(() => {
     //setTimeout을 이용하면 몇초간 스플래시 스크린을 보여주고 싶은지 설정할 수 있다.
+
+    getDefaultData();
+
     setTimeout(() => {
       SplashScreen.hide();
     }, 2000);
