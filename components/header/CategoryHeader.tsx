@@ -23,7 +23,7 @@ export const CategoryHeader = ({title,setTabIndex}:CategoryHeaderType) => {
                 <Text style={[style.text_b,{color:'#222222',fontSize:18}]}>{title}</Text>
             </View>
             <TouchableOpacity onPress={()=>{Notification();setTabIndex(2);}} style={[{position:'absolute',right:0,width:50,height:50,justifyContent:'center'}]}>
-                <Image style={{width:28,height:28}} source={require('../../assets/img/top_alim_new.png')}></Image>
+                <Image style={{width:28,height:28}} source={require('../../assets/img/top_alim.png')}/>
             </TouchableOpacity>
         </View>
     )

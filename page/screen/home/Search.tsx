@@ -107,6 +107,7 @@ const Search = () => {
         mt_idx: userInfo.idx,
       }
     }).then(res => {
+      console.log(res.data)
       setsearchText(res.data)
     }).catch(error => {
       console.log('getSearchedData')
@@ -310,7 +311,7 @@ const Search = () => {
                         onPress={KeywordNotice}
                         style={{ backgroundColor: colors.GREEN_COLOR_4, borderColor: colors.GREEN_COLOR_2, borderWidth: 1, borderRadius: 150, minWidth: 190, height: 50, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20 }}>
                         <Image source={require('../../../assets/img/ico_bell.png')} style={{ width: 20, height: 20 }} />
-                        <Text style={[style.text_me, { marginLeft: 10, color: '#222', fontSize: 15 }]}>"<Text style={{ color: colors.GREEN_COLOR_2 }}>{selectWord}</Text>" 알림 받기</Text>
+                        <Text style={[style.text_me, { marginLeft: 10, color: '#222', fontSize: 15 }]}>"<Text style={{ color: colors.GREEN_COLOR_2 }}>{selectWord}</Text>" {t("알림 받기")}</Text>
                       </TouchableOpacity>
                     </View>
                   }

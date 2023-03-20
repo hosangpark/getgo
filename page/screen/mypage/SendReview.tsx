@@ -30,7 +30,7 @@ export default function SendReview({ route }: Props) {
   const [items, setitem] = useState<any>()
   const [value, setValue] = useState('')
 
-  const userInfo = useSelector(state => state.userInfo)
+  const userInfo = useSelector((state:any) => state.userInfo)
 
   const [targetNickName, setTargetNickName] = useState('')
 
@@ -76,6 +76,7 @@ export default function SendReview({ route }: Props) {
   }
   const getReviewData = async () => {
     console.log('route.params', route.params);
+    console.log('route.params', userInfo);
     await client({
       method: 'get',
       url: `/product/review_basic?room_idx=${route.params?.item?.room_idx}&mt_idx=${userInfo.idx}`
@@ -93,6 +94,7 @@ export default function SendReview({ route }: Props) {
 
   React.useEffect(() => {
     getReviewData()
+    console.log(items)
   }, [])
 
   return (

@@ -32,8 +32,8 @@ export const LangugaeChange = ({isVisible,selectLag,action,action2}:ModalType) =
     selectLag(target)
     setselectItem(target)
   }
-
   return(
+
     <Modal 
       animationIn ={"slideInUp"}
       animationOut ={"slideOutDown"}
@@ -48,6 +48,7 @@ export const LangugaeChange = ({isVisible,selectLag,action,action2}:ModalType) =
       //     }                                                                                           
       // }}
     >
+    <TouchableWithoutFeedback style={{flex:1, backgroundColor:'aqua'}} onPress={action2}>
       <View style={{flex:1,width:'100%',flexDirection:'column',justifyContent:'flex-end',}}>
         <View style={{backgroundColor:'#fff',borderTopLeftRadius:30, borderTopRightRadius:30,}}>
           <View style={{justifyContent:'center',alignItems:'flex-start',marginBottom:25,
@@ -83,6 +84,7 @@ export const LangugaeChange = ({isVisible,selectLag,action,action2}:ModalType) =
           </View>
         </View>
       </View>
+    </TouchableWithoutFeedback>
     </Modal>
   )
 }

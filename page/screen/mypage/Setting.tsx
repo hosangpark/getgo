@@ -9,10 +9,8 @@
 import React, { useState } from 'react';
 import {
   Alert,
-  SafeAreaView, Image, Text, View, Switch, StyleSheet, ScrollView
+  SafeAreaView, Image, Text, View, Switch, StyleSheet, ScrollView,TouchableOpacity, TouchableWithoutFeedback
 } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-
 import style from '../../../assets/style/style';
 import { colors } from '../../../assets/color';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
@@ -187,9 +185,12 @@ const MypageSetting = () => {
       return () => { };
     }, []),
   );
-
+  const FFFFF = ()=>{
+    console.log('d')
+  }
 
   return (
+    <TouchableWithoutFeedback style={{flex:1}} onPress={FFFFF}>
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       <BackHeader title={t('설정')} />
       <View style={[{ padding: 20, borderBottomWidth: 1, borderColor: colors.GRAY_COLOR_3, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }]}>
@@ -338,13 +339,14 @@ const MypageSetting = () => {
             style={{ width: 7, height: 12, marginRight: 4 }}
             source={require('../../../assets/img/arrow4_r.png')} />
         </TouchableOpacity>
-        <TouchableOpacity style={[{ paddingVertical: 25, paddingHorizontal: 20, flexDirection: 'row', justifyContent: 'flex-end' }]}
-          onPress={Withdrawal}
+        <View style={[{ paddingVertical: 25, paddingHorizontal: 20, flexDirection: 'row', justifyContent: 'flex-end'}]}
         >
-          <Text style={[style.text_re, { fontSize: 13, color: colors.BLACK_COLOR_2, textDecorationLine: 'underline' }]}>
-            {t('탈퇴하기')}
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity onPress={Withdrawal}>
+            <Text style={[style.text_re, { fontSize: 13, color: colors.BLACK_COLOR_2, textDecorationLine: 'underline' }]}>
+              {t('탈퇴하기')}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
       </ScrollView>
 
@@ -356,6 +358,7 @@ const MypageSetting = () => {
       />
       <BackHandlerCom />
     </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
