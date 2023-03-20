@@ -150,9 +150,15 @@ export const MainHeader = ({ setTabIndex, setListChanege }: MainHeaderType) => {
         setPlaceListToggle(false)
     }
 
-    React.useEffect(() => {
-        getLocationData();
-    }, [])
+    useFocusEffect(
+        React.useCallback(() => {
+    
+            getLocationData()
+    
+          return () => { };
+        ;
+    }, [myLocation.location1.mt_area, myLocation.location2.mt_area])
+    )
 
 
 

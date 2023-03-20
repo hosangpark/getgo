@@ -48,12 +48,12 @@ const ChangePhoneResult = ({route}:Props) => {
                 <View style={[style.gray_box,{alignItems:'center',justifyContent:'center',marginTop:30,paddingVertical:40,borderRadius:6}]}>
                     <View style={{alignItems:'center'}}>
                         <Text style={[style.text_re,{fontSize:15,color:colors.BLACK_COLOR_2}]}>{t('기존 휴대폰 번호')}</Text>
-                        <Text style={[style.text_b,{fontSize:20,color:colors.BLACK_COLOR_2}]}>{beforeAreaCode} {beforePhone}</Text>
+                        <Text style={[style.text_b,{fontSize:20,color:colors.BLACK_COLOR_2}]}>+{beforeAreaCode} {beforePhone}</Text>
                     </View>
                     <Image source={require('../../../assets/img/ico_select.png')} style={{width:20,height:20,marginVertical:10}} />
                     <View style={{alignItems:'center'}}>
                         <Text style={[style.text_re,{fontSize:15,color:colors.GREEN_COLOR_2}]}>{t('변경된 휴대폰 번호')}</Text>
-                        <Text style={[style.text_b,{fontSize:20,color:colors.GREEN_COLOR_2}]}>{afterAreaCode} {afterPhone}</Text>
+                        <Text style={[style.text_b,{fontSize:20,color:colors.GREEN_COLOR_2}]}>+{afterAreaCode} {afterPhone}</Text>
                     </View>
                 </View>
             </ScrollView>

@@ -64,6 +64,7 @@ const AuthMyLocation = ({ route }: Props) => {
     const [nowLongName, setNowLongName] = React.useState('');
     const [distance, setDistance] = React.useState(0);
     const [selLongName, setSelLongName] = React.useState('');
+    const [CountryName, setCountryName] = React.useState('');
     const [fulladdress, setFulladdress] = React.useState('');
     const YorN = distance < 25 ? "Y" : "N"
     const onRegionChange = (region: RegionType) => {
@@ -74,12 +75,35 @@ const AuthMyLocation = ({ route }: Props) => {
         //  console.log(getDistanceBetweenPoints(nowLocation.mt_lat, nowLocation.mt_log, selLocation.mt_lat, selLocation.mt_log, 'kilometers'))
     }
 
-    const checkAuth = () => {
-        fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + (selLocation.mt_lat) + ',' + (selLocation.mt_log)
+    const checkAuth = async() => {
+     await fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + (selLocation.mt_lat) + ',' + (selLocation.mt_log)
             + '&key=' + 'AIzaSyC-iZoncRIA4y1xF8zFRkTT2Kp8A3CPC0o' + `&language=${i18n.language}`)
             .then((response) => response.json())
             .then((responseJson) => {
-                setSelLongName(responseJson.results[0].address_components[1].long_name);
+                for (var i = 0; i<9; i++){
+                    if(responseJson.results[0].address_components[i].types.includes('country')){
+                        setCountryName(responseJson.results[0].address_components[i].long_name);
+                        break
+                    }
+                }
+
+                if(CountryName == "Indonesia"){
+                    for (var i = 0; i<9; i++){
+                        if(responseJson.results[i].address_components[0].types.includes('administrative_area_level_4')){
+                            setSelLongName(responseJson.results[i].address_components[1].long_name);
+                            break
+                        }
+                    }
+                } else {
+                    for (var i = 0; i<5; i++){
+                        if(responseJson.results[i].address_components[0].types.includes('sublocality_level_2')){
+                            setSelLongName(responseJson.results[i].address_components[0].long_name);
+                            break
+                        }
+                    }
+                }
+
+
                 setFulladdress(responseJson.results[0].address_components[3].long_name + ' ' + responseJson.results[0].address_components[2].long_name + ' ' + responseJson.results[0].address_components[1].long_name)
             }).catch((err) => console.log("udonPeople error : " + err));
     }
@@ -223,8 +247,7 @@ const AuthMyLocation = ({ route }: Props) => {
     /** 드래그시 위치 */
     React.useEffect(() => {
         checkAuth();
-        console.log(selLocation)
-    }, [distance])
+    }, [selLocation])
 
     /** 거리계산 */
     React.useEffect(() => {

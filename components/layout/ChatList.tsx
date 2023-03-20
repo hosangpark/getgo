@@ -55,7 +55,7 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal }
                 null
                 :
                 <Text style={{ color: 'red', marginRight: 5, justifyContent: 'center' }}>
-                  차단중
+                  {t("차단중")}
               {/* <Image style={{width:20,height:20}} source={require('../../assets/img/top_alim.png')}/> */}
                 </Text>
               }
@@ -72,10 +72,9 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal }
         </TouchableOpacity>
       </View>
       <View style={{
-        position: 'absolute', backgroundColor: colors.WHITE_COLOR, right: 35, top: 20, borderRadius: 5, elevation: 10,
-        paddingVertical: 15, zIndex: 999, overflow: 'visible'
+        position: 'absolute', backgroundColor: colors.WHITE_COLOR, right: 35, top: 20, borderRadius: 5, elevation: 10, paddingVertical: 15
       }}>
-        {listmodal == item.chr_id ?
+        {listmodal == item.chr_id &&
           <>
             <TouchableOpacity style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 25 }}
               onPress={() => ToggleBridge({ chr_id: item.chr_id, ctt_push: item.ctt_push })}
@@ -96,7 +95,6 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal }
               </Text>
             </TouchableOpacity>
           </>
-          : null
         }
       </View>
     </View>

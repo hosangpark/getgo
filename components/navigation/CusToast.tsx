@@ -21,7 +21,8 @@ const cusToast = (message:string, duration?:any, position?:any, offset?:number) 
     topOffset: (Platform.OS === 'ios'? 66 + getStatusBarHeight() : 10),
     bottomOffset: offset ? offset + 10 : Platform.OS === "ios" ? 25 : 10,
     onShow: () => {},
-    onHide: () => {}
+    onHide: () => {},
+    onPress:() => {}
   });
 
 }

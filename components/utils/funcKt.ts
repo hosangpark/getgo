@@ -181,9 +181,9 @@ export const NumberReplace = (event: any) => {
 
 export const NumberComma = (number: number) => {
     const comNumber = number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-
     return comNumber;
 }
+
 
 import { format, formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";

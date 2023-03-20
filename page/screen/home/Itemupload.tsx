@@ -220,7 +220,7 @@ const Itemupload = ({ route }: Props) => {
       !uploadpictures ||
       !uploadpictures.length
     ) {
-      Alert.alert('', t('사진 추가') + ' or ' + t('내용입력해주세요'));
+      cusToast(t('필수 항목을 모두 입력해주세요.'));
       setLoading(false);
       return;
     } else {
@@ -578,7 +578,7 @@ const Itemupload = ({ route }: Props) => {
               blurOnSubmit={false}
               keyboardType="number-pad"
               value={price}
-              onChangeText={setPrice}
+              onChangeText={(e)=>setPrice(Api.comma(e))}
               onSubmitEditing={Complete}
             />
           </View>
