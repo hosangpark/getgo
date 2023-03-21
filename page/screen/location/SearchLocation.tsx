@@ -58,7 +58,7 @@ const SearchLocation = ({ route }: Props) => {
     const myLocation = useSelector((state: any) => state.myLocation)
     const userInfo = useSelector((state: any) => state.userInfo);
 
-    const [CountryName, setCountryName] = React.useState(i18n.language == 'In' ? 'Indonesia' : i18n.language == 'En' ? 'English' : 'Korea');
+    const [CountryName, setCountryName] = React.useState(i18n.language == 'Id' ? 'Indonesia' : i18n.language == 'En' ? 'English' : 'Korea');
 
     const searchPlace = () => {
         if (keyword != '') {

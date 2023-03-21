@@ -465,7 +465,7 @@ const Itempost = ({ route }: Props) => {
                   },
                 ]}>
                 {
-                  i18n.language == 'In' ? items.data[0].ct_in_name : i18n.language == 'En' ? items.data[0].ct_en_name : items.data[0].ct_name
+                  i18n.language == 'Id' ? items.data[0].ct_in_name : i18n.language == 'En' ? items.data[0].ct_en_name : items.data[0].ct_name
                 }
               </Text>
             </View>
