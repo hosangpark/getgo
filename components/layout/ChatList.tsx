@@ -32,7 +32,7 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal }
         flex: 1, position: 'relative',
       }}
     >
-      <View style={{ flexDirection: 'row', flex: 10 }}>
+      <View style={{ flexDirection: 'row', flex: 1 }}>
         <TouchableOpacity style={{ flexDirection: 'row' }}
           onPress={() => Enter(item)}>
           {/* onPress={()=>navigation.navigate('ReviewDetail',item)}> */}
@@ -42,11 +42,11 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal }
             : require('../../assets/img/img_profile.png')
           } />
           <View style={{ width: '80%' }}>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={[style.text_sb, { fontSize: 12, color: colors.BLACK_COLOR_1 }]}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', }}>
+              <Text style={[style.text_sb, { fontSize: 12, color: colors.BLACK_COLOR_1, marginRight: 5, }]}>
                 {item.mt_nickname}
               </Text>
-              <Text style={[style.text_li, { fontSize: 12, color: colors.GRAY_COLOR_2, marginLeft: 5 }]}>
+              <Text style={[style.text_li, { fontSize: 12, color: colors.GRAY_COLOR_2 }]}>
                 {item.mt_area} / {foramtDate(item.crt_last_date)}
               </Text>
             </View>
@@ -56,7 +56,7 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal }
                 :
                 <Text style={{ color: 'red', marginRight: 5, justifyContent: 'center' }}>
                   {t("차단중")}
-              {/* <Image style={{width:20,height:20}} source={require('../../assets/img/top_alim.png')}/> */}
+                  {/* <Image style={{width:20,height:20}} source={require('../../assets/img/top_alim.png')}/> */}
                 </Text>
               }
               <Text style={[style.text_re, { fontSize: 15, color: colors.BLACK_COLOR_2 }]} numberOfLines={1}>
@@ -66,7 +66,7 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal }
           </View>
         </TouchableOpacity>
       </View>
-      <View style={{ flexDirection: 'row', flex: 1 }}>
+      <View style={{ flexDirection: 'row', }}>
         <TouchableOpacity onPress={() => Toggle(item.chr_id)} style={{ flex: 3 }}>
           <Image style={{ width: 28, height: 28 }} source={require('../../assets/img/top_menu.png')} />
         </TouchableOpacity>

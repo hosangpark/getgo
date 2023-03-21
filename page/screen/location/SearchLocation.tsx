@@ -27,6 +27,7 @@ import { useTranslation } from 'react-i18next';
 import MapView, { Marker } from 'react-native-maps';
 import client from '../../../api/client';
 import LoadingIndicator from '../../../components/layout/Loading';
+import Api, { NodataView } from '../../../api/Api';
 
 
 
@@ -39,7 +40,7 @@ const SearchLocation = ({ route }: Props) => {
 
     const { type, selectIdx, mt_type, sns_key } = route?.params;
     // type == 'join' = mt_type, sns_key
-    const { t } = useTranslation()
+    const { t, i18n } = useTranslation()
 
     const dispatch = useDispatch();
     const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
@@ -57,6 +58,8 @@ const SearchLocation = ({ route }: Props) => {
     const myLocation = useSelector((state: any) => state.myLocation)
     const userInfo = useSelector((state: any) => state.userInfo);
 
+    const [CountryName, setCountryName] = React.useState(i18n.language == 'In' ? 'Indonesia' : i18n.language == 'En' ? 'English' : 'Korea');
+
     const searchPlace = () => {
         if (keyword != '') {
             setSearchKeyword(keyword);
@@ -65,52 +68,111 @@ const SearchLocation = ({ route }: Props) => {
         }
     }
 
+    const [CheckList, setCheckList] = React.useState([]);
     const [tempPlaceList, setTempPlaceList] = React.useState([
         {
             area: t('불러오는중...'),
-            zone: ''
+            zone: '',
+            lat: 0,
+            lng: 0,
         },
     ]);
 
-    const FindLocation = (type: string) => {
+    const FindLocation = async (type: string) => {
         console.log('nowLocation', nowLocation)
-        fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + (type == 'now' ? nowLocation.mt_lat : null) + ',' + (type == 'now' ? nowLocation.mt_log : null)
-            + '&key=' + 'AIzaSyC-iZoncRIA4y1xF8zFRkTT2Kp8A3CPC0o' + '&language=ko')
-            .then((response) => response.json())
-            .then((responseJson) => {
-                if (type == 'now') { //현재 동
-                    console.log(responseJson.results[0].address_components[1].long_name);
-                    FindNowLocation({
-                        lat: nowLocation.mt_lat,
-                        lng: nowLocation.mt_log,
-                        area: responseJson.results[0].address_components[1].long_name
-                    })
-                    console.log(responseJson.results[0].address_components[3].long_name + ' ' + responseJson.results[0].address_components[2].long_name + ' ' + responseJson.results[0].address_components[1].long_name)
-                }
-                else if (type == 'sel') { //선택한 동
-                    console.log(responseJson.results[0].address_components[1].long_name);
-                    console.log(responseJson.results[0].address_components[3].long_name + ' ' + responseJson.results[0].address_components[2].long_name + ' ' + responseJson.results[0].address_components[1].long_name)
-                }
-            }).catch((err) => console.log("udonPeople error : " + err));
+
+        setIsLoading(true)
+
+        if (nowLocation.mt_lat && nowLocation.mt_log) {
+            let lat = nowLocation.mt_lat;
+            let lng = nowLocation.mt_log;
+
+            const Center = { lat: lat, lng: lng }
+            const East = DestinationPoint(lat, lng, 90, 1);
+            const South = DestinationPoint(lat, lng, 180, 1);
+            const North = DestinationPoint(lat, lng, 0, 1);
+            const West = DestinationPoint(lat, lng, 270, 1);
+
+            let list = [];
+
+            let tempData = await getGoogleLocData(Center.lat, Center.lng);
+            list = [...list, ...tempData]
+            list = [... new Map(list.map(item => [item.zone, item])).values()]
+            setCheckList(tempData);
+
+            tempData = await getGoogleLocData(East?.lat, East?.lng);
+            list = [...list, ...tempData]
+
+            tempData = await getGoogleLocData(South?.lat, South?.lng);
+            list = [...list, ...tempData]
+
+            tempData = await getGoogleLocData(North?.lat, North?.lng);
+            list = [...list, ...tempData]
+
+            tempData = await getGoogleLocData(West?.lat, West?.lng);
+            list = [...list, ...tempData]
+
+            const unique = [... new Map(list.map(item => [item.zone, item])).values()]
+
+            console.log('unique', unique);
+
+            setTempPlaceList(unique);
+        } else {
+            Alert.alert(t('위치정보를 받아올 수 없습니다.'));
+        }
+
+        setIsLoading(false)
+
+        // https://maps.googleapis.com/maps/api/geocode/json?latlng=35.2441162,129.0902836&result_type=sublocality_level_2&location_type=&key=AIzaSyC-iZoncRIA4y1xF8zFRkTT2Kp8A3CPC0o&language=Ko
+
+
 
         setSearchType('location')
     }
 
-    const getMylocationData = async () => {
-        await client({
-            method: 'get',
-            url: '/user/myarealist?mt_idx=8&total_count&mat_idx&mat_area&mat_lat&mat_lon&mat_status',
-            data: {
-                mt_idx: userInfo.idx
+    const getGoogleLocData = async (lat, lng) => {
+        return await fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng
+            + '&result_type=sublocality_level_2&location_type=&key=' + Api.state.googleMapKey + '&language=' + i18n.language)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                // console.log('nowLocation2', responseJson);
+
+                if (responseJson.status == 'OK') {
+                    return responseJson.results.map((item, index) => {
+                        // console.log('tei', item)
+                        return { area: item.formatted_address, zone: item.address_components[0].long_name, lat: item.geometry.location.lat, lng: item.geometry.location.lng }
+                    })
+                } else {
+                    return []
+                }
+            }).catch((err) => {
+                console.log("udonPeople error : " + err)
+                return [];
+            });
+    }
+
+    const locDataRebuild = (responseJson) => {
+        for (var i = 0; i < 9; i++) {
+            if (responseJson.results[0].address_components[i].types.includes('country')) {
+                setCountryName(responseJson.results[0].address_components[i].long_name);
+                break
             }
-        }).then(res => console.log(res.data))
-            .catch(err => {
-                console.log(err)
-            })
-    };
+        }
+    }
+
+    // const getMylocationData = async () => {
+    //     await client({
+    //         method: 'get',
+    //         url: '/user/myarealist?mt_idx=' + userInfo.idx,
+    //     }).then(res => console.log('/user/myarealist?mt_idx=' + userInfo.idx, res.data))
+    //         .catch(err => {
+    //             console.log(err)
+    //         })
+    // };
 
     React.useEffect(() => {
-        getMylocationData();
+        // getMylocationData();
+
     }, []);
 
 
@@ -120,20 +182,17 @@ const SearchLocation = ({ route }: Props) => {
     }
 
 
-    const selectLocationAccess = (item: any) => {
-        SearchedLocation({ item })
-
-    }
 
     React.useEffect(() => {
+        //현재위치
         getLoaction();
     }, [])
 
     React.useEffect(() => {
-        console.log('nowLocation', nowLocation);
+        console.log('nowLocation', nowLocation, type,);
 
-        //처음 로딩후 현재 위치 불러옴.
-        if (type == 'join' && nowLocation.mt_lat) {
+        //처음 로딩후 현재 위치버튼 누름.
+        if (nowLocation.mt_lat) {
             FindLocation('now')
         }
     }, [nowLocation])
@@ -144,9 +203,10 @@ const SearchLocation = ({ route }: Props) => {
             url: '/user/search-area',
             data: {
                 input: keyword,
-                nat: "ko"
+                nat: i18n.language
             }
         }).then(res => {
+            console.log('user/search-area', res.data)
             setTempPlaceList(res.data.data)
         }
         )
@@ -155,7 +215,36 @@ const SearchLocation = ({ route }: Props) => {
             })
     };
 
-    /** 현재지역 위치기반 리스트 요청 */
+    //거리이격 좌표구하기
+    Number.prototype.toRad = function () {
+        return this * Math.PI / 180;
+    }
+
+    Number.prototype.toDeg = function () {
+        return this * 180 / Math.PI;
+    }
+
+    const DestinationPoint = function (lat: Number, lng: Number, brng: Number, dist: any) {
+        dist = dist / 6371;
+        brng = brng.toRad();
+
+        var lat1 = lat.toRad(), lon1 = lng.toRad();
+
+        var lat2 = Math.asin(Math.sin(lat1) * Math.cos(dist) +
+            Math.cos(lat1) * Math.sin(dist) * Math.cos(brng));
+
+        var lon2 = lon1 + Math.atan2(Math.sin(brng) * Math.sin(dist) *
+            Math.cos(lat1),
+            Math.cos(dist) - Math.sin(lat1) *
+            Math.sin(lat2));
+
+        if (isNaN(lat2) || isNaN(lon2)) return null;
+
+        return { lat: lat2.toDeg(), lng: lon2.toDeg() }
+    }
+
+
+    /** 현재지역 위치기반 리스트 요청 -> 안씀 */
     const FindNowLocation = async ({ lat, lng, area }: { lat: number, lng: number, area: string }) => {
         await client({
             method: 'get',
@@ -169,8 +258,17 @@ const SearchLocation = ({ route }: Props) => {
             })
     };
     /** 선택지역 위치요청 */
-    const SearchedLocation = async ({ item }: { item: { zone: string, area: string } }) => {
-        await client({
+    const SearchedLocation = (item: { zone: string, area: string, lat: any, lng: any }) => {
+
+        console.log('SearchedLocation, ', item)
+        let mat_status = 'N';
+        if (CheckList.length) {
+            CheckList.forEach(({ zone }) => {
+                if (item.zone == zone) mat_status = 'Y'
+            })
+        }
+
+        client({
             method: 'get',
             url: `/user/search-area_selected`,
             params: {
@@ -178,6 +276,7 @@ const SearchLocation = ({ route }: Props) => {
                 zone: item.zone
             }
         }).then(res => {
+            console.log('res', res.data);
             if (type == 'join') {
                 navigation.navigate('JoinStep2', {
                     area: item.zone,
@@ -185,23 +284,37 @@ const SearchLocation = ({ route }: Props) => {
                     mt_log: res.data.mt_log,
                     mt_type: mt_type ?? 1,
                     sns_key: sns_key ?? '',
+                    mat_status: mat_status,
                 })
             }
             else if (type == 'set' && selectIdx) {
-                navigation.navigate('AuthMyLocation', {
-                    setLocation: {
-                        mt_lat: res.data.mt_lat,
-                        mt_log: res.data.mt_log,
-                    },
-                    selectIdx
+                // navigation.navigate('AuthMyLocation', {
+                //     setLocation: {
+                //         mt_lat: res.data.mt_lat,
+                //         mt_log: res.data.mt_log,
+                //     },
+                //     selectIdx
+                // })
+                client({
+                    method: 'post',
+                    url: '/user/area_add',
+                    data: {
+                        mt_idx: userInfo.idx,
+                        mat_area: item.zone,
+                        mat_lat: res.data.mt_lat,
+                        mat_lon: res.data.mt_log,
+                        mat_status: mat_status,
+                    }
+                }).then(res => {
+                    navigation.navigate('SetMyLocation')
+                }).catch(error => {
+                    console.log(error)
                 })
             }
-        }
-        )
-            .catch(err => {
-                console.log(err)
-            })
+        });
+
     };
+
 
     const ListCoordinate = async ({ area, zone }: { area: string, zone: string }) => {
         await client({
@@ -243,6 +356,9 @@ const SearchLocation = ({ route }: Props) => {
                         </TouchableOpacity>
                     }
                 </View>
+                {isLoading &&
+                    <LoadingIndicator />
+                }
                 {searchType &&
                     <View style={{ marginTop: 40, flex: 1 }}>
                         {searchType == 'location' ?
@@ -251,17 +367,16 @@ const SearchLocation = ({ route }: Props) => {
                             <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}><Text style={{ color: colors.GREEN_COLOR_2 }}>'{searchKeyword}'</Text>{t('검색결과')}</Text>
                         }
                         <View style={{ marginTop: 20 }}>
-                            {tempPlaceList.map((item, index) => {
-                                return (
-                                    <TouchableOpacity onPress={() => {
-                                        selectLocationAccess(item);
-                                    }} key={index} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
-                                        <Image source={require('../../../assets/img/ico_map.png')} style={{ width: 17, height: 20.5 }} />
-                                        <Text style={[style.text_me, { fontSize: 15, color: colors.BLACK_COLOR_2, marginLeft: 10 }]}>
-                                            {item.area}</Text>
-                                    </TouchableOpacity>
-                                )
-                            })}
+                            {tempPlaceList.length ?
+                                tempPlaceList.map((item, index) => {
+                                    return (
+                                        <TouchableOpacity onPress={() => SearchedLocation(item)} key={index} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
+                                            <Image source={require('../../../assets/img/ico_map.png')} style={{ width: 17, height: 20.5 }} />
+                                            <Text style={[style.text_me, { fontSize: 15, color: colors.BLACK_COLOR_2, marginLeft: 10 }]}>
+                                                {item.area}</Text>
+                                        </TouchableOpacity>
+                                    )
+                                }) : <NodataView></NodataView>}
                         </View>
                     </View>
                 }

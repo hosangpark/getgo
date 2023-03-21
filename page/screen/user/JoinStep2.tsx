@@ -44,7 +44,7 @@ import Api from '../../../api/Api';
 
 type Props = StackScreenProps<MainNavigatorParams, 'JoinStep2'>
 const JoinStep2 = ({ route }: any) => {
-    const { area, mt_lat, mt_log, mt_type, sns_key } = route?.params;
+    const { area, mt_lat, mt_log, mt_type, sns_key, mat_status } = route?.params;
 
     const userInfo = useSelector((state: any) => state.userInfo);
     const myLocation = useSelector((state: any) => state.myLocation);
@@ -163,7 +163,7 @@ const JoinStep2 = ({ route }: any) => {
                 mt_log: mt_log,
                 mt_type: mt_type,
                 sns_key: sns_key,
-                mat_status: 'N',
+                mat_status: mat_status ?? 'N',
                 mt_app_token: Api.state.mb_fcm
             }
         }).then((res) => {

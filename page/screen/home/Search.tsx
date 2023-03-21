@@ -14,7 +14,7 @@ import {
 import style from '../../../assets/style/style';
 import { colors } from '../../../assets/color';
 
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation, useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../../components/types/routerTypes';
 import { SearchHeader } from '../../../components/header/SearchHeader';
@@ -175,7 +175,24 @@ const Search = () => {
   }, [searchKeyword])
 
   /** 검색 시 상품 리스트 가져오기 */
-  React.useEffect(() => {
+  // React.useEffect(() => {
+  //   if (selectWord != '') {
+  //     getSearchedData();
+  //     setIsSearch(true);
+  //     setIsLoading(true)
+  //     setTimer(true)
+  //     getSearchData();
+  //     setsearchText(searchText.concat({ slt_idx: 1, slt_txt: selectWord }))
+  //     searchRef.current?.blur()
+  //     setSeconds(4)
+  //   }
+  //   else {
+  //     setIsSearch(false);
+  //     getSearchedData()
+  //   }
+  // }, [selectWord])
+
+  useFocusEffect(React.useCallback(() => {
     if (selectWord != '') {
       getSearchedData();
       setIsSearch(true);
@@ -190,7 +207,7 @@ const Search = () => {
       setIsSearch(false);
       getSearchedData()
     }
-  }, [selectWord])
+  }, [selectWord]))
 
   // React.useEffect(()=>{
   //   console.log('now ? ' , searchKeyword);

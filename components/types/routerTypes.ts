@@ -53,6 +53,7 @@ export type MainNavigatorParams = { //props가 없으면 undefined 있으면 {pr
             mt_log: number;
         },
         selectIdx?: string;
+        mt_address?: string;
     }
 
     Itemlist: undefined;
