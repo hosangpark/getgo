@@ -155,7 +155,7 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
             <Text style={[style.text_b, {
               color: colors.GREEN_COLOR_2, backgroundColor: colors.GREEN_COLOR_1, fontSize: 12, paddingHorizontal: 6, paddingVertical: 3, borderRadius: 5
             }]}>
-              {i18n.language == 'In' ? item.ct_in_name : i18n.language == 'En' ? item.ct_en_name : item.ct_name}
+              {i18n.language == 'Id' ? item.ct_in_name : i18n.language == 'En' ? item.ct_en_name : item.ct_name}
             </Text>
             {toggleOpen ? (
               <View style={{

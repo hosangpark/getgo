@@ -123,7 +123,7 @@ const Category = ({ setTabIndex }: MainHeaderType) => {
                 >
                   {item.ct_file1 ? <View style={{ borderRadius: 20, overflow: 'hidden', marginBottom: 5, }}><Image style={{ width: 68, height: 68, resizeMode: 'cover' }} source={{ uri: Api.state.imageUrl + item.ct_file1 }} /></View> : null}
                   <Text style={[style.text_sb, { fontSize: 14, color: colors.BLACK_COLOR_1, paddingHorizontal: 5, textAlign: 'center', }]}>
-                    {i18n.language == 'In' ? item.ct_in_name : i18n.language == 'En' ? item.ct_en_name : item.ct_name}
+                    {i18n.language == 'Id' ? item.ct_in_name : i18n.language == 'En' ? item.ct_en_name : item.ct_name}
                   </Text>
                 </TouchableOpacity>
               </View>
