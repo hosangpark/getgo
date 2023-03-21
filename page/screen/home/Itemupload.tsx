@@ -381,7 +381,7 @@ const Itemupload = ({ route }: Props) => {
     if (Api.state.baseCode.category && Api.state.baseCode.category.length) {
       // { label: t('디지털기기'), value: '디지털기기', sel_id: 1 }
       const newCategory = Api.state.baseCode.category.map((item, index) => {
-        let label = i18n.language == 'In' ? item.ct_in_name : i18n.language == 'En' ? item.ct_en_name : item.ct_name;
+        let label = i18n.language == 'Id' ? item.ct_in_name : i18n.language == 'En' ? item.ct_en_name : item.ct_name;
         return { label: label, value: label, sel_id: item.ct_idx };
       });
       setCategoryOptions(newCategory);
@@ -578,7 +578,7 @@ const Itemupload = ({ route }: Props) => {
               blurOnSubmit={false}
               keyboardType="number-pad"
               value={price}
-              onChangeText={(e)=>setPrice(Api.comma(e))}
+              onChangeText={(e) => setPrice(Api.comma(e))}
               onSubmitEditing={Complete}
             />
           </View>
