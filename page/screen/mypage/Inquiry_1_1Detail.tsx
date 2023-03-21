@@ -148,11 +148,13 @@ const InquiryDetail = ({ route }: Props) => {
               </Text>
             </View>
             <View style={{ marginTop: 10 }}></View>
-
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              {image_arr.length > 0 &&
-                image_arr.map((v, i) => (
-                  <Image
+            <FlatList
+            showsHorizontalScrollIndicator={false}
+            style={{ marginBottom: 30 }}
+            data={image_arr}
+            renderItem={({ item, i }) => (
+              <View style={{ marginRight: 8, width: 100, height: 100 }}>
+                <Image
                     key={'img_' + i}
                     style={{
                       width: 100,
@@ -161,11 +163,14 @@ const InquiryDetail = ({ route }: Props) => {
                       marginRight: 10,
                     }}
                     source={{
-                      uri: v.uri,
+                      uri: item.uri,
                     }}
                   />
-                ))}
-            </View>
+              </View>
+            )}
+            horizontal={true}
+          />
+            
             <View style={{ marginVertical: 20 }}>
               <Text
                 style={[
