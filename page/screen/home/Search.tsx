@@ -85,11 +85,12 @@ const Search = () => {
 
   /** 검색어 입력 */
   const searchput = async () => {
+    console.log(selectWord)
     await client({
       method: 'get',
       url: `/product/slt_txt_search`,
       params: {
-        slt_txt: selectWord,
+        slt_txt: searchKeyword,
       }
     }).then(res => {
       setTempSearchList(res.data)
@@ -170,7 +171,9 @@ const Search = () => {
   React.useEffect(() => {
     // searchput()
     if (searchKeyword == '') {
-      setSelectWord('')
+      setSelectWord('') 
+    } else {
+      searchput()
     }
   }, [searchKeyword])
 
@@ -259,7 +262,7 @@ const Search = () => {
           {!isSearch ? //최종검색을 하지 않았을때(enter, 검색버튼 누르지 않음)
             <ScrollView style={{ paddingHorizontal: 20 }}>
               <Text style={[style.text_sb, { color: colors.GREEN_COLOR_2, fontSize: 15, marginTop: 28, marginBottom: 14, }]}>
-                관련검색어
+              {t('관련검색어')}
                 </Text>
               {tempSearchList.map((item, index) => {
                 return (

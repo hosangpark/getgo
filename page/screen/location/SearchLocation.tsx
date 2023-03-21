@@ -116,6 +116,7 @@ const SearchLocation = ({ route }: Props) => {
 
     const getLoaction = async () => {
         setIsLoading(true);
+        console.log('e')
         geoLocation(setNowLocation, setIsLoading);
     }
 
@@ -126,11 +127,12 @@ const SearchLocation = ({ route }: Props) => {
     }
 
     React.useEffect(() => {
+        
         getLoaction();
     }, [])
 
     React.useEffect(() => {
-        console.log('nowLocation', nowLocation);
+        console.log('nowLocation', nowLocation); 
 
         //처음 로딩후 현재 위치 불러옴.
         if (type == 'join' && nowLocation.mt_lat) {

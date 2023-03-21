@@ -231,7 +231,7 @@ const Itemupload = ({ route }: Props) => {
       form.append(`ct_id`, selectCategory.sel_id);
       form.append(`pt_title`, title);
       form.append(`pt_content`, bodyText);
-      form.append(`pt_selling_price`, price);
+      form.append(`pt_selling_price`, Api.uncomma(price));
       if (myLocation.select_location == 1) {
         form.append(`pt_area`, myLocation.location1.mt_area);
         form.append(`pt_lat`, myLocation.location1.mt_lat);

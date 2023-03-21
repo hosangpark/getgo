@@ -294,7 +294,7 @@ const AuthMyLocation = ({ route }: Props) => {
                     >
                         <Image style={{ width: 30, height: 50 }} resizeMode={'contain'} source={require('../../../assets/img/marker_town.png')} />
                     </Marker>
-                    <View style={{}}>
+                    <View style={{flex:1,backgroundColor:'auqa'}}>
                         <Text style={{ color: 'blue' }}>{t('현재위치와의 거리')} {distance} {t('km')}</Text>
                     </View>
                 </MapView>
