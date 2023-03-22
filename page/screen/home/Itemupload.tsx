@@ -210,9 +210,7 @@ const Itemupload = ({ route }: Props) => {
   };
 
   const Complete = () => {
-    // setLoading(true)
-
-
+    setLoading(true)
     if (
       title == '' ||
       bodyText == '' ||
@@ -224,7 +222,7 @@ const Itemupload = ({ route }: Props) => {
       setLoading(false);
       return;
     } else {
-
+      setLoading(true)
       console.log('Complete', '2', uploadpictures.length);
       const form = new FormData();
       form.append('mt_idx', userInfo.idx);
@@ -278,13 +276,12 @@ const Itemupload = ({ route }: Props) => {
             data: form,
           })
             .then(res => {
+              setLoading(true)
               navigation.goBack();
-              cusToast(res.data.message);
-              setLoading(false);
+              cusToast(t(res.data.message));
             })
             .catch(error => {
               console.log(error);
-              setLoading(false);
             });
         };
         setUpload();
@@ -299,8 +296,8 @@ const Itemupload = ({ route }: Props) => {
             data: form,
           })
             .then(res => {
-              cusToast(res.data.message);
-              setLoading(false);
+              setLoading(true)
+              cusToast(t(res.data.message));
               navigation.goBack();
             })
             .catch(error => {
@@ -579,13 +576,13 @@ const Itemupload = ({ route }: Props) => {
               keyboardType="number-pad"
               value={price}
               onChangeText={(e)=>setPrice(Api.comma(e))}
-              onSubmitEditing={Complete}
+              onSubmitEditing={loading? ()=>{}:Complete}
             />
           </View>
         </KeyboardAvoidingView>
-        <View style={{ backgroundColor: colors.GREEN_COLOR_2 }}>
+        <View style={{ backgroundColor: loading? colors.GRAY_COLOR_2:colors.GREEN_COLOR_2 }}>
           <TouchableOpacity
-            onPress={Complete}
+            onPress={loading? ()=>{}:Complete}
             style={[
               { alignItems: 'center', justifyContent: 'center', height: 60 },
             ]}>

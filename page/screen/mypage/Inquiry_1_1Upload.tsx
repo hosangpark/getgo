@@ -79,7 +79,7 @@ const Inquiry_1_1Upload = ({}) => {
   };
 
   const UploadData = async () => {
-    // setIsLoading(true)
+    setIsLoading(true)
     const form = new FormData();
     form.append('mt_idx', userInfo.idx);
     form.append(`qt_title`, title);
@@ -105,7 +105,6 @@ const Inquiry_1_1Upload = ({}) => {
       data: form,
     })
       .then(res => {
-        setIsLoading(false);
         navigation.goBack();
       })
       .catch(err => console.log(err));
@@ -222,13 +221,13 @@ const Inquiry_1_1Upload = ({}) => {
 
       <TouchableOpacity
         style={{
-          backgroundColor: colors.GREEN_COLOR_2,
+          backgroundColor: isloading? colors.GRAY_COLOR_2: colors.GREEN_COLOR_2,
           height: 54,
           borderRadius: 5,
           justifyContent: 'center',
           alignItems: 'center',
         }}
-        onPress={UploadData}>
+        onPress={isloading? ()=>{}:UploadData}>
         <Text style={[style.text_b, {fontSize: 18, color: colors.WHITE_COLOR}]}>
           {t('문의하기')}
         </Text>
