@@ -369,7 +369,7 @@ const Itempost = ({ route }: Props) => {
           />
         ) : <View style={{ height: 50, backgroundColor: colors.GRAY_COLOR_4 }}></View>}
         <View style={{ marginVertical: 24, marginHorizontal: 20 }}>
-          {myProduct /* && items.data[0].pt_sale_now != 3*/ ? (
+          {myProduct && items.data[0].pt_sale_now != 3 ? (
             <View style={{ width: 100, height: 20, marginBottom: 12 }}>
               <SelectBox
                 selOption={selectReserve}

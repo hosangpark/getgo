@@ -81,9 +81,12 @@ const AuthMyLocation = ({ route }: Props) => {
         //  console.log(getDistanceBetweenPoints(nowLocation.mt_lat, nowLocation.mt_log, selLocation.mt_lat, selLocation.mt_log, 'kilometers'))
     }
 
+    //대한민국의 일반정보의 대략적인 경도범위는 125 - 132, 위도(lat)범위는 33 - 39입니다.
     const getGoogleLocData = async (lat, lng) => {
+        // let result_type = (lng < 132 && lng > 125 && lat > 33 && lat < 39) ? 'sublocality_level_2' : 'administrative_area_level_4'
+
         return await fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng
-            + '&result_type=sublocality_level_2&location_type=&key=' + Api.state.googleMapKey + '&language=' + i18n.language)
+            + '&result_type=sublocality_level_2|administrative_area_level_4' + '&location_type=&key=' + Api.state.googleMapKey + '&language=' + i18n.language)
             .then((response) => response.json())
             .then((responseJson) => {
                 // console.log('nowLocation2', responseJson);
@@ -99,6 +102,7 @@ const AuthMyLocation = ({ route }: Props) => {
                 console.log("udonPeople error : " + err)
                 return [];
             });
+
     }
 
     const checkAuth = async () => {

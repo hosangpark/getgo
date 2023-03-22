@@ -131,11 +131,15 @@ const SearchLocation = ({ route }: Props) => {
     }
 
     const getGoogleLocData = async (lat, lng) => {
+        // lng = 106.759478;
+        // lat = -6.2295712;
+
+        // let result_type = (lng < 132 && lng > 125 && lat > 33 && lat < 39) ? 'sublocality_level_2' : 'administrative_area_level_4'
         return await fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng
-            + '&result_type=sublocality_level_2&location_type=&key=' + Api.state.googleMapKey + '&language=' + i18n.language)
+            + '&result_type=sublocality_level_2|administrative_area_level_4' + '&location_type=&key=' + Api.state.googleMapKey + '&language=' + i18n.language)
             .then((response) => response.json())
             .then((responseJson) => {
-                // console.log('nowLocation2', responseJson);
+                console.log('nowLocation2', responseJson);
 
                 if (responseJson.status == 'OK') {
                     return responseJson.results.map((item, index) => {
