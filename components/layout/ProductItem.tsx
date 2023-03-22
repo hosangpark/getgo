@@ -64,6 +64,7 @@ const ProductItem = ({
         area_show: "Y"
       }
     }).then(res => {
+      console.log("res",res)
       cusToast(t(res.data.message))
       setWp_idx(res.data.wt_idx)
 

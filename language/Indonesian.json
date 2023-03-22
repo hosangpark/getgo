@@ -249,7 +249,7 @@
     "채팅방에서 나가시겠습니까?": "Apakah Anda yakin untuk keluar dari ruang obrolan ini?",
     "채팅방을 나가면 채팅 목록 및 대화 내용이 삭제되고 복구 할 수 없습니다.": "Setelah Anda pergi, daftar obrolan dan riwayat akan hilang. Apakah Anda yakin untuk keluar dari ruang obrolan ini?",
     "네, 나갈래요": "Ya, saya ingin keluar. Bye",
-    "내가 등록한 상품입니다.": "This is the product I registered.",
+    "내가 등록한 상품입니다.": "Ini adalah produk yang saya daftarkan.",
     "판매자에게 채팅요청을 보냈습니다.": "You have sent a chat request to the seller.",
     "데이터가 없습니다": "No data",
     "로딩중": "Loading",
@@ -295,6 +295,8 @@
     "후기등록이 완료되었습니다.":"Pendaftaran tinjauan selesai.",
     "지역이 수정되었습니다.":"Area ini telah dimodifikasi.",
     "자동로그인 되었습니다.":"Anda secara otomatis masuk.",
+    "관심상품 등록이 완료되었습니다.":"Pendaftaran produk yang diminati selesai.",
+
     "닫기":"Tutup"
   }
 }
