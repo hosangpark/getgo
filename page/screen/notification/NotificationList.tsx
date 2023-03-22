@@ -79,8 +79,8 @@ const NotificationList = ({ Alert_datas }: any) => {
                     <View style={{ padding: 20, flexDirection: 'row', alignItems: 'center' }}>
                       <Image source={require('../../../assets/img/ico_logo.png')} style={{ borderRadius: 20, width: 55, height: 55 }} />
                       <View style={{ marginLeft: 15 }}>
-                        <Text style={[style.text_b, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>{t('알림제목')}</Text>
-                        <Text style={[style.text_li, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>{t('알림내용')}</Text>
+                        <Text style={[style.text_b, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>{t(item.pst_content)}</Text>
+                        <Text style={[style.text_li, { fontSize: 15, color: colors.BLACK_COLOR_2 }]}>{t(item.pst_title)}</Text>
                       </View>
                     </View>
                   </View>
