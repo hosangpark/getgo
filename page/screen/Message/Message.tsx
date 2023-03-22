@@ -72,7 +72,7 @@ const Message = () => {
     let YorN = e.ctt_push == "Y" ? "N" : "Y"
     await client({
       method: 'get',
-      url: `/product/chat-list-push?chr_idx=${e.chr_id}&ctt_push=${YorN}`
+      url: `/product/chat-list-push?chr_idx=${e.chr_id}&ctt_push=${YorN}&mt_idx=${userInfo.idx}`
     }).then(res => {
       cusToast(t(res.data.message))
       getChatListData()
@@ -197,7 +197,7 @@ const Message = () => {
           renderItem={({ item }) => {
             return (
               <ChatList key={item.chr_id} item={item} Enter={Enter} Delete={Delete} Toggle={Toggle}
-                listmodal={listmodal} noticeOnOff={noticeOnOff} />
+                listmodal={listmodal} noticeOnOff={noticeOnOff} isSeller={item.mt_seller_idx == userInfo.idx ? true : false} />
             )
           }}
           contentContainerStyle={{ paddingHorizontal: 20, flexDirection: 'column-reverse' }}
