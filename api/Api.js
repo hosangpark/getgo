@@ -67,6 +67,7 @@ class Api {
       goPopupData: {},
       goPopup: false,
       userData: {},
+      googleMapKey: 'AIzaSyC-iZoncRIA4y1xF8zFRkTT2Kp8A3CPC0o'
     };
 
   }

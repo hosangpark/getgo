@@ -143,19 +143,19 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
   return (
     <View style={{ borderBottomWidth: 2, borderBottomColor: '#D8D8D8', paddingVertical: 17, }}>
       <View style={{ flexDirection: 'row', }}>
-        {item.pt_image1 ? <View style={{ marginRight: 20, flex: 3 }}>
+        {item.pt_image1 ? <View style={{ marginRight: 20, }}>
           <TouchableOpacity onPress={Itempost}>
             <Image style={{ width: 103, height: 113, borderRadius: 10, }}
               resizeMode="cover"
               source={{ uri: Api.state.imageUrl + item.pt_image1 }} />
           </TouchableOpacity>
         </View> : null}
-        <View style={{ flex: 7 }}>
+        <View style={{ flex: 1 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Text style={[style.text_b, {
               color: colors.GREEN_COLOR_2, backgroundColor: colors.GREEN_COLOR_1, fontSize: 12, paddingHorizontal: 6, paddingVertical: 3, borderRadius: 5
             }]}>
-              {i18n.language == 'In' ? item.ct_in_name : i18n.language == 'En' ? item.ct_en_name : item.ct_name}
+              {i18n.language == 'Id' ? item.ct_in_name : i18n.language == 'En' ? item.ct_en_name : item.ct_name}
             </Text>
             {toggleOpen ? (
               <View style={{

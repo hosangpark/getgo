@@ -16,14 +16,19 @@ import Api from '../../api/Api';
 
 
 
-export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal }:
-  ({ item: ChatItemType, Delete: (e: number) => void, Enter: (e: ChatItemType) => void, Toggle: (itemid: number) => void, noticeOnOff: (e: { chr_id: number, ctt_push: string }) => void, listmodal: any })
+export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal, isSeller }:
+  ({ item: ChatItemType, Delete: (e: number) => void, Enter: (e: ChatItemType) => void, Toggle: (itemid: number) => void, noticeOnOff: (e: { chr_id: number, ctt_push: string }) => void, listmodal: any, isSeller: Boolean })
 ) => {
   const { t } = useTranslation()
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const ToggleBridge = (e: { chr_id: number, ctt_push: string }) => {
     noticeOnOff(e)
   }
+
+
+  console.log('item', item)
+
+  const newCttPush = isSeller ? item.ctt_push_seller : item.ctt_push;
 
   return (
     <View key={item.chr_id}
@@ -32,7 +37,7 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal }
         flex: 1, position: 'relative',
       }}
     >
-      <View style={{ flexDirection: 'row', flex: 10 }}>
+      <View style={{ flexDirection: 'row', flex: 1 }}>
         <TouchableOpacity style={{ flexDirection: 'row' }}
           onPress={() => Enter(item)}>
           {/* onPress={()=>navigation.navigate('ReviewDetail',item)}> */}
@@ -42,21 +47,21 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal }
             : require('../../assets/img/img_profile.png')
           } />
           <View style={{ width: '80%' }}>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={[style.text_sb, { fontSize: 12, color: colors.BLACK_COLOR_1 }]}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', }}>
+              <Text style={[style.text_sb, { fontSize: 12, color: colors.BLACK_COLOR_1, marginRight: 5, }]}>
                 {item.mt_nickname}
               </Text>
-              <Text style={[style.text_li, { fontSize: 12, color: colors.GRAY_COLOR_2, marginLeft: 5 }]}>
+              <Text style={[style.text_li, { fontSize: 12, color: colors.GRAY_COLOR_2 }]}>
                 {item.mt_area} / {foramtDate(item.crt_last_date)}
               </Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6, }}>
-              {item.ctt_push == "Y" ?
+              {newCttPush == "Y" ?
                 null
                 :
                 <Text style={{ color: 'red', marginRight: 5, justifyContent: 'center' }}>
                   {t("차단중")}
-              {/* <Image style={{width:20,height:20}} source={require('../../assets/img/top_alim.png')}/> */}
+                  {/* <Image style={{width:20,height:20}} source={require('../../assets/img/top_alim.png')}/> */}
                 </Text>
               }
               <Text style={[style.text_re, { fontSize: 15, color: colors.BLACK_COLOR_2 }]} numberOfLines={1}>
@@ -66,7 +71,7 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal }
           </View>
         </TouchableOpacity>
       </View>
-      <View style={{ flexDirection: 'row', flex: 1 }}>
+      <View style={{ flexDirection: 'row', }}>
         <TouchableOpacity onPress={() => Toggle(item.chr_id)} style={{ flex: 3 }}>
           <Image style={{ width: 28, height: 28 }} source={require('../../assets/img/top_menu.png')} />
         </TouchableOpacity>
@@ -77,10 +82,10 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal }
         {listmodal == item.chr_id &&
           <>
             <TouchableOpacity style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 25 }}
-              onPress={() => ToggleBridge({ chr_id: item.chr_id, ctt_push: item.ctt_push })}
+              onPress={() => ToggleBridge({ chr_id: item.chr_id, ctt_push: newCttPush })}
             >
               <Text style={[style.text_me, { fontSize: 14, color: colors.BLACK_COLOR_1 }]}>
-                {item.ctt_push == "Y" ?
+                {newCttPush == 'Y' ?
                   t('알림 끄기')
                   :
                   t('알림 켜기')

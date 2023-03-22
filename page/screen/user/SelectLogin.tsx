@@ -99,7 +99,7 @@ const SelectLogin = () => {
             }).then(res => {
                 console.log('resdata', res.data.user_data);
                 dispatch(UserInfoAction.userlogin(JSON.stringify(res.data.user_data)));
-                setAutoUserData({ idx: res.data.user_idx, mt_app_token: Api.state.mb_fcm, language:selLang.value })
+                setAutoUserData({ idx: res.data.user_idx, mt_app_token: Api.state.mb_fcm, language: selLang.value })
 
             }).catch(error => {
                 if (error.response) {
@@ -292,7 +292,7 @@ const SelectLogin = () => {
                     NativeModules.SettingsManager.settings.AppleLanguages[0] // iOS 13
                     : NativeModules.I18nManager.localeIdentifier;
 
-            newLang = deviceLanguage == 'ko_KR' ? 'Ko' : deviceLanguage.indexOf('in') > -1 ? 'Id' : 'En'
+            newLang = deviceLanguage == 'ko_KR' ? 'Ko' : deviceLanguage.indexOf('Id') > -1 ? 'Id' : 'En'
             console.log('default Lang', deviceLanguage, newLang);
 
             await AsyncStorage.setItem('@lang', newLang)

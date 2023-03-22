@@ -150,7 +150,7 @@ const ProductItem = ({
                 },
               ]}>
               {
-                i18n.language == 'In' ? item.ct_in_name : i18n.language == 'En' ? item.ct_en_name : item.ct_name
+                i18n.language == 'Id' ? item.ct_in_name : i18n.language == 'En' ? item.ct_en_name : item.ct_name
               }
             </Text>
             <TouchableOpacity onPress={() => heartOnOff(item.pt_idx)}>
