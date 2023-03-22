@@ -113,11 +113,11 @@ const Reserve_choice = ({ route }: Props) => {
           {route.params && route.params.target && route.params.target.image ? <Image
             style={{ width: 44, height: 44, marginRight: 8, borderRadius: 5 }}
             source={{ uri: Api.state.imageUrl + route.params.target.image }} /> : null}
-          <View style={{ justifyContent: 'center', width: 280 }}>
-            <Text style={[style.text_re, { color: colors.GREEN_COLOR_2 }]}>
+          <View style={{ justifyContent: 'center', flex: 1 }}>
+            <Text style={[style.text_re, { color: colors.GREEN_COLOR_2 }]} >
               {t('거래할 상품')}</Text>
-            <Text numberOfLines={1}
-              style={[style.text_b, { color: colors.BLACK_COLOR_1 }]}>
+            <Text
+              style={[style.text_b, { color: colors.BLACK_COLOR_1, }]} ellipsizeMode="tail" numberOfLines={1}>
               {route.params.target.title}</Text>
           </View>
         </View>

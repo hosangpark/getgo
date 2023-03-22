@@ -16,14 +16,19 @@ import Api from '../../api/Api';
 
 
 
-export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal }:
-  ({ item: ChatItemType, Delete: (e: number) => void, Enter: (e: ChatItemType) => void, Toggle: (itemid: number) => void, noticeOnOff: (e: { chr_id: number, ctt_push: string }) => void, listmodal: any })
+export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal, isSeller }:
+  ({ item: ChatItemType, Delete: (e: number) => void, Enter: (e: ChatItemType) => void, Toggle: (itemid: number) => void, noticeOnOff: (e: { chr_id: number, ctt_push: string }) => void, listmodal: any, isSeller: Boolean })
 ) => {
   const { t } = useTranslation()
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const ToggleBridge = (e: { chr_id: number, ctt_push: string }) => {
     noticeOnOff(e)
   }
+
+
+  console.log('item', item)
+
+  const newCttPush = isSeller ? item.ctt_push_seller : item.ctt_push;
 
   return (
     <View key={item.chr_id}
@@ -51,7 +56,7 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal }
               </Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6, }}>
-              {item.ctt_push == "Y" ?
+              {newCttPush == "Y" ?
                 null
                 :
                 <Text style={{ color: 'red', marginRight: 5, justifyContent: 'center' }}>
@@ -77,10 +82,10 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal }
         {listmodal == item.chr_id &&
           <>
             <TouchableOpacity style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 25 }}
-              onPress={() => ToggleBridge({ chr_id: item.chr_id, ctt_push: item.ctt_push })}
+              onPress={() => ToggleBridge({ chr_id: item.chr_id, ctt_push: newCttPush })}
             >
               <Text style={[style.text_me, { fontSize: 14, color: colors.BLACK_COLOR_1 }]}>
-                {item.ctt_push == "Y" ?
+                {newCttPush == 'Y' ?
                   t('알림 끄기')
                   :
                   t('알림 켜기')
