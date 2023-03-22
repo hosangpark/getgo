@@ -56,6 +56,8 @@ const NotificationDetail = ({route}:Props) => {
       }
       }).then(
         res=>{
+          console.log("res.data",res.data)
+          console.log("route",route)
           setAlert_datas(res.data[0])
           setIsLoading(false)
         }
