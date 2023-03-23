@@ -187,9 +187,14 @@ export const NumberComma = (number: number) => {
 
 import { format, formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
+import { id } from "date-fns/locale";
+import { useTranslation } from 'react-i18next';
 
 export function foramtDate(date: any) {
+    const { t, i18n } = useTranslation()
     if (!date) return '';
+    const localeSelect = i18n.language == 'Ko'? ko : i18n.language == 'En'? enUS:id
 
     const d = new Date(date);
     const now = Date.now();
@@ -198,9 +203,9 @@ export function foramtDate(date: any) {
         return "방금 전";
     }
     if (diff < 60 * 60 * 24 * 3) { // 3일 미만일땐 시간차이 출력(몇시간 전, 몇일 전)
-        return formatDistanceToNow(d, { addSuffix: true, locale: ko });
+        return formatDistanceToNow(d, { addSuffix: true, locale: localeSelect });
     }
-    return format(d, 'PPP EEE p', { locale: ko }); // 날짜 포맷
+    return format(d, 'PPP EEE p', { locale: localeSelect }); // 날짜 포맷
 }
 
 export const validateEmail = (email: any) => {

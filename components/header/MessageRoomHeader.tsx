@@ -205,7 +205,7 @@ export const MessageRoomHeader = ({ item, getRoomData, tradeDoneSend, targetOutS
                         <Image style={{ width: 70, height: 70, borderRadius: 6 }} source={{ uri: 'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:4000/uploads/' + item.tradeImg }} />
                         <View style={{ marginLeft: 15 }}>
                             {item.mt_seller_idx === userInfo.idx && item.salestate != 3 ?
-                                <View style={{ width: 100, height: 15, marginBottom: 18 }}>
+                                <View style={{ width:i18n.language=="Id"? 180:110, height: 15, marginBottom: 18 }}>
                                     <SelectBox
                                         selOption={selectReserve}
                                         options={ReserveOptions}
