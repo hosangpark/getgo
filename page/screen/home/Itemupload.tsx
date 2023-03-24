@@ -210,12 +210,9 @@ const Itemupload = ({ route }: Props) => {
   };
 
   const Complete = () => {
-    // setLoading(true)
-
-
     if (
-      title == '' ||
-      bodyText == '' ||
+      title.trim() == '' ||
+      bodyText.trim() == '' ||
       price == '' ||
       !uploadpictures ||
       !uploadpictures.length
@@ -268,6 +265,8 @@ const Itemupload = ({ route }: Props) => {
       console.log('Complete', '3');
 
       console.log('form', route.params.type, form);
+
+      setLoading(true)
 
       if (route.params.type == 'ProductUpload') {
         const setUpload = async () => {
@@ -366,6 +365,7 @@ const Itemupload = ({ route }: Props) => {
       })
       .catch(err => {
         console.log(err);
+        setLoading(false);
       });
   };
 

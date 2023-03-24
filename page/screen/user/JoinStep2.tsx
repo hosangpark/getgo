@@ -252,7 +252,10 @@ const JoinStep2 = ({ route }: any) => {
                         <TextInput
                             style={style.input_container}
                             value={inputLoginInfo.mt_hp}
-                            onChangeText={text => { inputControl('mt_hp', text) }}
+                            editable={!timer}
+                            onChangeText={text => {
+                                inputControl('mt_hp', Api.uncomma(text))
+                            }}
                             placeholder={t("번호를 입력해주세요.")}
                             keyboardType={'number-pad'}
                         />
@@ -330,7 +333,7 @@ const JoinStep2 = ({ route }: any) => {
                 </View> */}
             </ScrollView>
             <View style={style.bottom_wrapper}>
-                <TouchableOpacity onPress={() => { setAgreeModalVisible(true) }} disabled={!authSuccess} style={[style.bottom_btn, authSuccess ? style.bottom_btn_green : style.bottom_btn_gray]}>
+                <TouchableOpacity onPress={() => { setAgreeModalVisible(true) }} disabled={!authSuccess || !timer} style={[style.bottom_btn, authSuccess ? style.bottom_btn_green : style.bottom_btn_gray]}>
                     <Text style={[style.text_sb, { fontSize: 18, color: authSuccess ? colors.WHITE_COLOR : colors.GRAY_COLOR_4 }]}>{t('확인')}</Text>
                 </TouchableOpacity>
             </View>

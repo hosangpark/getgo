@@ -81,7 +81,7 @@ const JoinStep3 = () => {
     /** 닉네임 중복체크 */
     const IdCheck = async () => {
         console.log(userInfo)
-        if(Textreplace(inputName)){
+        if (Textreplace(inputName)) {
             await client({
                 method: 'post',
                 url: '/user/nickname-check',
@@ -107,10 +107,10 @@ const JoinStep3 = () => {
                 setIsOverName(true)
             }
             )
-          } else {
+        } else {
             Alert.alert(t('특수문자,단일자음,빈칸은 입력불가합니다.'))
-          }
-        
+        }
+
     }
     const Cancel = () => {
         navigation.navigate('SelectLogin');
@@ -126,7 +126,7 @@ const JoinStep3 = () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <BackHeader title="" />
+            <BackHeader title="" goLogin={true} />
             <ScrollView style={[style.default_background, { flexGrow: 1, paddingHorizontal: 20 }]}>
                 <View style={{ flex: 1, justifyContent: 'center', marginTop: 40 }}>
                     <Text style={[style.text_b, { fontSize: 15, color: colors.GREEN_COLOR_3 }]}>{t('회원가입 완료')}</Text>
@@ -166,7 +166,7 @@ const JoinStep3 = () => {
                     </View>
                 </View>
             </ScrollView>
-            <BackHandlerCom />
+            <BackHandlerCom goLogin={true} />
         </SafeAreaView>
     );
 };
