@@ -92,7 +92,10 @@ const MessageRoom = ({ route }: Props) => {
         <>
           {item.ctt_send_idx == userInfo.idx ?
             <View style={{ alignItems: 'flex-end', marginBottom: 20 }}>
-              <View style={{ backgroundColor: colors.GREEN_COLOR_2, paddingVertical: 10, paddingHorizontal: 20, borderRadius: 150, borderTopRightRadius: 0, maxWidth: '50%' }}>
+              <View style={{
+                backgroundColor: colors.GREEN_COLOR_2, paddingVertical: 10, paddingHorizontal: 20,
+                borderRadius: 25, borderTopRightRadius: 0, maxWidth: '50%'
+              }}>
                 <Text style={[style.text_re, { fontSize: 16, color: colors.WHITE_COLOR }]}>{item.ctt_msg}</Text>
               </View>
               <Text style={[style.text_re, { marginTop: 5, fontSize: 12, color: colors.GRAY_COLOR_2 }]}>{t('오후')} {item.ctt_sdate}</Text>
@@ -108,7 +111,10 @@ const MessageRoom = ({ route }: Props) => {
                     style={{ width: 42, height: 42 }} borderRadius={100} />
                 </View>
                 <View style={{ marginLeft: 20, marginTop: 5, flex: 9 }}>
-                  <View style={{ backgroundColor: colors.WHITE_COLOR, paddingVertical: 10, paddingHorizontal: 20, borderRadius: 150, borderTopLeftRadius: 0, maxWidth: '50%' }}>
+                  <View style={{
+                    backgroundColor: colors.WHITE_COLOR, paddingVertical: 10, paddingHorizontal: 20,
+                    borderRadius: 25, borderTopLeftRadius: 0, maxWidth: '50%'
+                  }}>
                     <Text style={[style.text_re, { fontSize: 16, color: colors.GREEN_COLOR_2 }]}>{item.ctt_msg}</Text>
                   </View>
                   <Text style={[style.text_re, { marginTop: 5, fontSize: 12, color: colors.GRAY_COLOR_2 }]}>{t('오후')} {item.ctt_sdate}</Text>

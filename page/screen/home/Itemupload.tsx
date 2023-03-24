@@ -210,10 +210,9 @@ const Itemupload = ({ route }: Props) => {
   };
 
   const Complete = () => {
-    setLoading(true)
     if (
-      title == '' ||
-      bodyText == '' ||
+      title.trim() == '' ||
+      bodyText.trim() == '' ||
       price == '' ||
       !uploadpictures ||
       !uploadpictures.length
@@ -266,6 +265,8 @@ const Itemupload = ({ route }: Props) => {
       console.log('Complete', '3');
 
       console.log('form', route.params.type, form);
+
+      setLoading(true)
 
       if (route.params.type == 'ProductUpload') {
         const setUpload = async () => {
@@ -363,6 +364,7 @@ const Itemupload = ({ route }: Props) => {
       })
       .catch(err => {
         console.log(err);
+        setLoading(false);
       });
   };
 
@@ -580,9 +582,9 @@ const Itemupload = ({ route }: Props) => {
             />
           </View>
         </KeyboardAvoidingView>
-        <View style={{ backgroundColor: loading? colors.GRAY_COLOR_2:colors.GREEN_COLOR_2 }}>
+        <View style={{ backgroundColor: loading ? colors.GRAY_COLOR_2 : colors.GREEN_COLOR_2 }}>
           <TouchableOpacity
-            onPress={loading? ()=>{}:Complete}
+            onPress={loading ? () => { } : Complete}
             style={[
               { alignItems: 'center', justifyContent: 'center', height: 60 },
             ]}>

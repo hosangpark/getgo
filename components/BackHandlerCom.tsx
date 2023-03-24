@@ -8,7 +8,7 @@ import { MainNavigatorParams } from "./types/routerTypes";
 
 
 
-export function BackHandlerCom({ goHome, noRetrun }: BackHandlerType) {
+export function BackHandlerCom({ goHome, noRetrun, goLogin = false }: BackHandlerType) {
 
     const isFocused = useIsFocused();
 
@@ -16,7 +16,12 @@ export function BackHandlerCom({ goHome, noRetrun }: BackHandlerType) {
 
 
     function handleBackButtonClick() {
-        if (!goHome && !noRetrun) {
+
+        console.log('goHome, noRetrun, goLogin ', goHome, noRetrun, goLogin)
+
+        if (goLogin) {
+            navigation.navigate('SelectLogin');
+        } else if (!goHome && !noRetrun) {
             navigation.goBack();
             return true;
         }
