@@ -507,7 +507,7 @@ const Itempost = ({ route }: Props) => {
                   style.text_li,
                   { color: colors.GRAY_COLOR_2, fontSize: 13 },
                 ]}>
-                {items.data[0].pt_area} / {foramtDate(items.data[0].pt_wdate)}
+                {items.data[0].pt_area} / {foramtDate(items.data[0].pt_wdate, i18n.language)}
               </Text>
             </View>
           </View>

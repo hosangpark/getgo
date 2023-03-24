@@ -191,10 +191,10 @@ import { enUS } from "date-fns/locale";
 import { id } from "date-fns/locale";
 import { useTranslation } from 'react-i18next';
 
-export function foramtDate(date: any) {
-    const { t, i18n } = useTranslation()
+export function foramtDate(date: any, language) {
+
     if (!date) return '';
-    const localeSelect = i18n.language == 'Ko'? ko : i18n.language == 'En'? enUS:id
+    const localeSelect = language == 'Ko' ? ko : language == 'En' ? enUS : id
 
     const d = new Date(date);
     const now = Date.now();
@@ -213,22 +213,22 @@ export const validateEmail = (email: any) => {
     return regex.test(email);
 }
 
-export const Textreplace = (text:string) =>{
-        // 특수문자 정규식 변수(공백 미포함)
-        var replaceChar = /[~!@\#$%^&*\()\-=+_'\;<>0-9\/.\`:\"\\,\[\]?|{}]/gi;
- 
-        // 완성형 아닌 한글 정규식
-        var replaceNotFullKorean = /[ㄱ-ㅎㅏ-ㅣ]/gi;
-        
-        // 허용할 특수문자는 여기서 삭제하면 됨
-        var regExp = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/gi; 
-        // 지금은 띄어쓰기도 특수문자 처리됨 참고하셈
-        if( regExp.test(text) || replaceNotFullKorean.test(text) ){
+export const Textreplace = (text: string) => {
+    // 특수문자 정규식 변수(공백 미포함)
+    var replaceChar = /[~!@\#$%^&*\()\-=+_'\;<>0-9\/.\`:\"\\,\[\]?|{}]/gi;
 
-            return false
-            // text = text.substring( 0 , text.length - 1 ); // 입력한 특수문자 한자리 지움
+    // 완성형 아닌 한글 정규식
+    var replaceNotFullKorean = /[ㄱ-ㅎㅏ-ㅣ]/gi;
 
-        } 
+    // 허용할 특수문자는 여기서 삭제하면 됨
+    var regExp = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/gi;
+    // 지금은 띄어쓰기도 특수문자 처리됨 참고하셈
+    if (regExp.test(text) || replaceNotFullKorean.test(text)) {
 
-        return true
+        return false
+        // text = text.substring( 0 , text.length - 1 ); // 입력한 특수문자 한자리 지움
+
+    }
+
+    return true
 }

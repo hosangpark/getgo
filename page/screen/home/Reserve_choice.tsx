@@ -40,7 +40,7 @@ import {
 
 type Props = StackScreenProps<MainNavigatorParams, 'Reserve_choice'>
 const Reserve_choice = ({ route }: Props) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const [loading, setLoading] = useState(false)
@@ -142,7 +142,7 @@ const Reserve_choice = ({ route }: Props) => {
                     {item.mt_nickname}</Text>
                   <View style={{ flexDirection: 'row' }}>
                     <Text style={[style.text_re, { fontSize: 13, color: colors.GRAY_COLOR_2 }]}>
-                      {item.mt_area} / {item.crt_last_date == null ? '' : foramtDate(item.crt_last_date)}
+                      {item.mt_area} / {item.crt_last_date == null ? '' : foramtDate(item.crt_last_date, i18n.language)}
                     </Text>
                   </View>
                 </View>

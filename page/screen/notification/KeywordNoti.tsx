@@ -94,7 +94,7 @@ const KeywordNoti = ({ KeywordNotiitem, MaxTextCount }: any) => {
                 </Text>
                 <Text style={[style.text_li, { color: colors.GRAY_COLOR_2, fontSize: 13 }]}> / </Text>
                 <Text style={[style.text_li, { color: colors.GRAY_COLOR_2, fontSize: 13 }]}>
-                  {foramtDate(item.pt_wdate)}
+                  {foramtDate(item.pt_wdate, i18n.language)}
                 </Text>
               </View>
             </View>

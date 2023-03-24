@@ -19,7 +19,7 @@ import Api from '../../api/Api';
 export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal, isSeller }:
   ({ item: ChatItemType, Delete: (e: number) => void, Enter: (e: ChatItemType) => void, Toggle: (itemid: number) => void, noticeOnOff: (e: { chr_id: number, ctt_push: string }) => void, listmodal: any, isSeller: Boolean })
 ) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const ToggleBridge = (e: { chr_id: number, ctt_push: string }) => {
     noticeOnOff(e)
@@ -30,6 +30,7 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal, 
 
   const newCttPush = isSeller ? item.ctt_push_seller : item.ctt_push;
 
+  i18n
   return (
     <View key={item.chr_id}
       style={{
@@ -52,7 +53,7 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal, 
                 {item.mt_nickname}
               </Text>
               <Text style={[style.text_li, { fontSize: 12, color: colors.GRAY_COLOR_2 }]}>
-                {item.mt_area} / {foramtDate(item.crt_last_date)}
+                {item.mt_area} / {foramtDate(item.crt_last_date, i18n.language)}
               </Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6, }}>

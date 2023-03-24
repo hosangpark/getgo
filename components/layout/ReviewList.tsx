@@ -19,7 +19,7 @@ import Api from "../../api/Api";
 export const ReviewList = ({ item, deleteReview, Toggle, listmodal, setListmodal }:
   ({ item: ReviewItemType, deleteReview: (item: ReviewItemType) => void, Toggle: (itemid: number) => void, listmodal: any, setListmodal: (e: boolean) => void })
 ) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const [noticeState, noticeToggle] = useState(false)
 
@@ -51,7 +51,7 @@ export const ReviewList = ({ item, deleteReview, Toggle, listmodal, setListmodal
                 {item.mt_nickname || item.review_nickname}
               </Text>
               <Text style={[style.text_li, { fontSize: 12, color: colors.GRAY_COLOR_2, marginLeft: 5 }]}>
-                {item.pt_area} / {foramtDate(item.rt_wdate)}
+                {item.pt_area} / {foramtDate(item.rt_wdate, i18n.language)}
               </Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6, }}>

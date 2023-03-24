@@ -53,7 +53,7 @@ const MessageRoom = ({ route }: Props) => {
 
   const [room_idx, setRoom_idx] = useState(route.params.items.room_id ? parseInt(route.params.items.room_id) : parseInt(route.params.items.chr_id))
 
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [inputChat, setInputChat] = React.useState('');
   const [selectImg, setSelectImg] = React.useState({
     uri: '',
