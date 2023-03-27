@@ -21,7 +21,6 @@ import client from '../../../api/client';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../../components/types/routerTypes';
-import { foramtDate } from '../../../components/utils/funcKt';
 import Api, { NodataView } from '../../../api/Api';
 import { useDispatch, useSelector } from 'react-redux';
 import cusToast from '../../../components/navigation/CusToast';
@@ -142,7 +141,7 @@ const Reserve_choice = ({ route }: Props) => {
                     {item.mt_nickname}</Text>
                   <View style={{ flexDirection: 'row' }}>
                     <Text style={[style.text_re, { fontSize: 13, color: colors.GRAY_COLOR_2 }]}>
-                      {item.mt_area} / {item.crt_last_date == null ? '' : foramtDate(item.crt_last_date)}
+                      {item.mt_area} / {item.crt_last_date == null ? '' : (item.crt_last_date)}
                     </Text>
                   </View>
                 </View>

@@ -153,7 +153,7 @@ React.useEffect(()=>{
 
     return (
         <SafeAreaView style={{flex:1,backgroundColor:'#fff'}}>
-          <BackHeader title={t('휴대폰번호 변경하기')}/>
+          <BackHeader title={t('휴대폰 번호 변경하기')}/>
           <ScrollView style={{paddingHorizontal:20,flex:1}}>
                 <View style={{marginTop:40}}>
                     <View style={{flexDirection:'row'}}>

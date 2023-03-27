@@ -21,7 +21,6 @@ import { useTranslation } from 'react-i18next';
 import client from '../../../api/client';
 import { useSelector } from 'react-redux';
 import LoadingIndicator from '../../../components/layout/Loading';
-import { foramtDate } from '../../../components/utils/funcKt';
 import { NodataView } from '../../../api/Api';
 
 
@@ -94,7 +93,7 @@ const NotificationList = ({ Alert_datas }: any) => {
                   }}>
                     <Text style={[style.text_me, { color: colors.GREEN_COLOR_2, fontSize: 13 }]}>{t(item.pst_title)}</Text>
                     <Text style={[style.text_me, { color: colors.BLACK_COLOR_2, fontSize: 15 }]}>{t(item.pst_content)}</Text>
-                    <Text style={[style.text_li, { color: colors.GRAY_COLOR_2, fontSize: 13 }]}>{foramtDate(item.pst_wdate)}</Text>
+                    <Text style={[style.text_li, { color: colors.GRAY_COLOR_2, fontSize: 13 }]}>{(item.pst_wdate)}</Text>
                   </View>
                 </TouchableOpacity>)
             }

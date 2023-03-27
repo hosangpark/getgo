@@ -11,7 +11,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../components/types/routerTypes';
-import { foramtDate } from "../utils/funcKt";
 import Api from "../../api/Api";
 
 
@@ -51,7 +50,7 @@ export const ReviewList = ({ item, deleteReview, Toggle, listmodal, setListmodal
                 {item.mt_nickname || item.review_nickname}
               </Text>
               <Text style={[style.text_li, { fontSize: 12, color: colors.GRAY_COLOR_2, marginLeft: 5 }]}>
-                {item.pt_area} / {foramtDate(item.rt_wdate)}
+                {item.pt_area} / {(item.rt_wdate)}
               </Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6, }}>

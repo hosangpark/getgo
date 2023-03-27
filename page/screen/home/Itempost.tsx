@@ -631,7 +631,7 @@ const Itempost = ({ route }: Props) => {
         }}>
         <View style={{ justifyContent: 'center', flex: 1 }}>
           <Text style={[style.default_font_black, { fontSize: 18, flexWrap: 'wrap', flexShrink: 1 }]}>
-            ￦ {NumberComma(items.data[0].pt_selling_price)}
+          {t('￦')} {NumberComma(items.data[0].pt_selling_price)}
           </Text>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>

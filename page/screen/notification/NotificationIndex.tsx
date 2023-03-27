@@ -19,7 +19,7 @@ import cusToast from '../../../components/navigation/CusToast';
 
 export default function NotificationIndex() {
 
-  const { t } = useTranslation()
+  const { t,i18n } = useTranslation()
   const layout = useWindowDimensions();
   const isFocused = useIsFocused();
   const [exitApp, setExitApp] = React.useState(false);
@@ -171,7 +171,7 @@ export default function NotificationIndex() {
             }}
             pressColor={"transparent"}
             renderLabel={({ route, focused }) => (
-              <Text style={[focused ? style.text_b : style.text_re, { color: colors.WHITE_COLOR, fontSize: 15, paddingVertical: 15, paddingHorizontal: 5, borderBottomColor: colors.WHITE_COLOR, borderBottomWidth: focused ? 6 : 0, opacity: focused ? 1 : 0.7, letterSpacing: focused ? -0.6 : 0 }]}>{route.title}</Text>
+              <Text style={[focused ? style.text_b : style.text_re, { color: colors.WHITE_COLOR, fontSize: 15, paddingVertical: 15, paddingHorizontal: 5, borderBottomColor: colors.WHITE_COLOR, borderBottomWidth: focused ? 6 : 0, opacity: focused ? 1 : 0.7, letterSpacing: focused ? -1 :-0.4 }]}>{route.title}</Text>
             )}
           />
         )}

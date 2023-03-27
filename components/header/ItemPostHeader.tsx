@@ -35,7 +35,7 @@ export const ItemPostHeader = ({ myProduct, pt_idx, pt_sale_now }: any) => {
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 {myProduct &&
                     <TouchableOpacity onPress={Itemupload}>
-                        <Text style={[style.text_sb, { fontSize: 15, color: colors.WHITE_COLOR, marginRight: 20 }]}>수정</Text>
+                        <Text style={[style.text_sb, { fontSize: 15, color: colors.WHITE_COLOR, marginRight: 20 }]}>{t("수정")}</Text>
                     </TouchableOpacity>
                 }
                 <TouchableOpacity onPress={() => { navigation.goBack(); }}>

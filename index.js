@@ -2,7 +2,7 @@
  * @format
  */
 import React, { createRef, useRef, useState } from 'react';
-import { AppRegistry, Text, TextInput, } from 'react-native';
+import { AppRegistry, Text, TextInput, PermissionsAndroid} from 'react-native';
 import App from './App';
 import { name as appName } from './app.json';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
@@ -28,6 +28,18 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
   }
 });
 
+// async function DDDD() {
+//   PermissionsAndroid.request(
+//     PermissionsAndroid.PERMISSIONS.CAMERA,
+//     {
+//       title: "App Camera Permission",
+//       message: "App needs",
+//       buttonPositive: 'OK',
+//       buttonNegative: 'Cancel',
+//     },
+//   )
+// }
+
 async function registerAppWithFCM() {
   if (!messaging().isDeviceRegisteredForRemoteMessages) {
     await messaging().registerDeviceForRemoteMessages();
@@ -40,6 +52,7 @@ async function requestUserPermission() {
     console.log('Permission settings:', settings);
   }
 }
+
 registerAppWithFCM();
 requestUserPermission();
 

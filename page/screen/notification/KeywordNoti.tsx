@@ -25,7 +25,6 @@ import client from '../../../api/client';
 import { useSelector } from 'react-redux';
 import LoadingIndicator from '../../../components/layout/Loading';
 import Api, { NodataView } from '../../../api/Api';
-import { foramtDate, NumberComma } from '../../../components/utils/funcKt';
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
@@ -94,7 +93,7 @@ const KeywordNoti = ({ KeywordNotiitem, MaxTextCount }: any) => {
                 </Text>
                 <Text style={[style.text_li, { color: colors.GRAY_COLOR_2, fontSize: 13 }]}> / </Text>
                 <Text style={[style.text_li, { color: colors.GRAY_COLOR_2, fontSize: 13 }]}>
-                  {foramtDate(item.pt_wdate)}
+                  {(item.pt_wdate)}
                 </Text>
               </View>
             </View>

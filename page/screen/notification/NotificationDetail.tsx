@@ -20,7 +20,6 @@ import { BackHandlerCom } from '../../../components/BackHandlerCom';
 import { useTranslation } from 'react-i18next';
 import { BackHeader } from '../../../components/header/BackHeader';
 import client from '../../../api/client';
-import { foramtDate } from '../../../components/utils/funcKt';
 import cusToast from '../../../components/navigation/CusToast';
 import LoadingIndicator from '../../../components/layout/Loading';
 
@@ -85,7 +84,7 @@ const NotificationDetail = ({route}:Props) => {
               <Text style={[style.text_sb,{fontSize:18,color:colors.BLACK_COLOR_1,marginVertical:8}]}>
                 {Alert_datas.pst_detail_content}</Text>
               <Text style={[style.text_re,{fontSize:13,color:colors.GRAY_COLOR_2}]}>
-                {foramtDate(Alert_datas.pst_wdate)}</Text>
+                {(Alert_datas.pst_wdate)}</Text>
             </View>
             <View style={{paddingVertical:20}}>
               <Text style={[style.text_re,{fontSize:14,color:colors.BLACK_COLOR_1,lineHeight:20}]}>

@@ -216,7 +216,7 @@ const ProductItem = ({
                   style.text_b,
                   { fontSize: 15, color: colors.BLACK_COLOR_2, flexShrink: 1 },
                 ]}>
-                ￦ {NumberComma(item.pt_selling_price)}
+                {t('￦')} {NumberComma(item.pt_selling_price)}
               </Text>
             </View>
           </TouchableOpacity>

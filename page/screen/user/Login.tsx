@@ -36,11 +36,11 @@ const Login = () => {
     const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
 
     const [phoneOptions] = React.useState([
-        { label: '+82', value: '82', sel_id: 1 },
-        { label: '+62', value: '62', sel_id: 2 },
+        { label: i18n.language == "Id"? '+62': '+82', value: i18n.language == "Id"? '62':'82', sel_id: i18n.language == "Id"? 2:1 },
+        { label: i18n.language == "Id"? '+82':'+62', value: i18n.language == "Id"? '82':'62', sel_id: i18n.language == "Id"? 1:2 },
     ])
     const [selectPhone, setSelPhone] = React.useState<OptionType>({
-        label: '+82', value: '82', sel_id: 1
+        label: phoneOptions[0].label, value: phoneOptions[0].value, sel_id: phoneOptions[0].sel_id
     })
     const [timer, setTimer] = React.useState<boolean>(false); //타이머 시작/끝 감지
     const [timerReset, setTimerReset] = React.useState<boolean>(false); //타이머 리셋
@@ -93,7 +93,7 @@ const Login = () => {
                 method: 'post',
                 url: '/user/auth-login_send',
                 data: {
-                    mt_na: inputLoginInfo.areaCode,
+                    mt_na: selectPhone.value,
                     mt_hp: inputLoginInfo.mt_hp,
                 }
             }).then(res => {
@@ -121,7 +121,7 @@ const Login = () => {
             method: 'post',
             url: '/user/auth',
             data: {
-                mt_na: inputLoginInfo.areaCode,
+                mt_na: selectPhone.value,
                 mt_hp: inputLoginInfo.mt_hp,
                 // auth_number: '1234'
                 auth_number: authCode,
@@ -271,7 +271,7 @@ const Login = () => {
                 </View>
             </ScrollView>
             <View style={style.bottom_wrapper}>
-                <TouchableOpacity onPress={LoginComplete} disabled={!isInputEnd} style={[style.bottom_btn, isInputEnd ? style.bottom_btn_green : style.bottom_btn_gray]}>
+            <TouchableOpacity onPress={LoginComplete} disabled={!isInputEnd} style={[style.bottom_btn, isInputEnd ? style.bottom_btn_green : style.bottom_btn_gray]}>
                     <Text style={[style.text_sb, { fontSize: 18, color: isInputEnd ? colors.WHITE_COLOR : colors.GRAY_COLOR_4 }]}>
                         {t('동의하고 시작하기')}</Text>
                 </TouchableOpacity>

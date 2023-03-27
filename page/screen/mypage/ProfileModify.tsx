@@ -195,7 +195,6 @@ const MypageSetting = () => {
 
   /** profile 수정 */
   const ModifyProfile = async () => {
-
     if (modifyName !== '' || profileimg !== undefined) {
       if (modifyName == '') {
         /** 사진만 변경 */

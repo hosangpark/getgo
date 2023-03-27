@@ -38,14 +38,14 @@ export const CheckPhotoImage = ({photoModalVisible,setPhotoModalVisible,action,a
             paddingHorizontal: 10,
             top: Dimensions.get('screen').height / 2 - 100
           }}>
-            <TouchableOpacity style={{ padding: 20, borderColor: colors.GRAY_COLOR_5, borderWidth: 1, borderRadius: 6 }}>
+            <TouchableOpacity style={{ flex:1,padding: 20, borderColor: colors.GRAY_COLOR_5, borderWidth: 1, borderRadius: 6,marginHorizontal:10,alignItems:'center' }}>
               <Text style={[style.text_sb, { color: colors.BLACK_COLOR_2, fontSize: 18 }]} onPress={() => {
                 action('camera')
                 setPhotoModalVisible(false)
               }}>
                 {t('카메라')}</Text></TouchableOpacity>
 
-            <TouchableOpacity style={{ padding: 20, borderColor: colors.GRAY_COLOR_5, borderWidth: 1, borderRadius: 6 }}>
+            <TouchableOpacity style={{ flex:1,padding: 20, borderColor: colors.GRAY_COLOR_5, borderWidth: 1, borderRadius: 6 ,marginHorizontal:10,alignItems:'center' }}>
               <Text style={[style.text_sb, { color: colors.BLACK_COLOR_2, fontSize: 18 }]} onPress={() => {
                 action2('gallery')
                 setPhotoModalVisible(false)

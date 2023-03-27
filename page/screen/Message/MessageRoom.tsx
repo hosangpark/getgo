@@ -22,7 +22,7 @@ import { BackHandlerCom } from '../../../components/BackHandlerCom';
 
 import { onImagePick } from '../../../components/utils/imgPicker';
 import { useTranslation } from 'react-i18next';
-import { foramtDate, NumberComma } from '../../../components/utils/funcKt';
+import { NumberComma } from '../../../components/utils/funcKt';
 import client from '../../../api/client';
 import { useSelector } from 'react-redux';
 import { MessageRoomHeader } from '../../../components/header/MessageRoomHeader';

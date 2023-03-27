@@ -144,7 +144,7 @@ const Message = () => {
       console.log('방 목록 리프레시', remoteMessage)
       getChatListData();
     });
-
+    setListmodal(false)
     return unsubscribe;
 
   }, []))

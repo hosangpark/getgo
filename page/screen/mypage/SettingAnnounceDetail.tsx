@@ -20,7 +20,7 @@ import { BackHandlerCom } from '../../../components/BackHandlerCom';
 import client from '../../../api/client';
 import AutoHeightWebView from 'react-native-autoheight-webview';
 import { widthPercentageToDP } from 'react-native-responsive-screen';
-
+import { useTranslation } from 'react-i18next';
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
@@ -34,7 +34,7 @@ interface data {
 type Props = StackScreenProps<MainNavigatorParams, 'SettingAnnounceDetail'>
 
 const AnnounceDetail = ({route}:Props) => {
-
+  const {t} = useTranslation()
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
 
   const Detail = route.params
@@ -66,7 +66,7 @@ const AnnounceDetail = ({route}:Props) => {
 
     return (
         <SafeAreaView style={{flex:1,backgroundColor:'#fff'}}>
-          <BackHeader title={'공지사항'}/>
+          <BackHeader title={t('공지사항')}/>
             <ScrollView style={{paddingHorizontal:20,paddingVertical:10}}>
               <View style={{justifyContent:'center',alignItems:'center',paddingVertical:18,borderBottomWidth:1,borderBottomColor:colors.GRAY_COLOR_3}}>
                 <Text style={[style.text_sb,{fontSize:18,color:colors.BLACK_COLOR_1,paddingHorizontal:15,lineHeight:26}]}>

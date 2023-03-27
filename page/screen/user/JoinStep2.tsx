@@ -49,15 +49,20 @@ const JoinStep2 = ({ route }: any) => {
     const userInfo = useSelector((state: any) => state.userInfo);
     const myLocation = useSelector((state: any) => state.myLocation);
 
-    const { t } = useTranslation()
+    const { t,i18n } = useTranslation()
 
 
     const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
 
-    const [selectPhone, setSelPhone] = React.useState<OptionType>({
-        label: '+82', value: '82', sel_id: 1
-    })
+    const [phoneOptions] = React.useState([
+        { label: i18n.language == "Id"? '+62': '+82', value: i18n.language == "Id"? '62':'82', sel_id: i18n.language == "Id"? 2:1 },
+        { label: i18n.language == "Id"? '+82':'+62', value: i18n.language == "Id"? '82':'62', sel_id: i18n.language == "Id"? 1:2 },
+    ])
 
+    const [selectPhone, setSelPhone] = React.useState<OptionType>({
+        label: phoneOptions[0].label, value: phoneOptions[0].value, sel_id: phoneOptions[0].sel_id
+    })
+    
     const [inputLoginInfo, setInputLoginInfo] = React.useState<any>({ //
         areaCode: '',
         mt_hp: '',
@@ -155,7 +160,7 @@ const JoinStep2 = ({ route }: any) => {
             method: 'post',
             url: '/user/account',
             data: {
-                mt_na: inputLoginInfo.areaCode,
+                mt_na: selectPhone.value,
                 mt_hp: inputLoginInfo.mt_hp,
                 auth_number: authCode,
                 mt_area: area,
@@ -171,7 +176,7 @@ const JoinStep2 = ({ route }: any) => {
                 let params = {
                     ...userInfo,
                     idx: res.data.user_idx,
-                    mt_na: inputLoginInfo.areaCode,
+                    mt_na: selectPhone.value,
                     mt_hp: inputLoginInfo.mt_hp,
                     mt_area: area,
                     mt_lat: mt_lat,
@@ -241,7 +246,7 @@ const JoinStep2 = ({ route }: any) => {
                     <View style={{ flex: 4 }}>
                         <SelectBox
                             selOption={selectPhone}
-                            options={frontPhoneList}
+                            options={phoneOptions}
                             action={phoneSelect}
                             height={45}
                             paddingVertical={10}

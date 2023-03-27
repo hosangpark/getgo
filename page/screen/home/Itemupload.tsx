@@ -77,22 +77,25 @@ const Itemupload = ({ route }: Props) => {
 
 
   const openPicker = async (type:string) => {
+    console.log('dasdasd')
+    PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+      {
+        title: "App Camera Permission",
+        message: "App needs",
+        buttonPositive: 'OK',
+        buttonNegative: 'Cancel',
+      },
+    )
+    
     if (uploadpictures.length == 10) {
       cusToast(t('사진은 10장까지 등록할수 있습니다.'));
       return false;
     }
     setCameraCancle(false)
     if (type == 'camera') {
-      PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        {
-          title: "App Camera Permission",
-          message: "App needs",
-          buttonPositive: 'OK',
-          buttonNegative: 'Cancel',
-        },
-      )
-      
+
+      console.log('dddddddddd')
       launchCamera({
         mediaType: 'photo',
         cameraType: 'back',
