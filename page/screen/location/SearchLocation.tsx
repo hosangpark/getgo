@@ -7,11 +7,11 @@
  */
 import React, { useState } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../../components/types/routerTypes';
 
-import { Alert, SafeAreaView, ScrollView, Text, View, Image, StyleSheet, Button, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
+import { Alert, SafeAreaView, ScrollView, Text, View, Image, StyleSheet, Button, TouchableOpacity, TextInput, ActivityIndicator, AppState } from 'react-native';
 import { colors } from '../../../assets/color';
 import style from '../../../assets/style/style';
 import { LocationHeader } from '../../../components/header/LocationHeader';
@@ -28,6 +28,7 @@ import MapView, { Marker } from 'react-native-maps';
 import client from '../../../api/client';
 import LoadingIndicator from '../../../components/layout/Loading';
 import Api, { NodataView } from '../../../api/Api';
+import cusToast from '../../../components/navigation/CusToast';
 
 
 
@@ -61,10 +62,12 @@ const SearchLocation = ({ route }: Props) => {
     const [CountryName, setCountryName] = React.useState(i18n.language == 'Id' ? 'Indonesia' : i18n.language == 'En' ? 'English' : 'Korea');
 
     const searchPlace = () => {
-        if (keyword != '') {
+        if (keyword.trim().length >= 2) {
             setSearchKeyword(keyword);
             setKeyword('');
             setSearchType('search');
+        } else {
+            cusToast(t('2자 이상 입력해주세요.'))
         }
     }
 
@@ -174,18 +177,30 @@ const SearchLocation = ({ route }: Props) => {
     //         })
     // };
 
-    React.useEffect(() => {
-        // getMylocationData();
+    // React.useEffect(() => {
+    //     // getMylocationData();
 
-    }, []);
+    //     const subscribe = AppState.addEventListener('change', (nextAppState) => {
+
+    //         console.log('nextAppState', nextAppState);
+    //         if (nextAppState === 'active') {
+    //             getLoaction();
+    //         }
+    //     });
+
+    //     getLoaction();
+
+    //     return () => {
+    //         subscribe.remove();
+    //     }
+    // }, []);
 
 
     const getLoaction = async () => {
         setIsLoading(true);
         console.log('e')
-        geoLocation(setNowLocation, setIsLoading);
+        geoLocation(setNowLocation, setIsLoading, t, navigation);
     }
-
 
 
     React.useEffect(() => {
@@ -213,8 +228,7 @@ const SearchLocation = ({ route }: Props) => {
         }).then(res => {
             console.log('user/search-area', res.data)
             setTempPlaceList(res.data.data)
-        }
-        )
+        })
             .catch(err => {
                 console.log(err)
             })
@@ -266,6 +280,7 @@ const SearchLocation = ({ route }: Props) => {
     const SearchedLocation = (item: { zone: string, area: string, lat: any, lng: any }) => {
 
         console.log('SearchedLocation, ', item)
+        console.log('CheckList.length', CheckList.length)
         let mat_status = 'N';
         if (CheckList.length) {
             CheckList.forEach(({ zone }) => {
@@ -336,7 +351,7 @@ const SearchLocation = ({ route }: Props) => {
 
     /** 글자 검색 시 마다 api 호출 */
     React.useEffect(() => {
-        if (keyword.length >= 2) {
+        if (keyword.trim().length >= 2) {
             getSearchLocation();
             setSearchKeyword(keyword);
             setSearchType('search');

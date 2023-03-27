@@ -14,7 +14,7 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import style from '../../../assets/style/style';
 import { colors } from '../../../assets/color';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../../components/types/routerTypes';
 import { QuestionHeader } from '../../../components/header/QuestionHeader'
@@ -42,7 +42,7 @@ const Inquiry = () => {
 
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const userInfo = useSelector((state: any) => state.userInfo);
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [isloading, setIsLoading] = useState(true);
   /** todo */
   const Inquiry_1_1Detail = (item: any) => {
@@ -52,9 +52,11 @@ const Inquiry = () => {
     navigation.navigate('Inquiry_1_1Upload', { type: '1_1Upload' });
   }
 
-  const [inquiry, setInquiry] = React.useState([
-  ])
+  const [inquiryData, setInquiry] = React.useState([])
+
   const getData = async () => {
+    setIsLoading(true)
+
     await client({
       method: 'get',
       url: '/customer/qna-list?',
@@ -75,12 +77,13 @@ const Inquiry = () => {
     )
   };
 
+
   /** 정보 받아오기 */
-  React.useEffect(() => {
-    navigation.addListener('focus', () => {
+  useFocusEffect(
+    React.useCallback(() => {
       getData();
-    })
-  }, []);
+    }, [])
+  );
 
 
 
@@ -90,17 +93,17 @@ const Inquiry = () => {
       {isloading ?
         <LoadingIndicator />
         :
-
-        <FlatList data={inquiry}
+        <FlatList data={inquiryData}
           ListEmptyComponent={<NodataView></NodataView>}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }: any) => (
-            <TouchableOpacity style={{
-              flexDirection: 'row', alignItems: 'center',
-              paddingVertical: 20, borderBottomWidth: 1, borderBottomColor: colors.GRAY_COLOR_3, paddingHorizontal: 20,
-            }}
-              onPress={() => { Inquiry_1_1Detail(item) }}
-            >
+          renderItem={({ item }: any) => {
+            return (
+              <TouchableOpacity style={{
+                flexDirection: 'row', alignItems: 'center',
+                paddingVertical: 20, borderBottomWidth: 1, borderBottomColor: colors.GRAY_COLOR_3, paddingHorizontal: 20,
+              }}
+                onPress={() => Inquiry_1_1Detail(item)}
+              >
               <View style={{ flex: 5 }} key={item.qt_idx}>
                 <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_1 }]}>
                   {item.qt_title}
@@ -117,15 +120,16 @@ const Inquiry = () => {
                     </Text>
                   </View>
                 ) : (
-                    <View style={{ flexDirection: 'row' }}>
-                      <Text style={[style.text_me, { color: colors.BLUE_COLOR_1, fontSize: 13, backgroundColor: colors.GRAY_COLOR_1, paddingHorizontal: 15, paddingVertical: 6, borderRadius: 20 }]}>
-                        {t('답변완료')}
-                      </Text>
-                    </View>
-                  )}
-              </View>
-            </TouchableOpacity>
-          )}
+                      <View style={{ flexDirection: 'row' }}>
+                        <Text style={[style.text_me, { color: colors.BLUE_COLOR_1, fontSize: 13, backgroundColor: colors.GRAY_COLOR_1, paddingHorizontal: 15, paddingVertical: 6, borderRadius: 20 }]}>
+                          {t('답변완료')}
+                        </Text>
+                      </View>
+                    )}
+                </View>
+              </TouchableOpacity>
+            );
+          }}
         />
         // <View style={{flex:1}}>
         //   <Text style={[style.text_sb,{fontSize:15,color:colors.BLACK_COLOR_1}]}>

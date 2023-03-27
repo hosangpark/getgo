@@ -18,7 +18,7 @@ import Api from "../../api/Api";
 export const ReviewList = ({ item, deleteReview, Toggle, listmodal, setListmodal }:
   ({ item: ReviewItemType, deleteReview: (item: ReviewItemType) => void, Toggle: (itemid: number) => void, listmodal: any, setListmodal: (e: boolean) => void })
 ) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const [noticeState, noticeToggle] = useState(false)
 

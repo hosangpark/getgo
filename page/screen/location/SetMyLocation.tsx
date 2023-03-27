@@ -106,11 +106,12 @@ const SetMyLocation = () => {
         setIsLoading(false)
     };
 
-    const DeleteLocation = async (target: number) => {
-        if (target == 1 && myLocation.location2.mt_address == '') {
-            Alert.alert(t('지역은 1개이상 등록해야됩니다.'));
+    const DeleteLocation = async (target: number, index: number) => {
+        if (index == 1 && myLocation.location2.mt_address == '') {
+            cusToast(t('지역은 1개이상 등록되어 있어야됩니다.'));
             return;
         }
+
 
         Alert.alert(t('선택한 지역을 삭제하시겠습니까?'), '', [
             {
@@ -181,7 +182,7 @@ const SetMyLocation = () => {
 
                         }} style={[myLocation.location1.mat_status == "Y" ? style.green_button : style.white_button_gb, { flexDirection: 'row', justifyContent: 'space-between', }]}>
                             <Text style={[style.text_b, { fontSize: 15, color: myLocation.location1.mat_status == "Y" ? colors.WHITE_COLOR : colors.GREEN_COLOR_2 }]}>{myLocation.location1.mt_address}</Text>
-                            <TouchableOpacity onPress={() => { DeleteLocation(myLocation.location1.mat_idx) }}
+                            <TouchableOpacity onPress={() => { DeleteLocation(myLocation.location1.mat_idx, 1) }}
                                 style={{ zIndex: 10, width: 30, height: 30, alignItems: 'flex-end', justifyContent: 'center' }}>
                                 <Image source={myLocation.location1.mat_status == "Y" ? require('../../../assets/img/ico_close2_w.png') : require('../../../assets/img/ico_close2_g.png')} style={{ width: 25, height: 25 }} />
                             </TouchableOpacity>
@@ -217,7 +218,7 @@ const SetMyLocation = () => {
                         }}
                             style={[myLocation.location2.mat_status == "Y" ? style.green_button : style.white_button_gb, { flexDirection: 'row', justifyContent: 'space-between', }]}>
                             <Text style={[style.text_b, { fontSize: 15, color: myLocation.location2.mat_status == "Y" ? colors.WHITE_COLOR : colors.GREEN_COLOR_2 }]}>{myLocation.location2.mt_address}</Text>
-                            <TouchableOpacity onPress={() => { DeleteLocation(myLocation.location2.mat_idx) }}
+                            <TouchableOpacity onPress={() => { DeleteLocation(myLocation.location2.mat_idx, 2) }}
                                 style={{ zIndex: 10, width: 30, height: 30, alignItems: 'flex-end', justifyContent: 'center' }}>
                                 <Image source={myLocation.location2.mat_status == "Y" ? require('../../../assets/img/ico_close2_w.png') : require('../../../assets/img/ico_close2_g.png')} style={{ width: 25, height: 25 }} />
                             </TouchableOpacity>

@@ -39,7 +39,7 @@ import {
 
 type Props = StackScreenProps<MainNavigatorParams, 'Reserve_choice'>
 const Reserve_choice = ({ route }: Props) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const [loading, setLoading] = useState(false)

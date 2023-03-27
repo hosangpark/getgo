@@ -30,7 +30,7 @@ export default function SendReview({ route }: Props) {
   const [items, setitem] = useState<any>()
   const [value, setValue] = useState('')
 
-  const userInfo = useSelector((state:any) => state.userInfo)
+  const userInfo = useSelector((state: any) => state.userInfo)
 
   const [targetNickName, setTargetNickName] = useState('')
 
@@ -55,6 +55,12 @@ export default function SendReview({ route }: Props) {
     }
   }
   const SendReviewComplete = async () => {
+
+    if (value.trim().length < 10) {
+      cusToast(t('10자 이상 내용을 입력해주세요.'))
+      return;
+    }
+
     await client({
       method: 'post',
       url: `/product/review_add`,

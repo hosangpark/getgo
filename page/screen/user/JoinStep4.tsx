@@ -108,7 +108,7 @@ const JoinStep4 = () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <BackHeader title="" />
+            <BackHeader title="" goLogin={true} />
             <ScrollView style={[style.default_background, { flexGrow: 1, paddingHorizontal: 20 }]}>
                 <View style={{ flex: 1, justifyContent: 'center', marginTop: 40 }}>
                     <Text style={[style.text_b, { fontSize: 22, color: colors.BLACK_COLOR_2, paddingRight: 100 }]}>{t('계정 찾기시 사용될 이메일 주소 인증이 필요합니다.')}</Text>
@@ -169,7 +169,7 @@ const JoinStep4 = () => {
                     </View>
                 </View>
             </ScrollView>
-            <BackHandlerCom />
+            <BackHandlerCom goLogin={true} />
         </SafeAreaView>
     );
 };

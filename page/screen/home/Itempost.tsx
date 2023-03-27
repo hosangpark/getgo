@@ -112,7 +112,7 @@ const Itempost = ({ route }: Props) => {
       // } else {
       //   shopUrl = 'https://apps.apple.com/kr/app/id1572757670';
       // }
-      let fullcodeUrl = 'http://getgo.id:3000/download-app?type=product&code=' + items.data[0].pt_idx;
+      let fullcodeUrl = 'http://getgo.id/bridge.html?type=product&code=' + items.data[0].pt_idx;
       // let fullcodeUrl = 'https://buzyrun.com/bridge.php?type=product&code=' + items.data[0].pt_idx;
 
       // let fullcodeUrl = await buildLink();
@@ -229,22 +229,34 @@ const Itempost = ({ route }: Props) => {
         navigation.navigate('Message')
         //채팅응답
       } else {
-        await client({
-          method: 'post',
-          url: '/product/chat_add',
-          data: {
-            mt_idx: userInfo.idx,
-            pt_idx: pt_idx,
-          },
-        })
-          .then(res => {
-            //{"crt_idx": 52, "ctt_room_id": "CzAuaGg4fxlXg"}
-            console.log('res', res.data);
-            if (res.data.crt_idx) navigation.navigate('MessageRoom', { items: { room_id: res.data.crt_idx }, type: 'messageChat' });
+
+        if (items.data[0].pt_sale_now == 3) {
+          //구매자일경우
+          if (items.data[0].mt_buyer_idx == userInfo.idx) {//내가 구매자
+            navigation.navigate('Message')
+          } else {
+            cusToast(t('이미 거래가 완료된 상품입니다.'));
+            return;
+          }
+        } else {
+
+          await client({
+            method: 'post',
+            url: '/product/chat_add',
+            data: {
+              mt_idx: userInfo.idx,
+              pt_idx: pt_idx,
+            },
           })
-          .catch(error => {
-            console.log(error);
-          });
+            .then(res => {
+              //{"crt_idx": 52, "ctt_room_id": "CzAuaGg4fxlXg"}
+              console.log('res', res.data);
+              if (res.data.crt_idx) navigation.navigate('MessageRoom', { items: { room_id: res.data.crt_idx }, type: 'messageChat' });
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
       }
     }
   };
@@ -495,7 +507,7 @@ const Itempost = ({ route }: Props) => {
                   style.text_li,
                   { color: colors.GRAY_COLOR_2, fontSize: 13 },
                 ]}>
-                {items.data[0].pt_area} / {foramtDate(items.data[0].pt_wdate)}
+                {items.data[0].pt_area} / {foramtDate(items.data[0].pt_wdate, i18n.language)}
               </Text>
             </View>
           </View>

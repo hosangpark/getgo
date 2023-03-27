@@ -64,7 +64,7 @@ const ProductItem = ({
         area_show: "Y"
       }
     }).then(res => {
-      console.log("res",res)
+      console.log("res", res)
       cusToast(t(res.data.message))
       setWp_idx(res.data.wt_idx)
 
@@ -175,7 +175,7 @@ const ProductItem = ({
             </Text>
             <Text
               style={[style.text_li, { color: colors.GRAY_COLOR_2, fontSize: 13 }]}>
-              {item.pt_area} / {foramtDate(item.pt_wdate)}
+              {item.pt_area} / {foramtDate(item.pt_wdate, i18n.language)}
             </Text>
             <View
               style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center' }}>

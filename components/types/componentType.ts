@@ -3,9 +3,12 @@ import { TextInputProps } from "react-native";
 export interface BackHandlerType {
     goHome?: boolean;
     noRetrun?: boolean;
+    goLogin?: boolean;
 }
 export interface BackHeaderType {
     title: String;
+    goHome?: boolean;
+    goLogin?: boolean;
 }
 export interface MessageHeaderType {
     title: String;
