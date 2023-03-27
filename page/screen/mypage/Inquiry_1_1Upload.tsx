@@ -18,7 +18,7 @@ import {
   Image,
   KeyboardAvoidingView,
   ImageBackground,
-  Platform,
+  Platform,PermissionsAndroid
 } from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import style from '../../../assets/style/style';
@@ -33,8 +33,9 @@ import MultipleImagePicker from '@baronha/react-native-multiple-image-picker';
 import {useTranslation} from 'react-i18next';
 import client from '../../../api/client';
 import {useSelector} from 'react-redux';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {launchImageLibrary,launchCamera} from 'react-native-image-picker';
 import LoadingIndicator from '../../../components/layout/Loading';
+import { CheckPhotoImage } from '../../../components/modal/CheckPhothImage';
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
@@ -48,6 +49,7 @@ const Inquiry_1_1Upload = ({}) => {
   const [isloading, setIsLoading] = useState(false);
   const [uploadpictures, setUploadpictures] = useState<any>([]);
   const [imageUrl, setImageUrl] = useState(null);
+  const [photoModalVisible, setPhotoModalVisible] = useState(false)
 
   const Delete = (e: any) => {
     const remove = uploadpictures.filter(item => item.fileName !== e.fileName);
@@ -55,7 +57,43 @@ const Inquiry_1_1Upload = ({}) => {
   };
 
   /** 사진 고르기 */
-  const openPicker = async () => {
+  const openPicker = (type: string) => {
+    if (type == 'camera') {
+      PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: "App Camera Permission",
+          message: "App needs",
+          buttonPositive: 'OK',
+          buttonNegative: 'Cancel',
+        },
+      )
+      launchCamera({
+        mediaType: 'photo',
+        cameraType: 'back',
+        maxWidth: 512,
+        maxHeight: 512,
+        saveToPhotos: true
+      }, (res) => {
+        console.log(res)
+        if (res.didCancel) {
+        } else if (res.assets) {
+          let newres = [...uploadpictures];
+          res.assets.forEach((item, index) => {
+            newres.push({
+              uri: item.uri,
+              fileName: item.fileName,
+              type: item.type,
+              img_idx: '',
+            });
+          });
+          if (newres.length >= 10) {
+            newres = newres.slice(0, 10);
+          }
+          setUploadpictures(newres);
+        }
+      });
+    } else {
     launchImageLibrary(
       {
         mediaType: 'photo',
@@ -76,6 +114,7 @@ const Inquiry_1_1Upload = ({}) => {
         }
       },
     );
+    }
   };
 
   const UploadData = async () => {
@@ -178,7 +217,7 @@ const Inquiry_1_1Upload = ({}) => {
               alignItems: 'center',
               marginBottom: 17,
             }}
-            onPress={openPicker}>
+            onPress={() => setPhotoModalVisible(true)}>
             <Text
               style={[
                 style.text_sb,
@@ -232,6 +271,13 @@ const Inquiry_1_1Upload = ({}) => {
           {t('문의하기')}
         </Text>
       </TouchableOpacity>
+
+      <CheckPhotoImage
+      photoModalVisible={photoModalVisible}
+      setPhotoModalVisible={()=>setPhotoModalVisible(false)}
+      action={()=>openPicker('camera')}
+      action2={()=>openPicker('gallery')}
+      />
       <BackHandlerCom />
     </SafeAreaView>
   );

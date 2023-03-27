@@ -125,7 +125,7 @@ const ChangeCheck = ()=>{
               <View style={{flexDirection:'row'}}>
                 <TextInput placeholder={t('이메일을 입력해주세요.')} style={{borderWidth:1,borderColor:colors.GRAY_COLOR_3,height:44,paddingLeft:10,marginRight:10,flex:3}}
                 value={inputEmail}
-                onChangeText={(e)=>{setInputEmail(e)}}
+                onChangeText={(e)=>{setInputEmail(e.replace(/ /g,""))}}
                 keyboardType={'email-address'}
                 />
                 <View style={{flex:1,}}>

@@ -123,7 +123,7 @@ const JoinStep4 = () => {
                                 style={[style.input_container, { marginTop: 5 }]}
                                 placeholder={t('이메일을 입력해주세요.')}
                                 value={inputEmail}
-                                onChangeText={(e) => { setInputEmail(e) }}
+                                onChangeText={(e) => { setInputEmail(e.replace(/ /g,"")) }}
                                 keyboardType={'email-address'}
                             />
                         </View>

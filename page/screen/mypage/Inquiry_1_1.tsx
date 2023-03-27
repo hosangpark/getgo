@@ -63,6 +63,7 @@ const Inquiry = () => {
       }
     }).then(
       res => {
+        console.log(res.data)
         setInquiry(res.data)
         setIsLoading(false)
       }
@@ -105,7 +106,7 @@ const Inquiry = () => {
                   {item.qt_title}
                 </Text>
                 <Text style={[style.text_re, { fontSize: 13, color: colors.GRAY_COLOR_2, marginTop: 4 }]}>
-                  {foramtDate(item.qt_wdate)}
+                  {item.qt_wdate}
                 </Text>
               </View>
               <View style={{ flex: 2, flexDirection: 'column', alignItems: 'flex-end' }}>

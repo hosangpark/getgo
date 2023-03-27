@@ -21,8 +21,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   ImageBackground,
-  ActivityIndicator,
-  Alert,
+  ActivityIndicator,BackHandler,
+  Alert,PermissionsAndroid
 } from 'react-native';
 import style from '../../../assets/style/style';
 import { colors } from '../../../assets/color';
@@ -49,9 +49,10 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import client from '../../../api/client';
 import cusToast from '../../../components/navigation/CusToast';
 import axios from 'axios';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { launchImageLibrary,launchCamera } from 'react-native-image-picker';
 import SetMyLocation from '../location/SetMyLocation';
 import Api from '../../../api/Api';
+import { CheckPhotoImage } from '../../../components/modal/CheckPhothImage';
 
 type Props = StackScreenProps<MainNavigatorParams, 'Itemupload'>;
 const Itemupload = ({ route }: Props) => {
@@ -67,16 +68,59 @@ const Itemupload = ({ route }: Props) => {
   const { t, i18n } = useTranslation();
   const bodyRef = useRef<TextInput | null>(null);
   const [uploadpictures, setUploadpictures] = useState<any>([]);
+  const [photoModalVisible, setPhotoModalVisible] = useState(false)
+  const [CameraCancle, setCameraCancle] = useState(false)
+
   const pt_idx = route?.params?.pt_idx;
 
   const dispatch = useDispatch();
 
-  const openPicker = async () => {
+
+  const openPicker = async (type:string) => {
     if (uploadpictures.length == 10) {
       cusToast(t('사진은 10장까지 등록할수 있습니다.'));
       return false;
     }
+    setCameraCancle(false)
+    if (type == 'camera') {
+      PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: "App Camera Permission",
+          message: "App needs",
+          buttonPositive: 'OK',
+          buttonNegative: 'Cancel',
+        },
+      )
+      
+      launchCamera({
+        mediaType: 'photo',
+        cameraType: 'back',
+        maxWidth: 512,
+        maxHeight: 512,
+        saveToPhotos: true,
+      }, (res) => {
+        console.log(res)
+        if (res.didCancel) {
+        } else if (res.assets) {
+          console.log(res.assets)
+          let newres = [...uploadpictures];
+          res.assets.forEach((item, index) => {
+            newres.push({
+              uri: item.uri,
+              fileName: item.fileName,
+              type: item.type,
+              img_idx: '',
+            });
+          });
+          if (newres.length >= 10) {
+            newres = newres.slice(0, 10);
+          }
+          setUploadpictures(newres);
+        }
+      })
 
+    } else {
     launchImageLibrary(
       {
         mediaType: 'photo',
@@ -108,22 +152,8 @@ const Itemupload = ({ route }: Props) => {
         }
       },
     );
-    // try {
-    // const response = await MultipleImagePicker.openPicker({
-    //     usedCameraButton: false,
-    // });
-    // if(response.length <= 10){
-    //     setUploadpictures(response)
-    // } else {
-    //     const newres = response.slice(0,10)
-    //     setUploadpictures(newres)
-    //     Alert.alert(
-    //         t("사진은 최대 10장까지만 업로드 가능합니다.")
-    //         )
-    // }
-    // } catch (e:any) {
-    // console.log(e.code, e.message);
-    // }
+    }
+
   };
 
   const [selectCategory, setSelCategory] = React.useState<CategoryOptionType>({
@@ -421,7 +451,7 @@ const Itemupload = ({ route }: Props) => {
               justifyContent: 'center',
               marginBottom: 17,
             }}
-            onPress={openPicker}>
+            onPress={() => setPhotoModalVisible(true)}>
             <Text
               style={[
                 style.text_sb,
@@ -611,6 +641,12 @@ const Itemupload = ({ route }: Props) => {
         ) : null}
       </ScrollView>
 
+      <CheckPhotoImage
+      photoModalVisible={photoModalVisible}
+      setPhotoModalVisible={()=>setPhotoModalVisible(false)}
+      action={()=>openPicker('camera')}
+      action2={()=>openPicker('gallery')}
+      />
       <BackHandlerCom />
     </SafeAreaView>
   );

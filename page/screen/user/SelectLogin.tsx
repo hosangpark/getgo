@@ -59,7 +59,7 @@ const SelectLogin = () => {
     const [langList, setLangList] = React.useState([
         { label: '한국어', img: require('../../../assets/img/lang_kr.png'), value: 'Ko' },
         { label: 'English', img: require('../../../assets/img/lang_in.png'), value: 'En' },
-        { label: 'Indonesia', img: require('../../../assets/img/lang_us.png'), value: 'Id' },
+        { label: 'Bahasa Indonesia', img: require('../../../assets/img/lang_us.png'), value: 'Id' },
     ])
     const [selLang, setSelLang] = React.useState<SelectLangType>({
         label: langList[0].label,

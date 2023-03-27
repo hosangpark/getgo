@@ -32,6 +32,7 @@ import logsStorage from '../../../components/utils/logStorage';
 import cusToast from '../../../components/navigation/CusToast';
 import Api, { NodataView } from '../../../api/Api';
 import { Textreplace } from '../../../components/utils/funcKt';
+import { CheckPhotoImage } from '../../../components/modal/CheckPhothImage';
 
 
 
@@ -107,7 +108,7 @@ const MypageSetting = () => {
         cameraType: 'back',
         maxWidth: 512,
         maxHeight: 512,
-        // saveToPhotos: true
+        saveToPhotos: true
       }, (res) => {
         console.log(res)
         if (res.didCancel != true) {
@@ -350,44 +351,12 @@ const MypageSetting = () => {
       }
 
 
-      <Modal visible={photoModalVisible} transparent={true} onRequestClose={() => setPhotoModalVisible(false)}>
-
-        <TouchableOpacity style={{
-          flex: 1, justifyContent: 'center', alignItems: 'center',
-          backgroundColor: '#000', flex: 1, opacity: 0.6,
-        }} onPress={() => setPhotoModalVisible(false)}>
-        </TouchableOpacity>
-        <View style={{
-          backgroundColor: colors.WHITE_COLOR,
-          width: Dimensions.get('screen').width - 100,
-          position: 'absolute',
-          zIndex: 10,
-          elevation: 1,
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          flexDirection: 'row',
-          borderRadius: 6,
-          left: 50,
-          height: 100,
-          paddingHorizontal: 10,
-          top: Dimensions.get('screen').height / 2 - 100
-        }}>
-          <TouchableOpacity style={{ padding: 20, borderColor: colors.GRAY_COLOR_5, borderWidth: 1, borderRadius: 6 }}>
-            <Text style={[style.text_sb, { color: colors.BLACK_COLOR_2, fontSize: 18 }]} onPress={() => {
-              ModifyImage('camera')
-              setPhotoModalVisible(false)
-            }}>
-              {t('카메라')}</Text></TouchableOpacity>
-
-          <TouchableOpacity style={{ padding: 20, borderColor: colors.GRAY_COLOR_5, borderWidth: 1, borderRadius: 6 }}>
-            <Text style={[style.text_sb, { color: colors.BLACK_COLOR_2, fontSize: 18 }]} onPress={() => {
-              ModifyImage('gallery')
-              setPhotoModalVisible(false)
-            }}>
-              {t('갤러리')}</Text></TouchableOpacity>
-        </View>
-
-      </Modal>
+    <CheckPhotoImage
+      photoModalVisible={photoModalVisible}
+      setPhotoModalVisible={()=>setPhotoModalVisible(false)}
+      action={()=>ModifyImage('camera')}
+      action2={()=>ModifyImage('gallery')}
+    />
 
       <BackHandlerCom />
     </SafeAreaView>
