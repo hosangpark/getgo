@@ -49,13 +49,13 @@ const SettingWithdrawal = () => {
         ,
         [
           {
-            text: '탈퇴', onPress: async () => {
+            text: t('탈퇴'), onPress: async () => {
               await AsyncStorage.removeItem('userIdx')
               DeleteUser();
             }, style: 'cancel'
           },
           {
-            text: '취소',
+            text: t('취소'),
             onPress: () => {
 
             },

@@ -9,7 +9,7 @@
 import React, { useState, useEffect, useCallback, Children } from 'react';
 import {
   Alert,
-  SafeAreaView, ScrollView, Text, View, StyleSheet, FlatList, Image, BackHandler, ActivityIndicator, VirtualizedList, Platform
+  SafeAreaView, ScrollView, Text, View, StyleSheet, FlatList, Image, BackHandler, ActivityIndicator, VirtualizedList, Platform, TouchableWithoutFeedback
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import style from '../../../assets/style/style';
@@ -83,7 +83,12 @@ const Message = () => {
   }
 
   const Enter = (items: any) => {
-    navigation.navigate('MessageRoom', { items, type: 'messageChat' });
+    console.log(listmodal)
+    if(listmodal !== false){
+      setListmodal(false)
+    } else {
+      navigation.navigate('MessageRoom', { items, type: 'messageChat' });
+    }
   }
 
   const Delete = async (e: number) => {
@@ -92,9 +97,10 @@ const Message = () => {
   }
 
   const Toggle = (e: number) => {
-    setListmodal(e)
     if (e == listmodal) {
       setListmodal(false)
+    } else {
+      setListmodal(e)
     }
   }
 
@@ -187,6 +193,7 @@ const Message = () => {
   }, [navigation]);
 
   return (
+      // <TouchableWithoutFeedback onPress={()=>{Toggle(0)}}>
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       <MessageHeader title={t('채팅')} />
       {isLoading ?
@@ -200,7 +207,7 @@ const Message = () => {
                 listmodal={listmodal} noticeOnOff={noticeOnOff} isSeller={item.mt_seller_idx == userInfo.idx ? true : false} />
             )
           }}
-          contentContainerStyle={{ paddingHorizontal: 20, flexDirection: 'column-reverse' }}
+          contentContainerStyle={{ flexDirection: 'column-reverse',paddingHorizontal:20 }}
           ListHeaderComponent={
             <View style={{ marginBottom: 120 }}></View>
           }
@@ -215,6 +222,7 @@ const Message = () => {
         action2={cancel}
       />
     </SafeAreaView>
+      // </TouchableWithoutFeedback>
   );
 };
 

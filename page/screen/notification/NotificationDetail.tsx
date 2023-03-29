@@ -55,8 +55,7 @@ const NotificationDetail = ({ route }: Props) => {
       }
       }).then(
         res=>{
-          console.log("res.data",res.data)
-          console.log("route",route)
+          console.log("res.datares.datares.datares.datares.datares.datares.datares.datares.datares.datares.datares.datares.datares.data",res.data)
           setAlert_datas(res.data[0])
           setIsLoading(false)
         }
@@ -88,7 +87,7 @@ const NotificationDetail = ({ route }: Props) => {
             </View>
             <View style={{paddingVertical:20}}>
               <Text style={[style.text_re,{fontSize:14,color:colors.BLACK_COLOR_1,lineHeight:20}]}>
-              {Alert_datas.pst_detail_content}{Alert_datas.pst_detail_content}{Alert_datas.pst_detail_content}{Alert_datas.pst_detail_content}{Alert_datas.pst_detail_content}{Alert_datas.pst_detail_content}{Alert_datas.pst_detail_content}{Alert_datas.pst_detail_content}{Alert_datas.pst_detail_content}{Alert_datas.pst_detail_content}{Alert_datas.pst_detail_content}{Alert_datas.pst_detail_content}{Alert_datas.pst_detail_content}</Text>
+              {Alert_datas.pst_content}</Text>
           </View>
         </ScrollView>
       }

@@ -32,54 +32,48 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal, 
 
   i18n
   return (
-    <View key={item.chr_id}
-      style={{
-        paddingVertical: 17, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', overflow: 'visible',
-        flex: 1, position: 'relative',
-      }}
-    >
-      <View style={{ flexDirection: 'row', flex: 1 }}>
-        <TouchableOpacity style={{ flexDirection: 'row' }}
-          onPress={() => Enter(item)}>
-          {/* onPress={()=>navigation.navigate('ReviewDetail',item)}> */}
-          <Image style={{ width: 40, height: 40, borderRadius: 50, marginRight: 20 }} source={item.mt_image1 ? {
+    <View>
+      <TouchableOpacity key={item.mt_idx}
+        style={{ flexDirection: 'row', minHeight: 77, alignItems: 'center',}}
+        onPress={()=>Enter(item)}
+            >
+        <View style={{ flexDirection: 'row' }}>
+          <Image style={{ width: 40, height: 40, borderRadius: 50, marginRight: 15 }} source={item.mt_image1 ? {
             uri: Api.state.imageUrl + item.mt_image1
           }
             : require('../../assets/img/img_profile.png')
           } />
-          <View style={{ width: '80%' }}>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', }}>
-              <Text style={[style.text_sb, { fontSize: 12, color: colors.BLACK_COLOR_1, marginRight: 5, }]}>
-                {item.mt_nickname}
-              </Text>
-              <Text style={[style.text_li, { fontSize: 12, color: colors.GRAY_COLOR_2 }]}>
-                {item.mt_area} / {foramtDate(item.crt_last_date, i18n.language)}
-              </Text>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6, }}>
-              {newCttPush == "Y" ?
-                null
-                :
-                <Text style={{ color: 'red', marginRight: 5, justifyContent: 'center' }}>
-                  {t("차단중")}
-                  {/* <Image style={{width:20,height:20}} source={require('../../assets/img/top_alim.png')}/> */}
+            <View style={{flex:1}}>
+              <View style={{flexDirection:'row'}}>
+                <Text style={[style.text_sb, { fontSize: 12, color: colors.BLACK_COLOR_1, marginRight: 5,flexShrink:1}]}>
+                  {item.mt_nickname}
                 </Text>
-              }
-              <Text style={[style.text_re, { fontSize: 15, color: colors.BLACK_COLOR_2 }]} numberOfLines={1}>
-                {item.ctt_msg}
-              </Text>
+                <Text style={[style.text_li, { fontSize: 12, color: colors.GRAY_COLOR_2,flexShrink:2 }]}>
+                    {item.mt_area} / {foramtDate(item.crt_last_date, i18n.language)}
+                </Text>
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6, }}>
+                {newCttPush == "Y" ?
+                    null
+                  :
+                  <Text style={{ color: 'red', marginRight: 5, justifyContent: 'center' }}>
+                    {t("차단중")}
+                  </Text>
+                }
+                <Text style={[style.text_re, { fontSize: 15, color: colors.BLACK_COLOR_2 }]} numberOfLines={1}>
+                  {item.ctt_msg}
+                </Text>
+              </View>
             </View>
-          </View>
-        </TouchableOpacity>
-      </View>
-      <View style={{ flexDirection: 'row', }}>
-        <TouchableOpacity onPress={() => Toggle(item.chr_id)} style={{ flex: 3 }}>
-          <Image style={{ width: 28, height: 28 }} source={require('../../assets/img/top_menu.png')} />
-        </TouchableOpacity>
-      </View>
+            <TouchableOpacity onPress={() => Toggle(item.chr_id)} style={{}}>
+              <Image style={{ width: 28, height: 28 }} source={require('../../assets/img/top_menu.png')} />
+            </TouchableOpacity>
+        </View>
+              
+      </TouchableOpacity>
       <View style={{
-        position: 'absolute', backgroundColor: colors.WHITE_COLOR, right: 35, top: 20, borderRadius: 5, elevation: 10, paddingVertical: 15
-      }}>
+          position: 'absolute', backgroundColor: colors.WHITE_COLOR, right: 35, top: 20, borderRadius: 5, elevation: 10, paddingVertical: 15
+        }}>
         {listmodal == item.chr_id &&
           <>
             <TouchableOpacity style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 25 }}
@@ -104,6 +98,10 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal, 
         }
       </View>
     </View>
+
+
+
+
   )
 
 }

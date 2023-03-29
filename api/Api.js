@@ -43,6 +43,7 @@ class Api {
       // deepLinkUrl: 'http://ec2-13-125-251-68.ap-northeast-2.compute.amazonaws.com:3000/bridge',
       // deepLinkUrl: 'https://getgo.page.link/bjYi',
       deepLinkUrl: 'https://getgo.page.link',
+
       path: '/api/',
       option: {
         method: 'POST',
@@ -364,6 +365,18 @@ class Api {
       );
     }
   }
+
+  // const get_numeric = (str:string) => {
+  //   if (!str){str = '0'}
+  //   var abdc = str.toString().replace(/[^\d-]/g, '');
+  //   return !abdc ? 0 : parseInt(abdc, 10);
+  // }
+  // const comma = (str:string) => {
+  //   if (!str) return 0;
+
+  //   var abdc = get_numeric(str).toString();
+  //   return abdc.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1');
+  // }
 
   //값을 숫자로 변환
   get_numeric(str) {

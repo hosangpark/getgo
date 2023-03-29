@@ -29,6 +29,7 @@ import {
   OptionType,
   Reserve_SelectBoxType,
 } from '../../../components/types/componentType';
+import { CustomButton } from '../../../components/layout/CustomButton';
 
 
 
@@ -103,6 +104,9 @@ const Reserve_choice = ({ route }: Props) => {
 
     console.log('route.params.target.image', route.params.target.image);
   }, []);
+  React.useEffect(() => {
+   console.log('route.params',route.params)
+  }, []);
 
   return (
     <SafeAreaView style={[style.default_background, { flex: 1 }]}>
@@ -125,31 +129,29 @@ const Reserve_choice = ({ route }: Props) => {
           ListEmptyComponent={<NodataView />}
           renderItem={({ item }) =>
             <View key={item.mt_idx}
-              style={{ flexDirection: 'row', justifyContent: 'space-between', height: 77, alignItems: 'center' }}
+              style={{ flexDirection: 'row', minHeight: 77, alignItems: 'center',}}
             >
               <View style={{ flexDirection: 'row' }}>
-                <View style={{ marginRight: 12, justifyContent: 'center', alignItems: 'center' }}>
-                  <Image source={
-                    item.mt_image1 ?
-                      { uri: Api.state.imageUrl + item.mt_image1 }
-                      :
-                      require('../../../assets/img/img_profile.png')
-                  } borderRadius={100} style={{ width: 40, height: 40 }} />
-                </View>
-                <View>
-                  <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_1 }]}>
-                    {item.mt_nickname}</Text>
+                <Image source={
+                  item.mt_image1 ?
+                    { uri: Api.state.imageUrl + item.mt_image1 }
+                    :
+                    require('../../../assets/img/img_profile.png')
+                } borderRadius={100} style={{ width: 40, height: 40,marginRight: 12, }} />
+                <View style={{flex:1,flexShrink:1}}>
+                  <Text style={[style.text_sb, { fontSize: 15, color: colors.BLACK_COLOR_1}]}>
+                    {item.mt_nickname}
+                  </Text>
                   <View style={{ flexDirection: 'row' }}>
                     <Text style={[style.text_re, { fontSize: 13, color: colors.GRAY_COLOR_2 }]}>
                       {item.mt_area} / {item.crt_last_date == null ? '' : (item.crt_last_date)}
                     </Text>
                   </View>
                 </View>
-              </View>
-              <View>
+
                 <TouchableOpacity style={{
-                  width: 85, height: 36, justifyContent: 'center',
-                  alignItems: 'center', backgroundColor: colors.BLUE_COLOR_1, borderRadius: 5
+                  width: 85, height: 40, justifyContent: 'center',
+                  alignItems: 'center', backgroundColor: colors.BLUE_COLOR_1, borderRadius: 5,
                 }}
                   onPress={() => ReserveSelect(item.mt_idx)}
                 >
@@ -158,6 +160,12 @@ const Reserve_choice = ({ route }: Props) => {
               </View>
             </View>
           } />
+          <CustomButton
+            buttonType='green'
+            action={()=>ReserveSelect(0)}
+            disable={false}
+            title={t('거래완료')}
+          />
       </View>
       <BackHandlerCom />
     </SafeAreaView>

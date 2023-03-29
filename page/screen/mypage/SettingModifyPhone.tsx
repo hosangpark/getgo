@@ -37,15 +37,16 @@ const SettingModifyPhone = ({route}:any) => {
     const PrevAreaNumber = route.params.PhoneNumber.substr(0,2)
     const PrevPhoneNumber = route.params.PhoneNumber.substring(2)
 
-  const {t} = useTranslation()  
+  const {t,i18n} = useTranslation()  
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const userInfo = useSelector((state:any) => state.userInfo);
   const [phoneOptions] = React.useState([
-      {label : '+82', value : '82', sel_id:1},
-      {label : '+62', value : '62', sel_id:2},
+        { label: '+62', value: '62', sel_id: 2 },
+        // { label: i18n.language == "Id"? '+62': '+82', value: i18n.language == "Id"? '62':'82', sel_id: i18n.language == "Id"? 2:1 },
+        // { label: i18n.language == "Id"? '+82':'+62', value: i18n.language == "Id"? '82':'62', sel_id: i18n.language == "Id"? 1:2 },
   ])
   const [selectPhone, setSelPhone] = React.useState<OptionType>({
-      label : '+82', value : '82' , sel_id:1
+        label: phoneOptions[0].label, value: phoneOptions[0].value, sel_id: phoneOptions[0].sel_id
   })
 
   const [inputLoginInfo, setInputLoginInfo] = React.useState({

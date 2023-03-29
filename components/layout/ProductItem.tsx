@@ -178,7 +178,7 @@ const ProductItem = ({
               {item.pt_area} / {foramtDate(item.pt_wdate, i18n.language)}
             </Text>
             <View
-              style={{ flexDirection: 'row', marginTop: 5, alignItems: 'center' }}>
+              style={{ flexDirection: i18n.language === 'Id' ? "column":'row', marginTop: 5, alignItems:i18n.language === 'Id' ? 'flex-start':'center', }}>
               {item.pt_sale_now && (
                 <View
                   style={{
@@ -192,7 +192,6 @@ const ProductItem = ({
                     paddingHorizontal: 5,
                     paddingVertical: 3,
                     marginRight: 5,
-                    flexShrink: i18n.language === 'Id' ? 2 : 0
                   }}>
                   <Image
                     style={{ width: 10, height: 10 }}

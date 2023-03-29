@@ -36,8 +36,9 @@ const Login = () => {
     const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
 
     const [phoneOptions] = React.useState([
-        { label: i18n.language == "Id"? '+62': '+82', value: i18n.language == "Id"? '62':'82', sel_id: i18n.language == "Id"? 2:1 },
-        { label: i18n.language == "Id"? '+82':'+62', value: i18n.language == "Id"? '82':'62', sel_id: i18n.language == "Id"? 1:2 },
+        { label: '+62', value: '62', sel_id: 2 },
+        // { label: i18n.language == "Id"? '+62': '+82', value: i18n.language == "Id"? '62':'82', sel_id: i18n.language == "Id"? 2:1 },
+        // { label: i18n.language == "Id"? '+82':'+62', value: i18n.language == "Id"? '82':'62', sel_id: i18n.language == "Id"? 1:2 },
     ])
     const [selectPhone, setSelPhone] = React.useState<OptionType>({
         label: phoneOptions[0].label, value: phoneOptions[0].value, sel_id: phoneOptions[0].sel_id
@@ -69,7 +70,7 @@ const Login = () => {
                 method: 'post',
                 url: '/user/auth-login_send',
                 data: {
-                    mt_na: inputLoginInfo.areaCode,
+                    mt_na: selectPhone.value,
                     mt_hp: inputLoginInfo.mt_hp,
                 }
             }).then(res => {

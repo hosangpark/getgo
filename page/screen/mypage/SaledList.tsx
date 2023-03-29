@@ -82,7 +82,7 @@ export default function SaledList({ route }) {
             }
           }).then(
             res => {
-              cusToast(res.data.message)
+              cusToast(t(res.data.message))
               getOnsaleData()
             }).catch(
               err => {

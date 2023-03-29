@@ -195,23 +195,25 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
                 {item.pt_area} / {foramtDate(item.pt_wdate, i18n.language)}
               </Text>
 
-              <View style={{ flexDirection: 'row', marginTop: 5 }}>
+              <View style={{flexDirection: i18n.language === 'Id' ? "column":'row', marginTop: 5, alignItems:i18n.language === 'Id' ? 'flex-start':'center', }}>
                 {item.pt_sale_now == "1" ?
+                <View style={{}}>
                   <Text style={[style.text_me, {
                     backgroundColor: colors.BLUE_COLOR_1,
                     borderRadius: 5, fontSize: 12, marginRight: 8, color: colors.WHITE_COLOR,
-                    paddingVertical: 3, paddingHorizontal: 5, flexShrink: 1
+                    paddingVertical: 3, paddingHorizontal: 5, 
                   }]}>
                     <Image style={{ width: 13, height: 13, }}
                       source={require('../../assets/img/ico_sale.png')} />
                     {t('판매중')}
                   </Text>
+                </View>
                   :
                   item.pt_sale_now == "2" ?
                     <Text style={[style.text_me, {
                       backgroundColor: colors.GREEN_COLOR_2,
                       borderRadius: 5, fontSize: 12, marginRight: 8, color: colors.WHITE_COLOR,
-                      paddingVertical: 3, paddingHorizontal: 5, flexShrink: 1
+                      paddingVertical: 3, paddingHorizontal: 5,
                     }]}>
                       <Image style={{ width: 13, height: 13, }}
                         source={require('../../assets/img/ico_time.png')} />
@@ -221,7 +223,7 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
                     <Text style={[style.text_me, {
                       backgroundColor: colors.GRAY_COLOR_4,
                       borderRadius: 5, fontSize: 12, marginRight: 8, color: colors.WHITE_COLOR,
-                      paddingVertical: 3, paddingHorizontal: 5, flexShrink: 1
+                      paddingVertical: 3, paddingHorizontal: 5,
                     }]}>
                       <Image style={{ width: 13, height: 13, }}
                         source={require('../../assets/img/ico_time.png')} />

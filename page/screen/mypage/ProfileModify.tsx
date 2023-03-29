@@ -39,7 +39,7 @@ import { CheckPhotoImage } from '../../../components/modal/CheckPhothImage';
 
 const MypageSetting = () => {
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
-  const { t } = useTranslation()
+  const { t,i18n } = useTranslation()
 
   const [modifyName, setModifyName] = React.useState('')
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
@@ -204,11 +204,12 @@ const MypageSetting = () => {
       } else if (profileimg == undefined) {
         /** 닉네임만 변경 */
         /** 닉네임 중복체크 */
-        if (Textreplace(modifyName)) {
-          NicknameCheck("onlynickname")
-        } else {
-          Alert.alert(t('특수문자,단일자음,빈칸은 입력불가합니다.'))
-        }
+        console.log(modifyName.length)
+        NicknameCheck("onlynickname")
+        // if (modifyName.length < 13) {
+        // } else {
+        //   Alert.alert(t('닉네임은 12자 이내로 제한됩니다.'))
+        // }
       } else {
         /** 닉네임 & 사진 둘다 변경 */
         NicknameCheck("both")
@@ -302,7 +303,7 @@ const MypageSetting = () => {
             placeholder={t('변경할 닉네임 입력')} />
           <CustomButton title={t('프로필 수정')} buttonType={'green'}
             action={ModifyProfile}
-            disable={modifyName == '' && profileimg == undefined} />
+            disable={!Textreplace(modifyName) && profileimg == undefined} />
         </View>
       </View>
       <View style={[{ paddingTop: 7, paddingHorizontal: 20, borderTopWidth: 7, borderColor: colors.GRAY_COLOR_1, }]}>

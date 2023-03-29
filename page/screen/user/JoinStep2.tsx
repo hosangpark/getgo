@@ -55,8 +55,9 @@ const JoinStep2 = ({ route }: any) => {
     const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
 
     const [phoneOptions] = React.useState([
-        { label: i18n.language == "Id"? '+62': '+82', value: i18n.language == "Id"? '62':'82', sel_id: i18n.language == "Id"? 2:1 },
-        { label: i18n.language == "Id"? '+82':'+62', value: i18n.language == "Id"? '82':'62', sel_id: i18n.language == "Id"? 1:2 },
+        { label: '+62', value: '62', sel_id: 2 },
+        // { label: i18n.language == "Id"? '+62': '+82', value: i18n.language == "Id"? '62':'82', sel_id: i18n.language == "Id"? 2:1 },
+        // { label: i18n.language == "Id"? '+82':'+62', value: i18n.language == "Id"? '82':'62', sel_id: i18n.language == "Id"? 1:2 },
     ])
 
     const [selectPhone, setSelPhone] = React.useState<OptionType>({
@@ -108,6 +109,7 @@ const JoinStep2 = ({ route }: any) => {
         }).then(res => {
             console.log(res.data)
             setAuthCode(res.data.auth_number);
+            setTimer(true);
             setInputAuth(res.data.auth_number);
         }).catch(error => {
             console.log('getAuthPhoceCode')
@@ -117,7 +119,6 @@ const JoinStep2 = ({ route }: any) => {
     const sendCode = () => {
         /** 중복체크 & 핸드폰 인증 정보 저장 */
         getAuthPhoceCode();
-        setTimer(true);
         setTimerReset(true)
     }
 
@@ -277,7 +278,7 @@ const JoinStep2 = ({ route }: any) => {
                             <Text style={btnStyle.green_font}>
                                 {t('인증번호 다시받기')}
                             </Text>
-                            <View style={{ width: 45, marginLeft: 5 }}>
+                            <View style={{ width: 55, marginLeft: 5 }}>
                                 <Timer
                                     mm={5}
                                     ss={0}
