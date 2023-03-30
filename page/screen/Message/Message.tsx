@@ -207,7 +207,7 @@ const Message = () => {
                 listmodal={listmodal} noticeOnOff={noticeOnOff} isSeller={item.mt_seller_idx == userInfo.idx ? true : false} />
             )
           }}
-          contentContainerStyle={{ flexDirection: 'column-reverse',paddingHorizontal:20 }}
+          contentContainerStyle={{ flexDirection: 'column-reverse' }}
           ListHeaderComponent={
             <View style={{ marginBottom: 120 }}></View>
           }

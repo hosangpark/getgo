@@ -68,16 +68,30 @@ const Reserve_choice = ({ route }: Props) => {
   //     .catch(err => console.log(err))
   // }
 
+  const Complete = ()=>{
+    Alert.alert(t('거래대상 없이 거래완료 하시겠습니까?'),'',[{
+      text:t('확인'),
+      onPress:()=>ReserveSelect(0)
+    },{
+      text:t('취소'),
+      onPress:()=>{}
+    }
+  ])
+  }
+
   /** 상품 판매상태변경 */
   const ReserveSelect = async (mt_idx: any) => {
     await client({
       method: 'post',
       url: '/product/product_status',
-      data: {
-        pt_idx: pt_idx,
-        mt_idx: mt_idx,
-        pt_sale_now: pt_sale_now,
-      },
+      data: mt_idx !== 0? {
+        pt_idx:pt_idx,
+        pt_sale_now:pt_sale_now,
+        mt_idx:mt_idx
+      }:{
+        pt_idx:pt_idx,
+        pt_sale_now:pt_sale_now,
+      }
     })
       .then(res => {
         cusToast(t(res.data.message));
@@ -144,7 +158,7 @@ const Reserve_choice = ({ route }: Props) => {
                   </Text>
                   <View style={{ flexDirection: 'row' }}>
                     <Text style={[style.text_re, { fontSize: 13, color: colors.GRAY_COLOR_2 }]}>
-                      {item.mt_area} / {item.crt_last_date == null ? '' : (item.crt_last_date)}
+                      {item.mt_area} {item.crt_last_date == null ? '' : '/'+(item.crt_last_date)}
                     </Text>
                   </View>
                 </View>
@@ -160,12 +174,15 @@ const Reserve_choice = ({ route }: Props) => {
               </View>
             </View>
           } />
+          {reserve_user_data.length == 0 &&
           <CustomButton
             buttonType='green'
-            action={()=>ReserveSelect(0)}
+            action={Complete}
             disable={false}
             title={t('거래완료')}
           />
+          }
+
       </View>
       <BackHandlerCom />
     </SafeAreaView>

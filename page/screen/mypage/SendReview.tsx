@@ -100,7 +100,7 @@ export default function SendReview({ route }: Props) {
 
   React.useEffect(() => {
     getReviewData()
-    console.log(items)
+    console.log(route)
   }, [])
 
   return (

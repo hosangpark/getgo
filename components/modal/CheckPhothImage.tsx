@@ -20,12 +20,12 @@ export const CheckPhotoImage = ({photoModalVisible,setPhotoModalVisible,action,a
     >
           <TouchableOpacity style={{
             flex: 1, justifyContent: 'center', alignItems: 'center',
-            backgroundColor: '#000', opacity: 0.1,
+            backgroundColor: '#000', opacity: 0.2,
           }} onPress={() => setPhotoModalVisible(false)}>
           </TouchableOpacity>
           <View style={{
             backgroundColor: colors.WHITE_COLOR,
-            width: Dimensions.get('screen').width - 100,
+            width: 300,
             position: 'absolute',
             zIndex: 10,
             elevation: 1,
@@ -33,7 +33,7 @@ export const CheckPhotoImage = ({photoModalVisible,setPhotoModalVisible,action,a
             alignItems: 'center',
             flexDirection: 'row',
             borderRadius: 6,
-            left: 50,
+            left: Dimensions.get('screen').width / 2 - 150,
             height: 100,
             paddingHorizontal: 10,
             top: Dimensions.get('screen').height / 2 - 100

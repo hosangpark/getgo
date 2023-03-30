@@ -601,18 +601,25 @@ const Itempost = ({ route }: Props) => {
                     </Text>
                   </TouchableOpacity>
                 </View>
-                <View style={{flexDirection:'row'}}>
+                <View style={{flexDirection:'row',flexShrink:1,alignItems:'center'}}>
                   <Text
                     style={[
                       style.text_li,
-                      { fontSize: 12, color: colors.GRAY_COLOR_2 },
+                      { fontSize: 12, color: colors.GRAY_COLOR_2,flexShrink:1 },
                     ]}>
-                    {t('판매상품수')} {items.selling_count} ·{' '}
+                    {t('판매상품수')} {items.selling_count} {' '}
                   </Text>
                   <Text
                     style={[
                       style.text_li,
-                      { fontSize: 12, color: colors.GRAY_COLOR_2 },
+                      { fontSize: 20, color: colors.GRAY_COLOR_2,flexShrink:1 },
+                    ]}>
+                    ·{' '}
+                  </Text>
+                  <Text
+                    style={[
+                      style.text_li,
+                      { fontSize: 12, color: colors.GRAY_COLOR_2 ,flexShrink:1},
                     ]}>
                     {t('거래완료 횟수')}{' '}
                     {items.pt_end_count == undefined ? 0 : items.pt_end_count}

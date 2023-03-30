@@ -100,9 +100,9 @@ const ProductItem = ({
     console.log('heartOnOff', pt_idx, wp_idx)
 
     if (!wp_idx) {
-      AddHeart(pt_idx)
+      setTimeout(()=>AddHeart(pt_idx),600)
     } else {
-      DeleteHeart(wp_idx)
+      setTimeout(()=>DeleteHeart(wp_idx),600)
     }
   }
 

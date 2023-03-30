@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import {
   Alert,
-  SafeAreaView, Image, Text, View, FlatList, ScrollView
+  SafeAreaView, Image, Text, View, FlatList, ScrollView,TouchableWithoutFeedback,TouchableOpacity,Dimensions
 } from 'react-native';
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import style from '../../assets/style/style';
 import { colors } from '../../assets/color';
 import { ChatItemType } from "../types/componentType";
@@ -34,7 +33,7 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal, 
   return (
     <View>
       <TouchableOpacity key={item.mt_idx}
-        style={{ flexDirection: 'row', minHeight: 77, alignItems: 'center',}}
+        style={{ flexDirection: 'row', minHeight: 77, alignItems: 'center',paddingHorizontal:20}}
         onPress={()=>Enter(item)}
             >
         <View style={{ flexDirection: 'row' }}>
@@ -71,32 +70,39 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal, 
         </View>
               
       </TouchableOpacity>
+      {listmodal == item.chr_id &&
+      <>
+      <TouchableOpacity style={{position: 'absolute',
+      width:Dimensions.get('screen').width,
+      height:Dimensions.get('screen').height}}
+      onPress={()=>Toggle(0)}
+      >
+
+      </TouchableOpacity>
       <View style={{
-          position: 'absolute', backgroundColor: colors.WHITE_COLOR, right: 35, top: 20, borderRadius: 5, elevation: 10, paddingVertical: 15
+          position: 'absolute', backgroundColor: colors.WHITE_COLOR, right: 55, top: 15, borderRadius: 5, elevation: 10, paddingVertical: 15
         }}>
-        {listmodal == item.chr_id &&
-          <>
-            <TouchableOpacity style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 25 }}
-              onPress={() => ToggleBridge({ chr_id: item.chr_id, ctt_push: newCttPush })}
-            >
-              <Text style={[style.text_me, { fontSize: 14, color: colors.BLACK_COLOR_1 }]}>
-                {newCttPush == 'Y' ?
-                  t('알림 끄기')
-                  :
-                  t('알림 켜기')
-                }
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 25 }}
-              onPress={() => Delete(item.chr_id)}
-            >
-              <Text style={[style.text_me, { fontSize: 14, color: colors.BLACK_COLOR_1 }]}>
-                {t('채팅방삭제')}
-              </Text>
-            </TouchableOpacity>
-          </>
-        }
+        <TouchableOpacity style={{ paddingVertical: 10, paddingHorizontal: 25 }}
+          onPress={() => ToggleBridge({ chr_id: item.chr_id, ctt_push: newCttPush })}
+        >
+          <Text style={[style.text_me, { fontSize: 14, color: colors.BLACK_COLOR_1 }]}>
+            {newCttPush == 'Y' ?
+              t('알림 끄기')
+              :
+              t('알림 켜기')
+            }
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 25 }}
+          onPress={() => Delete(item.chr_id)}
+        >
+          <Text style={[style.text_me, { fontSize: 14, color: colors.BLACK_COLOR_1 }]}>
+            {t('채팅방삭제')}
+          </Text>
+        </TouchableOpacity>
       </View>
+      </>
+      }
     </View>
 
 

@@ -223,7 +223,7 @@ const ItemList = ({ setTabIndex }: itemListType) => {
             onRefresh={onRefresh}
             refreshing={refreshing}
             renderItem={({ item }) => (
-              <ProductItem item={item} action={rerendering} />
+              <ProductItem item={item} action={(e)=>setIsLoading(e)} />
             )}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={<NodataView />}

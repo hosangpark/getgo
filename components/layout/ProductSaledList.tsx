@@ -53,7 +53,12 @@ const ProductSaledList = ({ item, Remove, Modify, getOnsaleData, getCompleteData
   }
 
   const SendReview = () => {
-    navigation.navigate('SendReview', { item: item })
+    console.log(item.mt_idx)
+    if(item.mt_idx == null){
+      cusToast(t('대상이 존재하지않습니다.'))
+    } else{
+      navigation.navigate('SendReview', { item: item })
+    }
   }
   const ReviewDetail = (rt_idx: number) => {
     navigation.navigate('ReviewDetail', { rt_idx: rt_idx, isMy: true })
