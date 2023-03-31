@@ -18,6 +18,8 @@ import { OptionType } from '../../../components/types/componentType';
 import { CustomButton } from '../../../components/layout/CustomButton';
 import { BackHeader } from '../../../components/header/BackHeader';
 import Timer from '../../../components/utils/Timer';
+import Timer2 from '../../../components/utils/Timer2';
+
 import { AgreeBottomModal } from '../../../components/modal/AgreeBottomModal';
 import { BackHandlerCom } from '../../../components/BackHandlerCom';
 import { frontPhoneList } from '../../../components/static/staticList';
@@ -279,13 +281,23 @@ const JoinStep2 = ({ route }: any) => {
                                 {t('인증번호 다시받기')}
                             </Text>
                             <View style={{ width: 55, marginLeft: 5 }}>
-                                <Timer
+                                {/* <Timer
                                     mm={5}
                                     ss={0}
                                     dur={300}
                                     timeover={() => setTimer(false)}
                                     reset={timerReset}
                                     setReset={setTimerReset}
+                                /> */}
+                                <Timer2
+                                    start={timerReset}
+                                    msecs={true}
+                                    // options: Object,
+                                    handleFinish={() => setTimer(false)}
+                                    totalDuration={300000}
+                                    timeover={() => setTimer(false)}
+                                    reset={timerReset}
+                                // setReset={setTimerReset}
                                 />
                             </View>
                         </TouchableOpacity>

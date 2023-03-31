@@ -45,7 +45,11 @@ type ChatType = {
 
 type Props = StackScreenProps<MainNavigatorParams, 'MessageRoom'>
 const MessageRoom = ({ route }: Props) => {
-  const ws = io(Api.state.socketUrl, { query: { device: Platform.OS } });
+  const ws = io(Api.state.socketUrl, {
+    query: { device: Platform.OS },
+    path: '/socket.io',
+  });
+
   const userInfo = useSelector((state: any) => state.userInfo)
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const [isLoading, setIsLoading] = React.useState<boolean>(true);

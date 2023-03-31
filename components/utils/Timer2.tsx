@@ -1,7 +1,40 @@
 import React, { Component } from 'react';
 import { Text, View, TextInput, StyleSheet, TouchableNativeFeedback, TouchableOpacity, Alert } from 'react-native';
 // import PropTypes from 'prop-types';
-import { formatTimeString } from './TimeUtil';
+import { colors } from '../../assets/color';
+import style from '../../assets/style/style';
+
+
+function formatTimeString(time, showMsecs) {
+    let msecs = String(time % 1000);
+    let me = msecs.substr(0, 2)
+    if (msecs < 10) {
+        me = `${me}0`;
+    } else if (msecs < 100) {
+        me = `${me}`;
+    }
+
+    let seconds = Math.floor(time / 1000);
+    let minutes = Math.floor(time / 60000);
+    let hours = Math.floor(time / 3600000);
+    seconds = seconds - minutes * 60;
+    minutes = minutes - hours * 60;
+    let formatted;
+    formatted = `${
+        minutes < 10 ? 0 : ""
+        }${minutes}:${seconds < 10 ? 0 : ""}${seconds}`;
+
+    // if (!showMsecs) {
+    //     formatted = `${minutes < 10 ? 0 : ""
+    //         }${minutes} : ${seconds < 10 ? 0 : ""}${seconds} . ${me}`;
+    // } else {
+    //     formatted = `${hours < 10 ? 0 : ""}${hours} : ${
+    //         minutes < 10 ? 0 : ""
+    //         }${minutes} : ${seconds < 10 ? 0 : ""}${seconds}`;
+    // }
+
+    return formatted;
+}
 
 
 type PropsType = {
@@ -11,8 +44,6 @@ type PropsType = {
     options: Object,
     handleFinish: void,
     totalDuration: Number,
-    getTime: void,
-    getMsecs: void,
 }
 
 class Timer extends Component {
@@ -27,19 +58,7 @@ class Timer extends Component {
         this.reset = this.reset.bind(this);
         this.formatTime = this.formatTime.bind(this);
         const width = props.msecs ? 220 : 150;
-        this.defaultStyles = {
-            container: {
-                backgroundColor: '#000',
-                padding: 5,
-                borderRadius: 5,
-                width: width,
-            },
-            text: {
-                fontSize: 30,
-                color: '#FFF',
-                marginLeft: 7,
-            }
-        };
+
     }
 
     componentDidMount() {
@@ -63,6 +82,9 @@ class Timer extends Component {
     start() {
         const handleFinish = this.props.handleFinish ? this.props.handleFinish : () => Alert.alert("Timer Finished");
         const endTime = new Date().getTime() + this.state.remainingTime;
+
+        if (this.interval) clearInterval(this.interval);
+
         this.interval = setInterval(() => {
             const remaining = endTime - new Date();
             if (remaining <= 1000) {
@@ -72,7 +94,7 @@ class Timer extends Component {
                 return;
             }
             this.setState({ remainingTime: remaining });
-        }, 1);
+        }, 1000);
     }
 
     stop() {
@@ -89,15 +111,10 @@ class Timer extends Component {
     }
 
     formatTime() {
-        const { getTime, getMsecs, msecs } = this.props;
+        const { msecs } = this.props;
         const now = this.state.remainingTime;
         const formatted = formatTimeString(now, msecs);
-        if (typeof getTime === "function") {
-            getTime(formatted);
-        }
-        if (typeof getMsecs === "function") {
-            getMsecs(now)
-        }
+
         return formatted;
     }
 
@@ -106,10 +123,18 @@ class Timer extends Component {
         const styles = this.props.options ? this.props.options : this.defaultStyles;
 
         return (
-            <View style={styles.container}>
-                <Text style={styles.text}>{this.formatTime()}</Text>
-                {/*<TextInput value={this.formatTime()} style={styles.text}/>*/}
-            </View>
+            // <View style={styles.container}>
+            //     <Text style={styles.text}>{this.formatTime()}</Text>
+            //     {/*<TextInput value={this.formatTime()} style={styles.text}/>*/}
+            // </View>
+            <Text
+                style={[style.text_sb, {
+                    color: colors.WHITE_COLOR,
+                    fontSize: 15,
+                }]}>
+                ({this.formatTime()})
+            </Text>
+
         );
     }
 }

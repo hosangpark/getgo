@@ -145,11 +145,11 @@ const ItemList = ({ setTabIndex }: itemListType) => {
   const getProductListData = async (event: any) => {
     console.log('getProductListData', event, userInfo.idx);
 
-    if (!event) return;
+    if (!event.mt_area) return;
 
     await client({
       method: 'get',
-      url: `/product/procudt-list?mt_idx=${userInfo.idx}&pt_area=${event}`,
+      url: `/product/procudt-list?mt_idx=${userInfo.idx}&pt_area=${event.mt_area}&mt_lat=${event.mt_lat}&mt_log=${event.mt_log}`,
     }).then(
       res => {
         //if (items !== res.data) {
@@ -165,11 +165,11 @@ const ItemList = ({ setTabIndex }: itemListType) => {
 
   const setListChanege = (target: number) => {
     if (target == 1) {
-      getProductListData(myLocation.location1.mt_area);
+      getProductListData(myLocation.location1);
       dispatch(MyLocationAction.select_loaction(JSON.stringify(1)));
       AsyncStorage.setItem('@locTarget', '1');
     } else if (target == 2) {
-      getProductListData(myLocation.location2.mt_area);
+      getProductListData(myLocation.location2);
       dispatch(MyLocationAction.select_loaction(JSON.stringify(2)));
       AsyncStorage.setItem('@locTarget', '2');
     } else {

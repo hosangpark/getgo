@@ -569,58 +569,59 @@ const Itempost = ({ route }: Props) => {
             </View>
           </View>
 
-            <TouchableOpacity
-              onPress={() => {
-                setProfileToggle(true);
-              }}
-              style={{
-                flexDirection: 'row',
-                paddingHorizontal: 20,
-                paddingVertical: 16,
-                backgroundColor: colors.GRAY_COLOR_1,
-                borderRadius: 5,}}>
-              <Image
-                style={{ width: 44, height: 44, marginRight: 20 }}
-                source={items.data[0].mt_image1 ? { uri: Api.state.imageUrl + items.data[0].mt_image1 } : require('../../../assets/img/img_profile.png')}
-                resizeMode="cover"
-                borderRadius={100}
-              />
-              <View style={{flexShrink:1}}>
-                <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                  <Text style={[style.default_font_black, { marginBottom: 3,flexShrink:1 }]}>
-                    {items.data[0].mt_seller_nickname}
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => ReportPost(items.data[0].mt_seller_idx, items.data[0].pt_idx)}>
-                    <Text
-                      style={[
-                        style.text_me,
-                        { fontSize: 13, color: colors.GRAY_COLOR_2 },
-                      ]}>
-                      {t('게시글 신고')}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={{flexDirection:'row'}}>
+          <TouchableOpacity
+            onPress={() => {
+              setProfileToggle(true);
+            }}
+            style={{
+              flexDirection: 'row',
+              paddingHorizontal: 20,
+              paddingVertical: 16,
+              backgroundColor: colors.GRAY_COLOR_1,
+              borderRadius: 5,
+            }}>
+            <Image
+              style={{ width: 44, height: 44, marginRight: 20 }}
+              source={items.data[0].mt_image1 ? { uri: Api.state.imageUrl + items.data[0].mt_image1 } : require('../../../assets/img/img_profile.png')}
+              resizeMode="cover"
+              borderRadius={100}
+            />
+            <View style={{ flexShrink: 1 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text style={[style.default_font_black, { marginBottom: 3, flexShrink: 1 }]}>
+                  {items.data[0].mt_seller_nickname}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => ReportPost(items.data[0].mt_seller_idx, items.data[0].pt_idx)}>
                   <Text
                     style={[
-                      style.text_li,
-                      { fontSize: 12, color: colors.GRAY_COLOR_2 },
+                      style.text_me,
+                      { fontSize: 13, color: colors.GRAY_COLOR_2 },
                     ]}>
-                    {t('판매상품수')} {items.selling_count} ·{' '}
+                    {t('게시글 신고')}
                   </Text>
-                  <Text
-                    style={[
-                      style.text_li,
-                      { fontSize: 12, color: colors.GRAY_COLOR_2 },
-                    ]}>
-                    {t('거래완료 횟수')}{' '}
-                    {items.pt_end_count == undefined ? 0 : items.pt_end_count}
-                  </Text>
-                </View>
-
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
+              <View style={{ flexDirection: 'row' }}>
+                <Text
+                  style={[
+                    style.text_li,
+                    { fontSize: 12, color: colors.GRAY_COLOR_2 },
+                  ]}>
+                  {t('판매상품수')} {items.selling_count} ·{' '}
+                </Text>
+                <Text
+                  style={[
+                    style.text_li,
+                    { fontSize: 12, color: colors.GRAY_COLOR_2 },
+                  ]}>
+                  {t('거래완료 횟수')}{' '}
+                  {items.pt_end_count == undefined ? 0 : items.pt_end_count}
+                </Text>
+              </View>
+
+            </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
 
@@ -631,7 +632,7 @@ const Itempost = ({ route }: Props) => {
         item={{
           mt_seller_nickname: items.data[0].mt_seller_nickname,
           pt_area: items.data[0].pt_area,
-          pt_end_cnt: items.data[0].pt_end_cnt,
+          pt_end_cnt: items.pt_end_count,
           mt_seller_idx: items.data[0].mt_seller_idx,
           selling_count: items.selling_count,
         }}
@@ -648,7 +649,7 @@ const Itempost = ({ route }: Props) => {
         }}>
         <View style={{ justifyContent: 'center', flex: 1 }}>
           <Text style={[style.default_font_black, { fontSize: 18, flexWrap: 'wrap', flexShrink: 1 }]}>
-          {t('￦')} {NumberComma(items.data[0].pt_selling_price)}
+            {t('￦')} {NumberComma(items.data[0].pt_selling_price)}
           </Text>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>

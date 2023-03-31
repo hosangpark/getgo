@@ -6,7 +6,6 @@ import style from '../../assets/style/style';
 type PropsType = {
   mm: number;
   ss: number;
-  duration: number;
   timeover: () => void;
   reset: boolean;
   setReset: (type: boolean) => void;
@@ -15,12 +14,10 @@ type PropsType = {
 const Timer = ({ mm, ss, timeover, reset, setReset }: PropsType) => {
   const [minutes, setMinutes] = React.useState<number>(mm);
   const [seconds, setSeconds] = React.useState<number>(ss);
-  const [starts, setStarts] = React.useState<Date>(new Date());
 
   //타이머 시작
   React.useEffect(() => {
     const countdown = setInterval(() => {
-
       if (seconds > 0) {
         setSeconds(seconds - 1);
       }
@@ -34,13 +31,11 @@ const Timer = ({ mm, ss, timeover, reset, setReset }: PropsType) => {
         }
       }
     }, 1000);
-
     return () => clearInterval(countdown);
   }, [minutes, seconds]);
 
   React.useEffect(() => {
     if (reset) {
-      setStarts(new Date());
       setMinutes(mm);
       setSeconds(ss);
       setReset(false);
