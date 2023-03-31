@@ -47,15 +47,16 @@ const KeywordNoti = ({ KeywordNotiitem, MaxTextCount }: any) => {
         <LoadingIndicator />
         :
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 18, marginBottom: 11, paddingHorizontal: 20 }}>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row',flexShrink:1,alignItems:'center' }}>
             <Image style={{ width: 24, height: 24, marginRight: 7 }} source={require('../../../assets/img/top_alim.png')} />
             <Text style={[style.text_b, { color: colors.BLACK_COLOR_1, fontSize: 17, }]}>
-              {t('알림받는 키워드')}
+              {t('알림받는 키워드')+" "}
               <Text style={[style.text_b, { color: colors.GREEN_COLOR_2, fontSize: 17 }]}>
                 {MaxTextCount}
-              </Text></Text></View>
+              </Text></Text>
+            </View>
           <TouchableOpacity style={{
-            borderColor: colors.GRAY_COLOR_2, borderWidth: 1, width: 52, height: 27
+            borderColor: colors.GRAY_COLOR_2, borderWidth: 1, minWidth: 52, height: 27
             , justifyContent: 'center', alignItems: 'center', borderRadius: 15
           }}
             onPress={() => { navigation.navigate('KeywordSetting') }}>

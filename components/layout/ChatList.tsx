@@ -73,11 +73,10 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal, 
       {listmodal == item.chr_id &&
       <>
       <TouchableOpacity style={{position: 'absolute',
-      width:Dimensions.get('screen').width,
+      width:Dimensions.get('screen').width-55,
       height:Dimensions.get('screen').height}}
       onPress={()=>Toggle(0)}
       >
-
       </TouchableOpacity>
       <View style={{
           position: 'absolute', backgroundColor: colors.WHITE_COLOR, right: 55, top: 15, borderRadius: 5, elevation: 10, paddingVertical: 15

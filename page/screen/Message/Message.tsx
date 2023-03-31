@@ -83,7 +83,6 @@ const Message = () => {
   }
 
   const Enter = (items: any) => {
-    console.log(listmodal)
     if(listmodal !== false){
       setListmodal(false)
     } else {

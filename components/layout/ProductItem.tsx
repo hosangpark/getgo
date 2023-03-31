@@ -71,9 +71,9 @@ const ProductItem = ({
       // action()
     }
     ).catch(error => {
-      // cusToast("이미 등록된 상품입니다")
-      // console.log(error);
-
+      cusToast(t("내가 등록한 상품입니다."))
+      console.log(error.message);
+      console.log('ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ');
     })
   }
 

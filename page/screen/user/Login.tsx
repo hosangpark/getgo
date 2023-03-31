@@ -134,9 +134,9 @@ const Login = () => {
             cusToast(t(res.data.message))
         }).catch(error => {
             console.log(error)
-            // cusToast(
-            //     t('기존 정보가 없습니다.')
-            // )
+            cusToast(
+                t('가입된 회원이 아닙니다')
+            )
         })
     }
 

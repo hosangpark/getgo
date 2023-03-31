@@ -10,11 +10,13 @@ import { MainNavigatorParams } from '../../components/types/routerTypes';
 import { useTranslation } from 'react-i18next';
 import cusToast from '../navigation/CusToast';
 import { useSelector } from 'react-redux';
+import Api from '../../api/Api';
 interface ModalType {
     isVisible: boolean;
     setVisible: (visible: boolean) => void;
     action: () => void;
     item: {
+        mt_image1:string
         pt_area: string
         mt_seller_nickname: string
         pt_end_cnt: number
@@ -92,7 +94,7 @@ export const ProfileBottomModal = ({ isVisible, setVisible, action, item }: Moda
                                 </TouchableOpacity>
                             </View>
                             <View style={{ marginTop: 10, flexDirection: 'column', alignItems: 'center' }}>
-                                <Image source={require('../../assets/img/img_profile.png')} borderRadius={100} style={{ width: 85, height: 85 }} />
+                                <Image source={item.mt_image1? { uri: Api.state.imageUrl + item.mt_image1 } : require('../../assets/img/img_profile.png')} borderRadius={100} style={{ width: 85, height: 85 }} />
                                 <Text style={[style.text_b, { marginTop: 10, fontSize: 20, color: colors.BLACK_COLOR_2 }]}>
                                     {item.mt_seller_nickname}</Text>
                                 <Text style={[style.text_li, { marginTop: 5, fontSize: 13, color: colors.GRAY_COLOR_2 }]}>

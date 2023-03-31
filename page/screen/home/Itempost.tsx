@@ -636,6 +636,7 @@ const Itempost = ({ route }: Props) => {
         setVisible={setProfileToggle}
         action={() => { }}
         item={{
+          mt_image1: items.data[0].mt_image1,
           mt_seller_nickname: items.data[0].mt_seller_nickname,
           pt_area: items.data[0].pt_area,
           pt_end_cnt: items.data[0].pt_end_cnt,

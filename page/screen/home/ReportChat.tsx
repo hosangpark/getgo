@@ -126,7 +126,7 @@ const ReportChat = ({ route }: Props) => {
           )
         })}
 
-        <TextInput placeholder={t('입력하세요')} style={{ minHeight: 95, borderRadius: 5, borderWidth: 1, borderColor: colors.GRAY_COLOR_3, padding: 15, textAlignVertical: 'top' }} multiline={true} value={text} onChangeText={setText}
+        <TextInput placeholder={t('입력하세요.')} style={{ minHeight: 95, borderRadius: 5, borderWidth: 1, borderColor: colors.GRAY_COLOR_3, padding: 15, textAlignVertical: 'top' }} multiline={true} value={text} onChangeText={setText}
           onSubmitEditing={Complete}
         />
         <Text style={[style.text_re, { fontSize: 13, color: colors.BLUE_COLOR_1, marginTop: 10, marginBottom: 100 }]}>* {t('허위 신고시 서비스 사용이 제한될 수 있습니다.')}</Text>

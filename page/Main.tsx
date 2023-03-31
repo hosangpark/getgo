@@ -25,7 +25,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../redux/reducers';
 import Api from '../api/Api';
 import { useNavigation, createNavigationContainerRef, useRoute, useNavigationState } from '@react-navigation/native';
-import { onPushNavigate } from './components/navigation/onPushNavigate'; //push...
 import PushNotification from 'react-native-push-notification'; //push...noti
 import PushNotificationIOS from '@react-native-community/push-notification-ios';//push...noti
 import messaging from '@react-native-firebase/messaging';
