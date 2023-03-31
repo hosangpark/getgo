@@ -49,7 +49,7 @@ const JoinStep2 = ({ route }: any) => {
     const userInfo = useSelector((state: any) => state.userInfo);
     const myLocation = useSelector((state: any) => state.myLocation);
 
-    const { t,i18n } = useTranslation()
+    const { t, i18n } = useTranslation()
 
 
     const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
@@ -63,7 +63,7 @@ const JoinStep2 = ({ route }: any) => {
     const [selectPhone, setSelPhone] = React.useState<OptionType>({
         label: phoneOptions[0].label, value: phoneOptions[0].value, sel_id: phoneOptions[0].sel_id
     })
-    
+
     const [inputLoginInfo, setInputLoginInfo] = React.useState<any>({ //
         areaCode: '',
         mt_hp: '',
@@ -282,6 +282,7 @@ const JoinStep2 = ({ route }: any) => {
                                 <Timer
                                     mm={5}
                                     ss={0}
+                                    dur={300}
                                     timeover={() => setTimer(false)}
                                     reset={timerReset}
                                     setReset={setTimerReset}

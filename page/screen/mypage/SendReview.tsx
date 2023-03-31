@@ -134,7 +134,7 @@ export default function SendReview({ route }: Props) {
               <Text style={[style.text_re, { fontSize: 13, color: colors.GRAY_COLOR_2 }]}>
                 {t('거래만족도는 나만 확인할 수 있습니다.')}</Text>
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 40 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 40, flexWrap: 'wrap', }}>
               <TouchableOpacity style={choose === 1 ? (styled.choosedBox) : (styled.chooseBox)}
                 onPress={bad_choice}
               >
@@ -218,8 +218,9 @@ export default function SendReview({ route }: Props) {
 
 const styled = StyleSheet.create({
   chooseBox: {
-    // width: 110,
-    flex: 1,
+    width: 100,
+    // flexGrow: 1,
+    // flex: 1,
     height: 153,
     paddingHorizontal: 20,
     justifyContent: 'center',
@@ -230,9 +231,9 @@ const styled = StyleSheet.create({
     borderColor: '#FFF',
   },
   choosedBox: {
-    // width: 110,
+    width: 100,
     paddingHorizontal: 20,
-    flex: 1,
+    // flex: 1,
     height: 153,
     justifyContent: 'center',
     alignItems: 'center',

@@ -26,54 +26,54 @@ export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal, 
   }
 
 
-  console.log('item', item)
+  // console.log('item', item)
 
   const newCttPush = isSeller ? item.ctt_push_seller : item.ctt_push;
 
-  i18n
+  // i18n
   return (
     <View>
       <TouchableOpacity key={item.mt_idx}
-        style={{ flexDirection: 'row', minHeight: 77, alignItems: 'center',}}
-        onPress={()=>Enter(item)}
-            >
+        style={{ flexDirection: 'row', minHeight: 77, alignItems: 'center', }}
+        onPress={() => Enter(item)}
+      >
         <View style={{ flexDirection: 'row' }}>
           <Image style={{ width: 40, height: 40, borderRadius: 50, marginRight: 15 }} source={item.mt_image1 ? {
             uri: Api.state.imageUrl + item.mt_image1
           }
             : require('../../assets/img/img_profile.png')
           } />
-            <View style={{flex:1}}>
-              <View style={{flexDirection:'row'}}>
-                <Text style={[style.text_sb, { fontSize: 12, color: colors.BLACK_COLOR_1, marginRight: 5,flexShrink:1}]}>
-                  {item.mt_nickname}
-                </Text>
-                <Text style={[style.text_li, { fontSize: 12, color: colors.GRAY_COLOR_2,flexShrink:2 }]}>
-                    {item.mt_area} / {foramtDate(item.crt_last_date, i18n.language)}
-                </Text>
-              </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6, }}>
-                {newCttPush == "Y" ?
-                    null
-                  :
-                  <Text style={{ color: 'red', marginRight: 5, justifyContent: 'center' }}>
-                    {t("차단중")}
-                  </Text>
-                }
-                <Text style={[style.text_re, { fontSize: 15, color: colors.BLACK_COLOR_2 }]} numberOfLines={1}>
-                  {item.ctt_msg}
-                </Text>
-              </View>
+          <View style={{ flex: 1 }}>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={[style.text_sb, { fontSize: 12, color: colors.BLACK_COLOR_1, marginRight: 5, flexShrink: 1 }]}>
+                {item.mt_nickname}
+              </Text>
+              <Text style={[style.text_li, { fontSize: 12, color: colors.GRAY_COLOR_2, flexShrink: 2 }]}>
+                {item.mt_area} / {foramtDate(item.crt_last_date, i18n.language)}
+              </Text>
             </View>
-            <TouchableOpacity onPress={() => Toggle(item.chr_id)} style={{}}>
-              <Image style={{ width: 28, height: 28 }} source={require('../../assets/img/top_menu.png')} />
-            </TouchableOpacity>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6, }}>
+              {newCttPush == "Y" ?
+                null
+                :
+                <Text style={{ color: 'red', marginRight: 5, justifyContent: 'center' }}>
+                  {t("차단중")}
+                </Text>
+              }
+              <Text style={[style.text_re, { fontSize: 15, color: colors.BLACK_COLOR_2 }]} numberOfLines={1}>
+                {item.ctt_msg}
+              </Text>
+            </View>
+          </View>
+          <TouchableOpacity onPress={() => Toggle(item.chr_id)} style={{}}>
+            <Image style={{ width: 28, height: 28 }} source={require('../../assets/img/top_menu.png')} />
+          </TouchableOpacity>
         </View>
-              
+
       </TouchableOpacity>
       <View style={{
-          position: 'absolute', backgroundColor: colors.WHITE_COLOR, right: 35, top: 20, borderRadius: 5, elevation: 10, paddingVertical: 15
-        }}>
+        position: 'absolute', backgroundColor: colors.WHITE_COLOR, right: 35, top: 20, borderRadius: 5, elevation: 10, paddingVertical: 15
+      }}>
         {listmodal == item.chr_id &&
           <>
             <TouchableOpacity style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 25 }}
