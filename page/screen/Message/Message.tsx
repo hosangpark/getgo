@@ -34,7 +34,7 @@ import messaging from '@react-native-firebase/messaging';
 
 const Message = () => {
   const { t } = useTranslation()
-  const ws = io(Api.state.socketUrl, { query: { device: Platform.OS } });
+  // const ws = io(Api.state.socketUrl, { query: { device: Platform.OS } });
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const isFocused = useIsFocused();
   const [exitApp, setExitApp] = React.useState(false);
@@ -83,7 +83,7 @@ const Message = () => {
   }
 
   const Enter = (items: any) => {
-    if(listmodal !== false){
+    if (listmodal !== false) {
       setListmodal(false)
     } else {
       navigation.navigate('MessageRoom', { items, type: 'messageChat' });
@@ -143,8 +143,6 @@ const Message = () => {
   // }, [])
 
   useFocusEffect(React.useCallback(() => {
-
-
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       console.log('방 목록 리프레시', remoteMessage)
       getChatListData();
@@ -192,7 +190,7 @@ const Message = () => {
   }, [navigation]);
 
   return (
-      // <TouchableWithoutFeedback onPress={()=>{Toggle(0)}}>
+    // <TouchableWithoutFeedback onPress={()=>{Toggle(0)}}>
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       <MessageHeader title={t('채팅')} />
       {isLoading ?
@@ -221,7 +219,7 @@ const Message = () => {
         action2={cancel}
       />
     </SafeAreaView>
-      // </TouchableWithoutFeedback>
+    // </TouchableWithoutFeedback>
   );
 };
 

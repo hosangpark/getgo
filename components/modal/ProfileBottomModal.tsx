@@ -26,7 +26,7 @@ interface ModalType {
 }
 
 export const ProfileBottomModal = ({ isVisible, setVisible, action, item }: ModalType) => {
-    const { t,i18n } = useTranslation()
+    const { t, i18n } = useTranslation()
     const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
     const userInfo = useSelector((state: any) => state.userInfo);
 
@@ -68,11 +68,11 @@ export const ProfileBottomModal = ({ isVisible, setVisible, action, item }: Moda
             isVisible={isVisible}
             useNativeDriver={true}
             style={[{ justifyContent: 'center', alignItems: 'center', flex: 1, flexDirection: 'column', width: '100%', margin: 0 }]}
-        // onRequestClose={() => {
-        //     if(isVisible){
-        //         setVisible(false);
-        //     }                                                                                          
-        // }}
+            onRequestClose={() => {
+
+                setVisible(false);
+
+            }}
         >
             <View style={{ flex: 1, width: '100%', flexDirection: 'column', justifyContent: 'flex-end' }}>
                 <View style={[{ flex: 1 }]}>
@@ -107,14 +107,14 @@ export const ProfileBottomModal = ({ isVisible, setVisible, action, item }: Moda
                             </View>
                             <View style={[style.gray_box, { marginTop: 10, flexDirection: 'row', borderRadius: 6, justifyContent: 'space-around', alignItems: 'center' }]}>
                                 <View style={{ alignItems: 'center', flex: 1 }}>
-                                    <Text style={[style.text_li, { fontSize: 15, color: colors.GRAY_COLOR_2, textAlign:'center', }]}>
+                                    <Text style={[style.text_li, { fontSize: 15, color: colors.GRAY_COLOR_2, textAlign: 'center', }]}>
                                         {t('판매상품수')}</Text>
                                     <Text style={[style.text_b, { fontSize: 17, color: colors.BLACK_COLOR_2 }]}>
                                         {item.selling_count ? item.selling_count : 0}</Text>
                                 </View>
                                 <View style={[style.vertical_line, { height: 35 }]} />
                                 <View style={{ alignItems: 'center', flex: 1 }}>
-                                    <Text style={[style.text_li, { fontSize: 15, color: colors.GRAY_COLOR_2,textAlign:'center' }]}>
+                                    <Text style={[style.text_li, { fontSize: 15, color: colors.GRAY_COLOR_2, textAlign: 'center' }]}>
                                         {t('거래완료 횟수')}</Text>
                                     <Text style={[style.text_b, { fontSize: 17, color: colors.BLACK_COLOR_2 }]}>
                                         {item.pt_end_cnt ? item.pt_end_cnt : 0}</Text>

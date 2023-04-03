@@ -48,9 +48,9 @@ const Category_Filter = ({ route }: any) => {
 
   const rerendering = () => {
     if (myLocation.select_location == 1) {
-      getData(myLocation.location1.mt_area)
+      getData(myLocation.location1)
     } else if (myLocation.select_location == 2) {
-      getData(myLocation.location2.mt_area)
+      getData(myLocation.location2)
     } else {
       console.log('noArea')
     }
@@ -59,7 +59,7 @@ const Category_Filter = ({ route }: any) => {
   const getData = async (event: any) => {
     await client({
       method: 'get',
-      url: `/product/procudt-list?mt_idx=${userInfo.idx}&pt_area=${event}&ct_idx=${route.params.ct_idx}`
+      url: `/product/procudt-list?mt_idx=${userInfo.idx}&pt_area=${event.mt_area}&ct_idx=${route.params.ct_idx}&mt_lat=${event.mt_lat}&mt_log=${event.mt_log}`
     }).then(res => {
       setitem(res.data)
       setIsLoading(false)

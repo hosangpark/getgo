@@ -11,7 +11,7 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainNavigatorParams } from '../../../components/types/routerTypes';
 
-import { Alert, SafeAreaView, ScrollView, Text, View, Image, StyleSheet, Button, TouchableOpacity, BackHandler, Platform, NativeModules } from 'react-native';
+import { Alert, SafeAreaView, ScrollView, Text, View, Image, StyleSheet, Button, TouchableOpacity, BackHandler, Platform, NativeModules, Modal, Linking } from 'react-native';
 import { colors } from '../../../assets/color';
 import style from '../../../assets/style/style';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -29,7 +29,9 @@ import PushNotification from "react-native-push-notification";
 import Api from '../../../api/Api';
 import messaging from '@react-native-firebase/messaging';
 import { cusGetLang } from '../../../language/i18n';
-
+import WebView from 'react-native-webview';
+import { appleAuthAndroid, appleAuth } from '@invertase/react-native-apple-authentication';
+import jwt_decode from 'jwt-decode';
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
 
@@ -51,6 +53,9 @@ const SelectLogin = () => {
     const [isOpen, setIsOpen] = React.useState(false);
     const [state, setState] = React.useState<any>();
     const [exitApp, setExitApp] = React.useState(false);
+    const [lineLoginModalVisible, setLineLoginModalVisible] = React.useState(false);
+    const [urls, setUrls] = React.useState(Api.state.siteUrl);
+    const webViews = React.useRef();
     const dispatch = useDispatch()
 
 
@@ -93,25 +98,9 @@ const SelectLogin = () => {
                 return;
             }
 
-            await client({
-                method: 'get',
-                url: `/user/sns_login?mt_type=${mt_type}&sns_key=${sns_key}&mt_app_token=${Api.state.mb_fcm}`,
-            }).then(res => {
-                console.log('resdata', res.data.user_data);
-                dispatch(UserInfoAction.userlogin(JSON.stringify(res.data.user_data)));
-                setAutoUserData({ idx: res.data.user_idx, mt_app_token: Api.state.mb_fcm, language: selLang.value })
+            sns_login(mt_type, sns_key)
 
-            }).catch(error => {
-                if (error.response) {
-                    console.log(error.response.message);
-                    if (error.response.status == '409') {
-                        //회원가입으로 이동
-                        navigation.navigate('SearchLocation', { type: 'join', mt_type, sns_key });
-                    }
-                    return;
-                }
-                cusToast(t('실패했습니다'));
-            });
+
 
             // Alert.alert(`${userInfo.user.name}`, `${userInfo.user.email},${userInfo.user.id},${userInfo.user.photo}`)
             console.log("user:", userInfo)
@@ -144,8 +133,138 @@ const SelectLogin = () => {
     const userInfo = useSelector((state: any) => state.userInfo);
     /** 라인 로그인 */
     const lineLogin = async () => {
-        console.log('2')
-        navigation.navigate('Main')
+        // console.log('2')
+        // navigation.navigate('Main')
+        setLineLoginModalVisible(true);
+        setUrls('https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1660658040&' +
+            'redirect_uri=https%3A%2F%2Fgetgowww.dmonster.kr%2Fsns_login_line_update.php' +
+            '&scope=profile&state=e3XXfzkAYMlIGtNQ2p6kuRTsYB7I1aE0KzLjkAdgFeRtVJlJ')
+    }
+
+    async function onAppleButtonPress() {
+
+        if (Platform.OS == 'android') {
+            // Generate secure, random values for state and nonce
+            // const rawNonce = uuid();
+            // const state = uuid();
+
+            // Configure the request
+            appleAuthAndroid.configure({
+                // The Service ID you registered with Apple
+                clientId: 'getgo.daehands.com',
+                //A8D4GSJZ8P
+                // Return URL added to your Apple dev console. We intercept this redirect, but it must still match
+                // the URL you provided to Apple. It can be an empty route on your backend as it's never called.
+                redirectUri: 'https://getgo.id/apple_login_update.php',
+
+                // The type of response requested - code, id_token, or both.
+                responseType: appleAuthAndroid.ResponseType.ALL,
+
+                // The amount of user information requested from Apple.
+                scope: appleAuthAndroid.Scope.ALL,
+
+                // Random nonce value that will be SHA256 hashed before sending to Apple.
+                //nonce: rawNonce,
+
+                // Unique state value used to prevent CSRF attacks. A UUID will be generated if nothing is provided.
+                //state,
+            });
+
+            // Open the browser window for user sign in
+            const response = await appleAuthAndroid.signIn();
+
+            // console.log('apple_login_response', response);
+
+            const { email, email_verified, is_private_email, sub } = jwt_decode(response.id_token);
+
+            console.log('apple_login_response', sub, email);
+
+            sns_login(3, sub);
+
+
+            return;
+
+            // Send the authorization code to your backend for verification
+        } else {
+
+
+
+            try {
+                // performs login request
+                const appleAuthRequestResponse = await appleAuth.performRequest({
+                    requestedOperation: appleAuth.Operation.LOGIN,
+                    requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+                });
+
+                console.log('appleAuthRequestResponse', appleAuthRequestResponse);
+
+                // get current authentication state for user
+                // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+                const credentialState = await appleAuth.getCredentialStateForUser(
+                    appleAuthRequestResponse.user,
+                );
+
+                // use credentialState response to ensure the user is authenticated
+                if (credentialState === appleAuth.State.AUTHORIZED) {
+                    // user is authenticated
+                    console.log(appleAuthRequestResponse);
+
+                    const {
+                        user,
+                        email,
+                        nonce,
+                        identityToken,
+                        realUserStatus,
+                        fullName /* etc */,
+                    } = appleAuthRequestResponse;
+
+                    if (identityToken) {
+                        // e.g. sign in with Firebase Auth using `nonce` & `identityToken`
+                        console.log(nonce, identityToken);
+                        // sns_login(5, user, email, fullName.nickname);
+                        sns_login(3, user);
+                    } else {
+                        // no token - failed sign-in?
+                    }
+
+                    // if (realUserStatus === appleAuth.UserStatus.LIKELY_REAL) {
+                    //   console.log("I'm a real person!");
+                    // }
+
+                    //console.warn(`Apple Authentication Completed, ${user}, ${email}`);
+                }
+            } catch (error) {
+                if (error.code === appleAuth.Error.CANCELED) {
+                    console.warn('User canceled Apple Sign in.');
+                } else {
+                    console.error(error);
+                }
+            }
+        }
+    }
+
+    //login_submit
+    const sns_login = async (mt_type: Number, sns_key: String) => {
+        await client({
+            method: 'get',
+            url: `/user/sns_login?mt_type=${mt_type}&sns_key=${sns_key}&mt_app_token=${Api.state.mb_fcm}`,
+        }).then(res => {
+
+            console.log('resdata', res.data.user_data);
+            dispatch(UserInfoAction.userlogin(JSON.stringify(res.data.user_data)));
+            setAutoUserData({ idx: res.data.user_idx, mt_app_token: Api.state.mb_fcm, language: selLang.value })
+
+        }).catch(error => {
+            if (error.response) {
+                console.log(error.response.message);
+                if (error.response.status == '409') {
+                    //회원가입으로 이동
+                    navigation.navigate('SearchLocation', { type: 'join', mt_type, sns_key });
+                }
+                return;
+            }
+            cusToast(t('실패했습니다'));
+        });
     }
 
     const backAction = () => {
@@ -241,6 +360,23 @@ const SelectLogin = () => {
                 }
             })
         })
+
+        Linking.addEventListener('url', e => {
+            // const route = e.url.replace(/.*?\/\//g, '');
+            // console.log('Linking route', route);
+            const url = e.url;
+            const params: any = Api.urlGetCode(url);
+            const { code, type } = params;
+
+            console.log('Linking', url, params, code);
+
+            if (code && type == 'line_login') {
+
+                sns_login(2, code);
+
+                return true;
+            } else return false;
+        })
     }, [])
 
     const Visitapi = async () => {
@@ -301,6 +437,27 @@ const SelectLogin = () => {
         }
     }
 
+    //웹뷰 ->  RN 으로 전송
+    const onWebViewMessage = (datas) => {
+        let jsonData = JSON.parse(datas.nativeEvent.data);
+        console.log('웹뷰에서 데이터를 받습니다.', jsonData);
+
+        //로그인후 아이디값을 받았다면 저장한다.
+        if (jsonData.type == 'line_login') {
+            sns_login(4, props.token);
+        } else if (jsonData.type == 'whatsapp_login') {
+            sns_login(5, props.token);
+        } else if (jsonData.type == 'console') {
+            console.log('@webviewLog', jsonData.log);
+        } else if (jsonData.type == 'outlink') {
+            //   console.log('@webviewLog', jsonData.url);
+            //   const supported = Linking.canOpenURL(jsonData.url);
+            //   if (supported) {
+            //     Linking.openURL(jsonData.url);
+            //   }
+        }
+    };
+
 
     React.useEffect(() => {
         Visitapi()
@@ -310,93 +467,191 @@ const SelectLogin = () => {
     }, [])
 
     return (
-        <ScrollView contentContainerStyle={[style.default_background, { flexGrow: 1, paddingHorizontal: 20 }]}>
-            <View style={{ flex: 1, alignItems: 'flex-end', zIndex: 10 }}>
-                <View style={[style.lang_sel_back, { marginTop: 20 }]}>
-                    <TouchableOpacity onPress={() => { setIsOpen(!isOpen) }}>
-                        <View style={[{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 5 }]}>
-                            <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
-                                <Image style={style.lang_icon} source={selLang.img} />
-                                <Text style={{ marginLeft: 5 }}>{selLang.label}</Text>
+
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView contentContainerStyle={[style.default_background, { flexGrow: 1, paddingHorizontal: 20 }]}>
+                <View style={{ flex: 1, alignItems: 'flex-end', zIndex: 10 }}>
+                    <View style={[style.lang_sel_back, { marginTop: 20 }]}>
+                        <TouchableOpacity onPress={() => { setIsOpen(!isOpen) }}>
+                            <View style={[{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 5 }]}>
+                                <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
+                                    <Image style={style.lang_icon} source={selLang.img} />
+                                    <Text style={{ marginLeft: 5 }}>{selLang.label}</Text>
+                                </View>
+                                <Image style={[style.sel_arrow, { marginLeft: 10 }]} source={require('../../../assets/img/arrow1_down.png')} />
                             </View>
-                            <Image style={[style.sel_arrow, { marginLeft: 10 }]} source={require('../../../assets/img/arrow1_down.png')} />
-                        </View>
-                    </TouchableOpacity>
-                    {isOpen && langList.map((item, index) => {
-                        return (
-                            <View key={item.value + index}>
-                                {item.value != selLang.value &&
-                                    <TouchableOpacity onPress={() => { selectLang(item) }} style={{ paddingVertical: 8 }}>
-                                        <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
-                                            <Image style={style.lang_icon} source={item.img} />
-                                            <Text style={{ marginLeft: 5 }}>{item.label}</Text>
-                                        </View>
-                                    </TouchableOpacity>
+                        </TouchableOpacity>
+                        {isOpen && langList.map((item, index) => {
+                            return (
+                                <View key={item.value + index}>
+                                    {item.value != selLang.value &&
+                                        <TouchableOpacity onPress={() => { selectLang(item) }} style={{ paddingVertical: 8 }}>
+                                            <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
+                                                <Image style={style.lang_icon} source={item.img} />
+                                                <Text style={{ marginLeft: 5 }}>{item.label}</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    }
+                                </View>
+                            )
+                        })}
+
+                    </View>
+                </View>
+                <View style={[{ flex: 9, alignItems: 'center', justifyContent: 'center' }]}>
+                    <Image source={require('../../../assets/img/logo.png')} style={loginStyle.logo} />
+                    <Text style={[style.text_re, { marginTop: 40, color: colors.GRAY_COLOR_2, fontSize: 14, textAlign: 'center', height: 35 }]}>
+                        {t('내주변 안전한 중고거래는 GETGO와 함께 시작하세요')}
+                    </Text>
+
+                    <View style={{ marginTop: 50, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <View style={{ flex: 1, width: '100%', borderBottomColor: colors.GRAY_COLOR_2, borderBottomWidth: 1 }} />
+                        <Text style={[style.text_re, { fontSize: 14, color: colors.GRAY_COLOR_2, marginHorizontal: 10 }]}>
+                            {t('SNS 간편 로그인')}
+                        </Text>
+                        <View style={{ flex: 1, width: '100%', borderBottomColor: colors.GRAY_COLOR_2, borderBottomWidth: 1 }} />
+                    </View>
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 30 }}>
+                        <TouchableOpacity
+                            onPress={() => { console.log('1') }}
+                        >
+                            <Image source={require('../../../assets/img/sns_whatsapp.png')} style={[loginStyle.login_ic]} />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={lineLogin}
+                        >
+                            <Image source={require('../../../assets/img/sns_line.png')} style={[loginStyle.login_ic, { marginLeft: 20 }]} />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={googleLogin}
+                        >
+                            <Image source={require('../../../assets/img/sns_google.png')} style={[loginStyle.login_ic, { marginLeft: 20 }]} />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => onAppleButtonPress()}
+                        >
+                            <Image source={require('../../../assets/img/sns_apple.png')} style={[loginStyle.login_ic, { marginLeft: 20 }]} />
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={{ marginTop: 30, flexDirection: 'row' }}>
+                        <TouchableOpacity onPress={() => { navigation.navigate('SearchLocation', { type: 'join', mt_type: 1, sns_key: '' }) }} style={[style.custom_button, { alignItems: 'center', justifyContent: 'center' }]} >
+                            <Text style={[style.text_b, { color: colors.WHITE_COLOR, fontSize: 18 }]}>
+                                {t('시작하기')}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{ flexDirection: 'row', marginTop: 20 }}>
+                        <Text style={[style.text_re, { fontSize: 13, color: colors.GRAY_COLOR_2 }]}>
+                            {t('이미 계정이 있나요?')}
+                        </Text>
+                        <TouchableOpacity onPress={() => { navigation.navigate('Login') }}>
+                            <Text style={[style.text_b, { marginLeft: 10, color: colors.GREEN_COLOR_2, textDecorationLine: 'underline' }]}>
+                                {t('로그인')}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+
+            </ScrollView>
+
+            <Modal visible={lineLoginModalVisible} onRequestClose={() => setLineLoginModalVisible(false)} transparent={false} animationType="slide" presentationStyle={"formSheet"}>
+                <View style={{ flex: 1 }}>
+                    <View>
+                        <TouchableOpacity onPress={() => { setLineLoginModalVisible(false) }}>
+                            <Image source={require('../../../assets/img/ico_close3.png')} style={{ width: 32, height: 32 }} />
+                        </TouchableOpacity>
+                    </View>
+                    <WebView
+                        ref={webViews}
+                        userAgent={'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19' + ' -- GetGoApp -- ' + Platform.OS}
+                        source={{ uri: urls }}
+                        onLoadEnd={(webViews) => {
+                            //onSendWebViewMessage(webViews);
+                            // setLoading(false);
+                            // onNavigationStateChange(webViews.nativeEvent);
+                        }}
+                        //allowsBackForwardNavigationGestures={true}
+
+                        onMessage={(webViews) => onWebViewMessage(webViews)}
+                        setSupportMultipleWindows={false}
+                        onShouldStartLoadWithRequest={(e) => {
+                            let wurl = e.url;
+                            console.log('onShouldStartLoadWithRequest', e.url);
+
+                            // if (wurl == 'https://wakeupearly.co.kr/bbs/password_lost.php') {
+                            //     Linking.openURL(wurl);
+                            //     return false;
+                            // }
+
+                            let rs = true;
+                            //var SendIntentAndroid = require('react-native-send-intent');
+                            if (
+                                //!wurl.startsWith('https://wakeupearly.co.kr') &&
+                                //wurl.startsWith('intents://')
+                                !wurl.startsWith('http://') &&
+                                !wurl.startsWith('https://') &&
+                                !wurl.startsWith('javascript:') &&
+                                wurl != 'about:blank'
+                            ) {
+
+
+
+                                wurl = wurl.replace('intents://');
+
+                                // webViews.current.stopLoading();
+                                // const supported = Linking.canOpenURL(wurl);
+                                // if (supported) {
+                                //     Linking.openURL(wurl);
+                                // }
+
+                                if (Platform.OS == 'android') {
+                                    const SendIntentAndroid = require('react-native-send-intent');
+                                    webViews.current.stopLoading();
+                                    SendIntentAndroid.openChromeIntent(wurl).then((isOpened) => {
+                                        if (!isOpened) {
+                                            Alert.alert(t('어플을 설치해주세요'))
+                                        }
+                                    });
+                                } else {
+                                    webViews.current.stopLoading();
+                                    const supported = Linking.canOpenURL(wurl);
+                                    if (supported) {
+                                        Linking.openURL(wurl);
+                                    } else {
+                                        Alert.alert(t('어플을 설치해주세요'))
+                                    }
                                 }
-                            </View>
-                        )
-                    })}
+                                rs = false;
+                            }
 
+                            return rs;
+                        }}
+                        //onNavigationStateChange={onNavigationStateChange}
+                        //onNavigationStateChange={
+                        //(webViews) =>
+                        //onNavigationStateChange(webViews)
+                        //} //for Android
+                        // injectedJavaScript={debugging}
+                        javaScriptCanOpenWindowsAutomatically={true}
+                        javaScriptEnabledAndroid={true}
+                        allowFileAccess={true}
+                        renderLoading={true}
+                        setSupportMultipleWindows={true}
+                        mediaPlaybackRequiresUserAction={false}
+                        javaScriptEnabled={true}
+                        scalesPageToFit={false}
+                        originWhitelist={['*']}
+                        allowFileAccessFromFileURLs={true}
+                        allowUniversalAccessFromFileURLs={true}
+                    // originWhitelist={['http://*', 'https://*', 'intent://*']}
+                    />
                 </View>
-            </View>
-            <View style={[{ flex: 9, alignItems: 'center', justifyContent: 'center' }]}>
-                <Image source={require('../../../assets/img/logo.png')} style={loginStyle.logo} />
-                <Text style={[style.text_re, { marginTop: 40, color: colors.GRAY_COLOR_2, fontSize: 14, textAlign: 'center', height: 35 }]}>
-                    {t('내주변 안전한 중고거래는 GETGO와 함께 시작하세요')}
-                </Text>
+            </Modal>
 
-                <View style={{ marginTop: 50, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <View style={{ flex: 1, width: '100%', borderBottomColor: colors.GRAY_COLOR_2, borderBottomWidth: 1 }} />
-                    <Text style={[style.text_re, { fontSize: 14, color: colors.GRAY_COLOR_2, marginHorizontal: 10 }]}>
-                        {t('SNS 간편 로그인')}
-                    </Text>
-                    <View style={{ flex: 1, width: '100%', borderBottomColor: colors.GRAY_COLOR_2, borderBottomWidth: 1 }} />
-                </View>
-
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 30 }}>
-                    <TouchableOpacity
-                        onPress={() => { console.log('1') }}
-                    >
-                        <Image source={require('../../../assets/img/sns_whatsapp.png')} style={[loginStyle.login_ic]} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={lineLogin}
-                    >
-                        <Image source={require('../../../assets/img/sns_line.png')} style={[loginStyle.login_ic, { marginLeft: 20 }]} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={googleLogin}
-                    >
-                        <Image source={require('../../../assets/img/sns_google.png')} style={[loginStyle.login_ic, { marginLeft: 20 }]} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => { console.log('4') }}
-                    >
-                        <Image source={require('../../../assets/img/sns_apple.png')} style={[loginStyle.login_ic, { marginLeft: 20 }]} />
-                    </TouchableOpacity>
-                </View>
-
-                <View style={{ marginTop: 30, flexDirection: 'row' }}>
-                    <TouchableOpacity onPress={() => { navigation.navigate('SearchLocation', { type: 'join', mt_type: 1, sns_key: '' }) }} style={[style.custom_button, { alignItems: 'center', justifyContent: 'center' }]} >
-                        <Text style={[style.text_b, { color: colors.WHITE_COLOR, fontSize: 18 }]}>
-                            {t('시작하기')}
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={{ flexDirection: 'row', marginTop: 20 }}>
-                    <Text style={[style.text_re, { fontSize: 13, color: colors.GRAY_COLOR_2 }]}>
-                        {t('이미 계정이 있나요?')}
-                    </Text>
-                    <TouchableOpacity onPress={() => { navigation.navigate('Login') }}>
-                        <Text style={[style.text_b, { marginLeft: 10, color: colors.GREEN_COLOR_2, textDecorationLine: 'underline' }]}>
-                            {t('로그인')}
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-
-
-        </ScrollView>
+        </SafeAreaView >
     );
 };
 

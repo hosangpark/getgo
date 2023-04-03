@@ -45,7 +45,11 @@ type ChatType = {
 
 type Props = StackScreenProps<MainNavigatorParams, 'MessageRoom'>
 const MessageRoom = ({ route }: Props) => {
-  const ws = io(Api.state.socketUrl, { query: { device: Platform.OS } });
+  const ws = io(Api.state.socketUrl, {
+    query: { device: Platform.OS },
+    path: '/socket.io',
+  });
+
   const userInfo = useSelector((state: any) => state.userInfo)
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
@@ -163,7 +167,7 @@ const MessageRoom = ({ route }: Props) => {
   const ChatTypeCheck = async (type: string) => {
     const form = new FormData();
     form.append('crt_idx', room_idx);
-    form.append(`ctt_room_id`, items.cct_room_id);
+    form.append(`ctt_room_id`, items.cct_room_id ?? '');
     form.append(`ctt_send_idx`, userInfo.idx);
     if (type == 'messageChat') {
       form.append(`ctt_content_type`, 1);
@@ -188,14 +192,14 @@ const MessageRoom = ({ route }: Props) => {
       console.log('err:', err)
     })
     // ws.emit('SendListUpdate', { mt_idx: items.mt_idx });
+    console.log('SendMessage', { room_idx: room_idx, msg: inputChat ? inputChat : null })
     ws.emit('SendMessage', { room_idx: room_idx, msg: inputChat ? inputChat : null });
 
   }
   const sendChat = async (type: string) => {
-    const nowDate = new Date();
-    const nowHour = nowDate.getHours();
-    const nowMin = nowDate.getMinutes();
-
+    // const nowDate = new Date();
+    // const nowHour = nowDate.getHours();
+    // const nowMin = nowDate.getMinutes();
 
     if (selectImg.uri == '' && inputChat == '') {
       return false;
@@ -230,6 +234,7 @@ const MessageRoom = ({ route }: Props) => {
       setIsLoading(false)
     })
   };
+
   const getChatData = async (roomidx: number) => {
     await client({
       method: 'get',
@@ -262,6 +267,7 @@ const MessageRoom = ({ route }: Props) => {
   }, [route.params.items.room_id, route.params.items.chr_id])
 
   React.useEffect(() => {
+
     return () => {
       ws.disconnect();
       console.log('room disconnect')
@@ -290,8 +296,9 @@ const MessageRoom = ({ route }: Props) => {
       });
 
       ws.on('revMessage', e => {
-        getChatData(room_idx)
         console.log('revMessage', e, room_idx);
+        getChatData(room_idx)
+
       });
 
       ws.on('tradeDone', e => {
@@ -311,10 +318,8 @@ const MessageRoom = ({ route }: Props) => {
         }
       });
 
-      console.log('join', room_idx);
+      console.log('join start', room_idx);
       ws.emit('join', { room_idx: room_idx });
-
-
     }
 
   }, [room_idx]))
@@ -380,7 +385,7 @@ const MessageRoom = ({ route }: Props) => {
                 editable={selectImg.uri == ''}
               />
               <TouchableOpacity onPress={() => {
-                // sendChat(route.params.type) 
+                // sendChat(route.params.type)
                 sendChat()
               }}>
                 <Image source={require('../../../assets/img/ico_send.png')} style={{ width: 38, height: 38 }} />

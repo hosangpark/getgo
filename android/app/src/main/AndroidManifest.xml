@@ -24,8 +24,7 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme"
         android:requestLegacyExternalStorage="true"
-        android:exported="true"
-        >
+        android:exported="true">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCiUoFcfZ7Lt2gmTHKMuFKDubxyDg2WiLE" />
@@ -34,27 +33,33 @@
             android:required="false" />
 
 
-            <!-- Change the value to true to enable pop-up for in foreground on receiving remote notifications (for prevent duplicating while showing local notifications set this to false) -->
-        <meta-data  android:name="com.dieam.reactnativepushnotification.notification_foreground"
-                    android:value="false"/>
+        <!-- Change the value to true to enable pop-up for in foreground on receiving remote notifications (for prevent duplicating while showing local notifications set this to false) -->
+        <meta-data
+            android:name="com.dieam.reactnativepushnotification.notification_foreground"
+            android:value="false" />
         <!-- Change the resource name to your App's accent color - or any other color you want -->
-<!--        <meta-data  android:name="com.dieam.reactnativepushnotification.notification_color"-->
-<!--                    android:resource="@android:color/white"/> &lt;!&ndash; or @android:color/{name} to use a standard color&ndash;&gt;-->
+        <!--        <meta-data  android:name="com.dieam.reactnativepushnotification.notification_color"-->
+        <!--                    android:resource="@android:color/white"/> &lt;!&ndash; or @android:color/{name} to use a standard color&ndash;&gt;-->
 
-        <meta-data android:name="com.dieam.reactnativepushnotification.default_notification_channel_id" android:value="@string/channel_name" />
+        <meta-data
+            android:name="com.dieam.reactnativepushnotification.default_notification_channel_id"
+            android:value="@string/channel_name" />
+
         <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationActions" />
         <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver" android:exported="false">
+        <receiver
+            android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
 
         <service
             android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -75,10 +80,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-              <action android:name="android.intent.action.VIEW" />
-              <category android:name="android.intent.category.DEFAULT" />
-              <category android:name="android.intent.category.BROWSABLE" />
-              <data android:scheme="getgoid"  />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="getgoid" />
             </intent-filter>
         </activity>
     </application>

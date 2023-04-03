@@ -43,6 +43,7 @@ const Search = () => {
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
   // value,setValue,searchPlace
   const userInfo = useSelector((state: any) => state.userInfo);
+  const myLocation = useSelector((state: any) => state.myLocation);
   const isFocuesd = useIsFocused();
   const [searchKeyword, setSearchKeyword] = React.useState(''); //입력한 검색키워드
   const [isListLoading, setIsListLoading] = React.useState<boolean>(false);
@@ -132,17 +133,29 @@ const Search = () => {
     })
   }
   const getSearchData = async () => {
+    let selectLocation = myLocation['location' + myLocation.select_location];
 
     console.log('getSearchData', {
       slt_txt: selectWord,
-      mt_idx: userInfo.idx
+      mt_idx: userInfo.idx,
+      myLocation: myLocation.select_location,
+      selectLocation: selectLocation,
     });
+
+    if (!myLocation.select_location) {
+      cusToast(t('잘못된 방법입니다.'));
+      return false;
+    }
+
     await client({
       method: 'post',
       url: '/product/search_result',
       data: {
         slt_txt: selectWord,
-        mt_idx: userInfo.idx
+        mt_idx: userInfo.idx,
+        mt_area: selectLocation.mt_area,
+        mt_lat: selectLocation.mt_lat,
+        mt_log: selectLocation.mt_log,
       }
     }).then(res => {
       setIsLoading(false)
@@ -171,7 +184,7 @@ const Search = () => {
   React.useEffect(() => {
     // searchput()
     if (searchKeyword == '') {
-      setSelectWord('') 
+      setSelectWord('')
     } else {
       searchput()
     }
@@ -279,8 +292,8 @@ const Search = () => {
           {!isSearch ? //최종검색을 하지 않았을때(enter, 검색버튼 누르지 않음)
             <ScrollView style={{ paddingHorizontal: 20 }}>
               <Text style={[style.text_sb, { color: colors.GREEN_COLOR_2, fontSize: 15, marginTop: 28, marginBottom: 14, }]}>
-              {t('관련검색어')}
-                </Text>
+                {t('관련검색어')}
+              </Text>
               {tempSearchList.map((item, index) => {
                 return (
                   <TouchableOpacity onPress={() => Research(item.search_slt_txt)} hitSlop={{ left: 5, right: 5, top: 5, bottom: 5 }}
