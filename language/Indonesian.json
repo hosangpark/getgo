@@ -311,6 +311,12 @@
     "탈퇴": "Penarikan",
     "거래대상이 필요합니다.": "Target transaksi diperlukan.",
     "이미 등록된 휴대폰번호입니다.": "Nomor ini sudah terdaftar",
-    "닫기": "Tutup"
+    "닫기": "Tutup",
+    "어플을 설치해주세요": "silahkan install aplikasinya",
+    "이미 존재하는 이메일입니다.": "Email ini sudah ada.",
+    "사용 가능한 이메일입니다.": "Email tersedia.",
+    "이미 존재하는 닉네임입니다.": "Nama panggilan ini sudah ada.",
+    "사용 가능한 닉네임입니다.": "Nama panggilan yang tersedia.",
+    "이미 가입된 회원입니다.": "Anda sudah menjadi anggota terdaftar."
   }
 }

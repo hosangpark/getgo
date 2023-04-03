@@ -298,7 +298,7 @@
     "카메라": "Camera",
     "갤러리": "Gallery",
     "보낸 후기 보기": "View Sent Reviews",
-    "￦": "$",
+    "￦": "Rp",
     "받은 후기 보기": "View reviews received",
     "거래 후기 취소하기": "Cancel Review",
     "후기 보기": "View reviews",
@@ -311,6 +311,12 @@
     "탈퇴": "Withdrawal",
     "거래대상이 필요합니다.": "Transaction target is required.",
     "이미 등록된 휴대폰번호입니다.": "This number is already registered",
-    "닫기": "Close"
+    "닫기": "Close",
+    "어플을 설치해주세요": "please install the app",
+    "이미 존재하는 이메일입니다.": "This email already exists.",
+    "사용 가능한 이메일입니다.": "Email available.",
+    "이미 존재하는 닉네임입니다.": "This nickname already exists.",
+    "사용 가능한 닉네임입니다.": "Available nickname.",
+    "이미 가입된 회원입니다.": "You are already a registered member."
   }
 }
