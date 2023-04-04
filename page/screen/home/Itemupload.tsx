@@ -651,16 +651,8 @@ const Itemupload = ({ route }: Props) => {
       <CheckPhotoImage
         photoModalVisible={photoModalVisible}
         setPhotoModalVisible={() => setPhotoModalVisible(false)}
-        action={() => {
-          setPhotoModalVisible(false)
-          // openPicker('camera')
-          setTimeout(() => openPicker('camera'), 200);
-        }}
-        action2={() => {
-          setPhotoModalVisible(false)
-
-          setTimeout(() => openPicker('gallery'), 200);
-        }}
+        action={() => openPicker('camera')}
+        action2={() => openPicker('gallery')}
       />
       <BackHandlerCom />
     </SafeAreaView>
