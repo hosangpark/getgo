@@ -58,6 +58,7 @@
     "react-native-send-intent": "^1.3.0",
     "react-native-splash-screen": "^3.3.0",
     "react-native-status-bar-height": "^2.6.0",
+    "react-native-stop-app": "^0.1.31",
     "react-native-svg": "^13.6.0",
     "react-native-swiper": "^1.6.0",
     "react-native-tab-view": "^3.3.4",

@@ -13,8 +13,6 @@ import { MainNavigatorParams } from '../types/routerTypes';
 import { foramtDate } from "../utils/funcKt";
 import Api from '../../api/Api';
 
-
-
 export const ChatList = ({ item, Delete, Enter, Toggle, noticeOnOff, listmodal, isSeller }:
   ({ item: ChatItemType, Delete: (e: number) => void, Enter: (e: ChatItemType) => void, Toggle: (itemid: number) => void, noticeOnOff: (e: { chr_id: number, ctt_push: string }) => void, listmodal: any, isSeller: Boolean })
 ) => {

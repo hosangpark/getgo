@@ -7784,6 +7784,11 @@
   "resolved" "https://registry.npmjs.org/react-native-status-bar-height/-/react-native-status-bar-height-2.6.0.tgz"
   "version" "2.6.0"
 
+"react-native-stop-app@^0.1.31":
+  "integrity" "sha512-s6Ff0fRh6YStrKMB4wN/YzRaqJJG/YZgH9XcUZ2DbXwkMjFK+FK0+MKufNSXQw66dAsIb/3RcWuvTqCNpV1T9g=="
+  "resolved" "https://registry.npmjs.org/react-native-stop-app/-/react-native-stop-app-0.1.31.tgz"
+  "version" "0.1.31"
+
 "react-native-svg@*", "react-native-svg@^13.6.0":
   "integrity" "sha512-G8Mx6W86da+vFimZBJvA93POw8yz0fgDS5biy6oIjMWVJVQSDzCyzwO/zY0yuZmCDhKSZzogl5m0wXXvW2OcTA=="
   "resolved" "https://registry.npmjs.org/react-native-svg/-/react-native-svg-13.8.0.tgz"

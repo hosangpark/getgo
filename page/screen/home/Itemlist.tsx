@@ -41,6 +41,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import { BackHandlerCom } from '../../../components/BackHandlerCom';
 import Api, { NodataView } from '../../../api/Api';
+import { stopApp } from 'react-native-stop-app';
+
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
 
@@ -103,7 +105,8 @@ const ItemList = ({ setTabIndex }: itemListType) => {
       } else {
         // appTimeSave();
         clearTimeout(timeout);
-        BackHandler.exitApp(); // 앱 종료
+        stopApp()
+        // BackHandler.exitApp(); // 앱 종료
       }
       return true;
     }
@@ -223,7 +226,7 @@ const ItemList = ({ setTabIndex }: itemListType) => {
             onRefresh={onRefresh}
             refreshing={refreshing}
             renderItem={({ item }) => (
-              <ProductItem item={item} action={()=>{}} />
+              <ProductItem item={item} action={() => { }} />
             )}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={<NodataView />}

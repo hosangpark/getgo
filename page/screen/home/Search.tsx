@@ -27,6 +27,7 @@ import Timer from '../../../components/utils/Timer';
 import LoadingIndicator from '../../../components/layout/Loading';
 import { useTranslation } from 'react-i18next';
 import cusToast from '../../../components/navigation/CusToast';
+import { NodataView } from '../../../api/Api';
 // import Reserve_choice from "../../../
 // import { color } from 'native-base/lib/typescript/theme/styled-system';
 
@@ -269,21 +270,22 @@ const Search = () => {
           </Text>
           <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
             {
-              searchText.map((item, index) => {
-                return (
-                  <TouchableOpacity key={item.slt_txt + index}
-                    style={{ borderWidth: 1, borderColor: colors.GRAY_COLOR_3, borderRadius: 150, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: 14, marginBottom: 14, paddingHorizontal: 15, paddingVertical: 10 }}
-                    onPress={() => { Research(item.slt_txt) }}
-                  >
-                    <Text style={[style.text_me, { fontSize: 15, color: colors.BLACK_COLOR_1, marginRight: 5 }]}>
-                      {item.slt_txt}
-                    </Text>
-                    <TouchableOpacity style={{ padding: 4 }} onPress={() => DeleteSearchedData(item)}>
-                      <Image style={{ width: 15, height: 15 }} source={require('../../../assets/img/ico_x.png')} />
+              searchText.length ?
+                searchText.map((item, index) => {
+                  return (
+                    <TouchableOpacity key={item.slt_txt + index}
+                      style={{ borderWidth: 1, borderColor: colors.GRAY_COLOR_3, borderRadius: 150, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: 14, marginBottom: 14, paddingHorizontal: 15, paddingVertical: 10 }}
+                      onPress={() => { Research(item.slt_txt) }}
+                    >
+                      <Text style={[style.text_me, { fontSize: 15, color: colors.BLACK_COLOR_1, marginRight: 5 }]}>
+                        {item.slt_txt}
+                      </Text>
+                      <TouchableOpacity style={{ padding: 4 }} onPress={() => DeleteSearchedData(item)}>
+                        <Image style={{ width: 15, height: 15 }} source={require('../../../assets/img/ico_x.png')} />
+                      </TouchableOpacity>
                     </TouchableOpacity>
-                  </TouchableOpacity>
-                )
-              })
+                  )
+                }) : <NodataView></NodataView>
             }
           </View>
         </ScrollView>

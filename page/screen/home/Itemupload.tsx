@@ -21,8 +21,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   ImageBackground,
-  ActivityIndicator,BackHandler,
-  Alert,PermissionsAndroid
+  ActivityIndicator, BackHandler,
+  Alert, PermissionsAndroid
 } from 'react-native';
 import style from '../../../assets/style/style';
 import { colors } from '../../../assets/color';
@@ -49,7 +49,7 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import client from '../../../api/client';
 import cusToast from '../../../components/navigation/CusToast';
 import axios from 'axios';
-import { launchImageLibrary,launchCamera } from 'react-native-image-picker';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import SetMyLocation from '../location/SetMyLocation';
 import Api from '../../../api/Api';
 import { CheckPhotoImage } from '../../../components/modal/CheckPhothImage';
@@ -76,7 +76,7 @@ const Itemupload = ({ route }: Props) => {
   const dispatch = useDispatch();
 
 
-  const openPicker = async (type:string) => {
+  const openPicker = async (type: string) => {
     console.log('dasdasd')
     PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -87,7 +87,7 @@ const Itemupload = ({ route }: Props) => {
         buttonNegative: 'Cancel',
       },
     )
-    
+
     if (uploadpictures.length == 10) {
       cusToast(t('사진은 10장까지 등록할수 있습니다.'));
       return false;
@@ -99,8 +99,8 @@ const Itemupload = ({ route }: Props) => {
       launchCamera({
         mediaType: 'photo',
         cameraType: 'back',
-        maxWidth: 512,
-        maxHeight: 512,
+        maxWidth: 1024,
+        maxHeight: 1024,
         saveToPhotos: true,
       }, (res) => {
         console.log(res)
@@ -124,37 +124,37 @@ const Itemupload = ({ route }: Props) => {
       })
 
     } else {
-    launchImageLibrary(
-      {
-        mediaType: 'photo',
-        maxWidth: 512,
-        maxHeight: 512,
-        selectionLimit: 10,
-        // includeBase64: Platform.OS === 'android'
-      },
-      (res: any) => {
-        console.log('res.assets', res);
+      launchImageLibrary(
+        {
+          mediaType: 'photo',
+          maxWidth: 1024,
+          maxHeight: 1024,
+          selectionLimit: 10,
+          // includeBase64: Platform.OS === 'android'
+        },
+        (res: any) => {
+          console.log('res.assets', res);
 
-        if (res.didCancel) {
-        } else if (res.assets) {
-          let newres = [...uploadpictures];
-          res.assets.forEach((item, index) => {
-            newres.push({
-              uri: item.uri,
-              fileName: item.fileName,
-              type: item.type,
-              img_idx: '',
+          if (res.didCancel) {
+          } else if (res.assets) {
+            let newres = [...uploadpictures];
+            res.assets.forEach((item, index) => {
+              newres.push({
+                uri: item.uri,
+                fileName: item.fileName,
+                type: item.type,
+                img_idx: '',
+              });
             });
-          });
 
-          if (newres.length >= 10) {
-            newres = newres.slice(0, 10);
+            if (newres.length >= 10) {
+              newres = newres.slice(0, 10);
+            }
+
+            setUploadpictures(newres);
           }
-
-          setUploadpictures(newres);
-        }
-      },
-    );
+        },
+      );
     }
 
   };
@@ -647,10 +647,10 @@ const Itemupload = ({ route }: Props) => {
       </ScrollView>
 
       <CheckPhotoImage
-      photoModalVisible={photoModalVisible}
-      setPhotoModalVisible={()=>setPhotoModalVisible(false)}
-      action={()=>openPicker('camera')}
-      action2={()=>openPicker('gallery')}
+        photoModalVisible={photoModalVisible}
+        setPhotoModalVisible={() => setPhotoModalVisible(false)}
+        action={() => openPicker('camera')}
+        action2={() => openPicker('gallery')}
       />
       <BackHandlerCom />
     </SafeAreaView>

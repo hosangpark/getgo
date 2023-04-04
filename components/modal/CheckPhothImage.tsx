@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View ,TouchableOpacity,Dimensions} from 'react-native';
+import { Text, View, TouchableOpacity, Dimensions } from 'react-native';
 import Modal from "react-native-modal";
 import { colors } from '../../assets/color';
 import style from '../../assets/style/style';
@@ -7,50 +7,46 @@ import { useTranslation } from 'react-i18next';
 
 
 
-export const CheckPhotoImage = ({photoModalVisible,setPhotoModalVisible,action,action2}:{photoModalVisible:boolean,setPhotoModalVisible:(e:boolean)=>void,action:(e:string)=>void,action2:(e:string)=>void}) => {
-  
+export const CheckPhotoImage = ({ photoModalVisible, setPhotoModalVisible, action, action2 }: { photoModalVisible: boolean, setPhotoModalVisible: (e: boolean) => void, action: (e: string) => void, action2: (e: string) => void }) => {
+
   const { t } = useTranslation()
 
-  return(
-    <Modal 
-    isVisible={photoModalVisible}
-    transparent={true} 
-    onRequestClose={() => setPhotoModalVisible(false)}
-    style={[{flex:1,margin:0}]}
+  return (
+    <Modal
+      isVisible={photoModalVisible}
+      transparent={true}
+      onBackdropPress={() => {
+        setPhotoModalVisible(false)
+      }}
+      onRequestClose={() => setPhotoModalVisible(false)}
+      style={[{ flex: 1, margin: 0, justifyContent: 'center', alignItems: 'center' }]}
     >
-          <TouchableOpacity style={{
-            flex: 1, justifyContent: 'center', alignItems: 'center',
-            backgroundColor: '#000', opacity: 0.2,
-          }} onPress={() => setPhotoModalVisible(false)}>
-          </TouchableOpacity>
-          <View style={{
-            backgroundColor: colors.WHITE_COLOR,
-            width: 300,
-            position: 'absolute',
-            zIndex: 10,
-            elevation: 1,
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            flexDirection: 'row',
-            borderRadius: 6,
-            left: Dimensions.get('screen').width / 2 - 150,
-            height: 100,
-            paddingHorizontal: 10,
-            top: Dimensions.get('screen').height / 2 - 100
-          }}>
-            <TouchableOpacity style={{ flex:1,padding: 20, borderColor: colors.GRAY_COLOR_5, borderWidth: 1, borderRadius: 6,marginHorizontal:10,alignItems:'center' }}>
-              <Text style={[style.text_sb, { color: colors.BLACK_COLOR_2, fontSize: 18 }]} onPress={() => {
-                action('camera')
-                setPhotoModalVisible(false)
-              }}>
-                {t('카메라')}</Text></TouchableOpacity>
-
-            <TouchableOpacity style={{ flex:1,padding: 20, borderColor: colors.GRAY_COLOR_5, borderWidth: 1, borderRadius: 6 ,marginHorizontal:10,alignItems:'center' }}>
-              <Text style={[style.text_sb, { color: colors.BLACK_COLOR_2, fontSize: 18 }]} onPress={() => {
-                action2('gallery')
-                setPhotoModalVisible(false)
-              }}>
-                {t('갤러리')}</Text></TouchableOpacity>
-          </View>
+      {/* <TouchableOpacity style={{
+        flex: 1, justifyContent: 'center', alignItems: 'center',
+        backgroundColor: '#000', opacity: 0.2,
+      }} onPress={() => setPhotoModalVisible(false)}>
+      </TouchableOpacity> */}
+      <View style={{
+        backgroundColor: colors.WHITE_COLOR,
+        padding: 20,
+        margin: 20,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        flexDirection: 'row',
+        borderRadius: 6,
+        paddingHorizontal: 10,
+      }}>
+        <TouchableOpacity style={{ flex: 1, paddingHorizontal: 6, paddingVertical: 20, borderColor: colors.GRAY_COLOR_5, borderWidth: 1, borderRadius: 6, marginHorizontal: 10, alignItems: 'center' }}>
+          <Text style={[style.text_sb, { color: colors.BLACK_COLOR_2, fontSize: 16 }]} onPress={() => {
+            setPhotoModalVisible(false)
+            action('camera')
+          }}>{t('카메라')}</Text></TouchableOpacity>
+        <TouchableOpacity style={{ flex: 1, paddingHorizontal: 6, paddingVertical: 20, borderColor: colors.GRAY_COLOR_5, borderWidth: 1, borderRadius: 6, marginHorizontal: 10, alignItems: 'center' }}>
+          <Text style={[style.text_sb, { color: colors.BLACK_COLOR_2, fontSize: 16 }]} onPress={() => {
+            setPhotoModalVisible(false)
+            action2('gallery')
+          }}>{t('갤러리')}</Text></TouchableOpacity>
+      </View>
     </Modal>
-)}
+  )
+}

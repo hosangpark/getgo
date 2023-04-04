@@ -586,7 +586,7 @@ const Itempost = ({ route }: Props) => {
               resizeMode="cover"
               borderRadius={100}
             />
-            <View style={{ flexShrink: 1 }}>
+            <View style={{ flex: 1 }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={[style.default_font_black, { marginBottom: 3, flexShrink: 1, marginRight: 5 }]}>
                   {items.data[0].mt_seller_nickname}
@@ -602,18 +602,18 @@ const Itempost = ({ route }: Props) => {
                   </Text>
                 </TouchableOpacity>
               </View>
-              <View style={{ flexDirection: 'row', flexShrink: 1, alignItems: 'center' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }}>
                 <Text
                   style={[
                     style.text_li,
-                    { fontSize: 12, color: colors.GRAY_COLOR_2, flexShrink: 1 },
+                    { fontSize: 12, color: colors.GRAY_COLOR_2, },
                   ]}>
                   {t('판매상품수')} {items.selling_count} {' '}
                 </Text>
                 <Text
                   style={[
                     style.text_li,
-                    { fontSize: 20, color: colors.GRAY_COLOR_2, flexShrink: 1 },
+                    { fontSize: 20, color: colors.GRAY_COLOR_2, },
                   ]}>
                   ·{' '}
                 </Text>
