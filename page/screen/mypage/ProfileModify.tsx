@@ -39,7 +39,7 @@ import { CheckPhotoImage } from '../../../components/modal/CheckPhothImage';
 
 const MypageSetting = () => {
   const navigation = useNavigation<StackNavigationProp<MainNavigatorParams>>();
-  const { t,i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const [modifyName, setModifyName] = React.useState('')
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
@@ -61,14 +61,12 @@ const MypageSetting = () => {
     await client({
       method: 'get',
       url: `/user/myprofile?mt_idx=${userInfo.idx}`
-    }).then(
-      (res) => {
-        console.log('res.data.list', res.data.list);
-        setProfileData(res.data.data[0])
-        setReviewData(res.data.list)
-        setIsLoading(false)
-      }
-    ).catch(
+    }).then((res) => {
+      console.log('res.data.list', res.data);
+      setProfileData(res.data.data[0])
+      setReviewData(res.data.list)
+      setIsLoading(false)
+    }).catch(
       err => console.log(err)
     );
   };
@@ -175,21 +173,27 @@ const MypageSetting = () => {
       setModifyName('')
       Keyboard.dismiss()
 
-      if (rrrtype != 'onlynickname') {
-        setProfileimg(undefined);
 
-      }
+
+      // console.log('res.data', res.data)
 
       let params = { ...userInfo }
       if (res.data.nickname) params.mt_nickname = res.data.nickname
       if (res.data.mt_image1) params.mt_profile_img = res.data.mt_image1
 
+      if (rrrtype != 'onlynickname') {
+        setProfileimg(undefined);
+      }
+
+      //post와 get을 연속으로 던지니까 에러가 나옵니다...
+      getProfileDetailData()
+      // setTimeout(() => {
+      //   getProfileDetailData()
+      // }, 1300)
       dispatch(UserInfoAction.updateUserInfo(JSON.stringify(params)));
 
-
-      getProfileDetailData()
     }).catch(error => {
-      console.log("getUserNickName")
+      console.log("getUserNickName", error)
     })
   }
 
@@ -351,12 +355,12 @@ const MypageSetting = () => {
       }
 
 
-    <CheckPhotoImage
-      photoModalVisible={photoModalVisible}
-      setPhotoModalVisible={()=>setPhotoModalVisible(false)}
-      action={()=>ModifyImage('camera')}
-      action2={()=>ModifyImage('gallery')}
-    />
+      <CheckPhotoImage
+        photoModalVisible={photoModalVisible}
+        setPhotoModalVisible={() => setPhotoModalVisible(false)}
+        action={() => ModifyImage('camera')}
+        action2={() => ModifyImage('gallery')}
+      />
 
       <BackHandlerCom />
     </SafeAreaView>
