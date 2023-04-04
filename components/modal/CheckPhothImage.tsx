@@ -18,6 +18,12 @@ export const CheckPhotoImage = ({ photoModalVisible, setPhotoModalVisible, actio
       onBackdropPress={() => {
         setPhotoModalVisible(false)
       }}
+
+      animationIn="fadeIn"
+      animationOut="fadeOut"
+      animationInTiming={1}
+      animationOutTiming={1}
+
       onRequestClose={() => setPhotoModalVisible(false)}
       style={[{ flex: 1, margin: 0, justifyContent: 'center', alignItems: 'center' }]}
     >
@@ -36,16 +42,16 @@ export const CheckPhotoImage = ({ photoModalVisible, setPhotoModalVisible, actio
         borderRadius: 6,
         paddingHorizontal: 10,
       }}>
-        <TouchableOpacity style={{ flex: 1, paddingHorizontal: 6, paddingVertical: 20, borderColor: colors.GRAY_COLOR_5, borderWidth: 1, borderRadius: 6, marginHorizontal: 10, alignItems: 'center' }}>
-          <Text style={[style.text_sb, { color: colors.BLACK_COLOR_2, fontSize: 16 }]} onPress={() => {
-            setPhotoModalVisible(false)
-            action('camera')
-          }}>{t('카메라')}</Text></TouchableOpacity>
-        <TouchableOpacity style={{ flex: 1, paddingHorizontal: 6, paddingVertical: 20, borderColor: colors.GRAY_COLOR_5, borderWidth: 1, borderRadius: 6, marginHorizontal: 10, alignItems: 'center' }}>
-          <Text style={[style.text_sb, { color: colors.BLACK_COLOR_2, fontSize: 16 }]} onPress={() => {
-            setPhotoModalVisible(false)
-            action2('gallery')
-          }}>{t('갤러리')}</Text></TouchableOpacity>
+        <TouchableOpacity style={{ flex: 1, paddingHorizontal: 6, paddingVertical: 20, borderColor: colors.GRAY_COLOR_5, borderWidth: 1, borderRadius: 6, marginHorizontal: 10, alignItems: 'center' }} onPress={() => {
+          action()
+          // setPhotoModalVisible(false)
+        }}>
+          <Text style={[style.text_sb, { color: colors.BLACK_COLOR_2, fontSize: 16 }]} >{t('카메라')}</Text></TouchableOpacity>
+        <TouchableOpacity style={{ flex: 1, paddingHorizontal: 6, paddingVertical: 20, borderColor: colors.GRAY_COLOR_5, borderWidth: 1, borderRadius: 6, marginHorizontal: 10, alignItems: 'center' }} onPress={() => {
+          action2()
+          // setPhotoModalVisible(false)
+        }}>
+          <Text style={[style.text_sb, { color: colors.BLACK_COLOR_2, fontSize: 16 }]}>{t('갤러리')}</Text></TouchableOpacity>
       </View>
     </Modal>
   )

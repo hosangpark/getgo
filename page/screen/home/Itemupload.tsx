@@ -93,6 +93,8 @@ const Itemupload = ({ route }: Props) => {
       return false;
     }
     setCameraCancle(false)
+
+
     if (type == 'camera') {
 
       console.log('dddddddddd')
@@ -649,8 +651,16 @@ const Itemupload = ({ route }: Props) => {
       <CheckPhotoImage
         photoModalVisible={photoModalVisible}
         setPhotoModalVisible={() => setPhotoModalVisible(false)}
-        action={() => openPicker('camera')}
-        action2={() => openPicker('gallery')}
+        action={() => {
+          setPhotoModalVisible(false)
+          // openPicker('camera')
+          setTimeout(() => openPicker('camera'), 200);
+        }}
+        action2={() => {
+          setPhotoModalVisible(false)
+
+          setTimeout(() => openPicker('gallery'), 200);
+        }}
       />
       <BackHandlerCom />
     </SafeAreaView>
