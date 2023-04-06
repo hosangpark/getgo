@@ -401,69 +401,35 @@ const Itempost = ({ route }: Props) => {
               marginBottom: 16,
             }}>
             <View style={{ flexDirection: 'row', marginTop: 10 }}>
-              {items.data[0].pt_sale_now == 1 && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: (items.pt_sale_now == "1" ?
+                    colors.BLUE_COLOR_1
+                    : items.pt_sale_now == "2" ? colors.GREEN_COLOR_2 : colors.GRAY_COLOR_5),
+                  borderRadius: 3,
+                  paddingHorizontal: 5,
+                  paddingVertical: 3,
+                  marginRight: 5,
+                }}>
+                <Image
+                  style={{ width: 10, height: 10 }}
+                  source={items.pt_sale_now == "1" ? require('../../../assets/img/ico_sale.png') : require('../../../assets/img/ico_time.png')}
+                />
                 <Text
                   style={[
                     style.text_me,
-                    {
-                      backgroundColor: colors.BLUE_COLOR_1,
-                      borderRadius: 5,
-                      color: colors.WHITE_COLOR,
-                      marginRight: 7,
-                      paddingVertical: 3,
-                      paddingHorizontal: 6,
-                      fontSize: 12,
-                    },
+                    { marginLeft: 2, fontSize: 12, color: colors.WHITE_COLOR, },
                   ]}>
-                  <Image
-                    style={{ width: 13, height: 13 }}
-                    source={require('../../../assets/img/ico_sale.png')}
-                  />
-                  {t('판매중')}
+                  {items.pt_sale_now == "1" ?
+                    t('판매중') :
+                    items.pt_sale_now == "2" ?
+                      t('예약중') : t('거래완료')
+                  }
                 </Text>
-              )}
-              {items.data[0].pt_sale_now == 2 && (
-                <Text
-                  style={[
-                    style.text_me,
-                    {
-                      backgroundColor: colors.GREEN_COLOR_2,
-                      borderRadius: 5,
-                      color: colors.WHITE_COLOR,
-                      marginRight: 7,
-                      paddingVertical: 3,
-                      paddingHorizontal: 6,
-                      fontSize: 12,
-                    },
-                  ]}>
-                  <Image
-                    style={{ width: 13, height: 13 }}
-                    source={require('../../../assets/img/ico_time.png')}
-                  />
-                  {t('예약중')}
-                </Text>
-              )}
-              {items.data[0].pt_sale_now == 3 && (
-                <Text
-                  style={[
-                    style.text_me,
-                    {
-                      backgroundColor: colors.GRAY_COLOR_5,
-                      borderRadius: 5,
-                      fontSize: 12,
-                      marginRight: 7,
-                      color: colors.WHITE_COLOR,
-                      paddingVertical: 3,
-                      paddingHorizontal: 5,
-                    },
-                  ]}>
-                  <Image
-                    style={{ width: 13, height: 13 }}
-                    source={require('../../../assets/img/ico_time.png')}
-                  />
-                  {t('거래완료')}
-                </Text>
-              )}
+              </View>
               <Text
                 style={[
                   style.text_me,
